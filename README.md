@@ -45,6 +45,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for authoring guidelines and the review p
 | Skill | Description |
 |-------|-------------|
 | [prompt-engineer](skills/prompt-engineer/SKILL.md) | Design and generate effective prompts for AI agents, graph nodes, and multi-agent pipelines — including technique selection, archetype-based templates (ReAct, CoT, ToT, Reflexion, and more), and a prompt hardening checklist |
+| [git-workflow](skills/git-workflow/SKILL.md) | Manage a GitHub repository end-to-end: branching strategy, Conventional Commits v1.0.0, pull requests, merging, releases, and branch cleanup — with MCP server, `gh` CLI, and `git` CLI tooling guidance |
+| [code-review](skills/code-review/SKILL.md) | Perform structured code reviews on GitHub PRs: severity classification, inline and general comment posting, approval decisions, universal security checklist, and language-specific checks for Golang, TypeScript, and Python grounded in the Google style guides |
 
 ## Contributing
 
