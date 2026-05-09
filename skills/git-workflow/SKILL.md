@@ -5,8 +5,8 @@ description: >
   pull requests, code review, merging, releases, and branch cleanup. Use this skill whenever the agent
   needs to create a branch, commit changes, open or merge a pull request, tag a release, or perform
   any GitHub repository operation. Triggers on: "create a branch", "commit my changes", "open a PR",
-  "merge this PR", "tag a release", "review this PR", "clean up branches", or any instruction
-  involving git or GitHub repository state.
+  "merge this PR", "tag a release", "clean up branches", or any instruction involving git or GitHub
+  repository state. For code review, use the code-review skill.
 ---
 
 # Git Workflow Skill
@@ -324,6 +324,9 @@ EOF
   --head feature/AUTH-42-oauth2-login
 ```
 
+> Once the PR is open and ready for review, the `code-review` skill can be used to perform a
+> structured review and post findings directly to the PR before merging.
+
 ---
 
 ## Step 6 — Merging
@@ -348,7 +351,7 @@ Is the team maintaining a strict linear history?
 ### Pre-merge checklist
 
 - [ ] All required status checks pass
-- [ ] Required approvals obtained
+- [ ] Required approvals obtained — use the `code-review` skill to perform and submit a review if one has not been completed
 - [ ] No unresolved review comments
 - [ ] Branch is up to date with base (rebase or merge base if behind)
 
