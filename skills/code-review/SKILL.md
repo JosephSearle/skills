@@ -3,9 +3,9 @@ name: code-review
 description: >
   Perform a structured code review on a GitHub pull request. Analyses the diff for correctness,
   security, style, and language-specific issues, then posts inline and general comments using the
-  GitHub MCP server or gh CLI. Supports Golang, TypeScript, and Python via language reference files.
-  Triggers on: "review this PR", "review this pull request", "check this diff", "look over my changes",
-  or any instruction to assess code quality on a branch or PR.
+  GitHub MCP server or gh CLI. Supports Golang, TypeScript, Python, and Terraform via language
+  reference files. Triggers on: "review this PR", "review this pull request", "check this diff",
+  "look over my changes", or any instruction to assess code quality on a branch or PR.
 ---
 
 # Code Review Skill
