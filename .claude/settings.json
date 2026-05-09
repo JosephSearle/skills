@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.conventionalcommits.org)",
+      "WebFetch(domain:developers.google.com)"
+    ]
+  }
+}
