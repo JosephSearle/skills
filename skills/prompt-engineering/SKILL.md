@@ -1,5 +1,5 @@
 ---
-name: prompt-engineer
+name: prompt-engineering
 description: >
   Design and generate effective prompts for AI agents, graph nodes, pipelines, and multi-agent systems based on the node's role, reasoning scope, and position in a workflow. Use this skill whenever the user wants to create a system prompt, node prompt, or agent instruction — including ReAct agents, planner nodes, router/classifier nodes, executor nodes, critic/judge nodes, summarizer nodes, RAG retrieval nodes, tool-use agents, or any other dedicated LLM component in a graph or pipeline. Also triggers for: prompt chaining design, chain-of-thought prompt construction, few-shot example design, Tree of Thoughts scaffolding, self-consistency prompts, meta-prompting, and matching prompting technique to task complexity. If the user says "write a prompt for", "help me design a system prompt", "what technique should I use", "prompt for my [node/agent/step]", or mentions a node role in a graph or workflow — use this skill.
 ---
