@@ -2,16 +2,31 @@
 
 ## Adding a skill
 
-1. Pick the right category directory under `skills/` — if none fits, open an issue to propose a new one before adding a directory
-2. Create `skills/<category>/<kebab-case-name>.md`
-3. Write clear, imperative steps — an agent reading this for the first time should not need to infer intent
-4. Open a pull request
+1. Create a new directory under `skills/`: `skills/<skill-name>/`
+2. Add a `SKILL.md` file inside it: `skills/<skill-name>/SKILL.md`
+3. Add a `references/` subdirectory for any language- or topic-specific reference files the skill loads
+4. Write clear, imperative steps — an agent reading this for the first time should not need to infer intent
+5. Open a pull request
 
 ## Naming conventions
 
-- File names: `kebab-case.md`
-- Skill `name` field: `Title Case`
-- Keep names specific — `review-python-types` is better than `code-review`
+**Pattern: `<domain>-<action>`** — domain first, action noun second, kebab-case, no abbreviations.
+
+| Element | Rule | Example |
+|---|---|---|
+| Directory name | `<domain>-<action>` kebab-case | `code-review`, `test-generation` |
+| `name` frontmatter field | Must match the directory name exactly | `name: code-review` |
+| Action noun | Full word — no abbreviations | `test-generation` not `test-gen` |
+| Second word type | Noun form of the action, not a verb or role | `prompt-engineering` not `prompt-engineer` |
+
+**Applying the pattern:**
+
+- What domain does the skill operate on? → first word (`code`, `git`, `test`, `prompt`)
+- What does the skill do to that domain? → second word, as a noun (`review`, `workflow`, `generation`, `engineering`)
+
+**Valid:** `code-review`, `git-workflow`, `prompt-engineering`, `test-generation`, `security-review`, `doc-generation`
+
+**Invalid:** `review-code` (verb-first), `test-gen` (abbreviation), `prompt-engineer` (role noun, not action noun)
 
 ## Review criteria
 

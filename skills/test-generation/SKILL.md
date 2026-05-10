@@ -1,5 +1,5 @@
 ---
-name: test-gen
+name: test-generation
 description: >
   Generate unit tests, integration tests, and benchmarks for Python, TypeScript, and Go code.
   Detects the language and test framework automatically, loads language-specific standards, reads

@@ -32,21 +32,23 @@ No dependencies are required — skills are plain Markdown files.
 
 ### Creating a new skill
 
-Add a new Markdown file to the appropriate category directory under `skills/`:
+Create a new directory under `skills/` and add a `SKILL.md` file inside it:
 
 ```bash
-touch skills/<category>/<skill-name>.md
+mkdir skills/<skill-name>
+touch skills/<skill-name>/SKILL.md
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for authoring guidelines and the review process.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for authoring guidelines, naming conventions, and the review process.
 
 ## Skills Index
 
 | Skill | Description |
 |-------|-------------|
-| [prompt-engineer](skills/prompt-engineer/SKILL.md) | Design and generate effective prompts for AI agents, graph nodes, and multi-agent pipelines — including technique selection, archetype-based templates (ReAct, CoT, ToT, Reflexion, and more), and a prompt hardening checklist |
+| [code-review](skills/code-review/SKILL.md) | Perform structured code reviews on GitHub PRs: severity classification, inline and general comment posting, approval decisions, universal security checklist, and language-specific checks for Go, TypeScript, Python, and Terraform |
 | [git-workflow](skills/git-workflow/SKILL.md) | Manage a GitHub repository end-to-end: branching strategy, Conventional Commits v1.0.0, pull requests, merging, releases, and branch cleanup — with MCP server, `gh` CLI, and `git` CLI tooling guidance |
-| [code-review](skills/code-review/SKILL.md) | Perform structured code reviews on GitHub PRs: severity classification, inline and general comment posting, approval decisions, universal security checklist, and language-specific checks for Golang, TypeScript, and Python grounded in the Google style guides |
+| [prompt-engineering](skills/prompt-engineering/SKILL.md) | Design and generate effective prompts for AI agents, graph nodes, and multi-agent pipelines — including technique selection, archetype-based templates (ReAct, CoT, ToT, Reflexion, and more), and a prompt hardening checklist |
+| [test-generation](skills/test-generation/SKILL.md) | Generate unit tests, integration tests, and benchmarks for Python, TypeScript, and Go — grounded in ISO/IEC 29119, NIST IR 8397, and ISTQB conventions, with language-specific idioms for pytest, Jest/Vitest, and the Go testing package |
 
 
 ## Contributing
