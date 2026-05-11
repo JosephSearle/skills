@@ -7,7 +7,11 @@
       "WebFetch(domain:owasp.org)",
       "WebFetch(domain:atlas.mitre.org)",
       "WebFetch(domain:genai.owasp.org)",
-      "WebFetch(domain:developer.hashicorp.com)"
+      "WebFetch(domain:developer.hashicorp.com)",
+      "WebFetch(domain:unsloth.ai)",
+      "WebFetch(domain:docs.unsloth.ai)",
+      "Bash(git -C /Users/josephsearle/Documents/Projects/agent-skills status)",
+      "Bash(git -C /Users/josephsearle/Documents/Projects/agent-skills log --oneline -5)"
     ]
   }
 }
