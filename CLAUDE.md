@@ -68,6 +68,7 @@ Skills follow Semantic Versioning:
 
 | Skill | What it does |
 |-------|-------------|
+| `architecture-docs` | Comprehensive architectural documentation for new or existing projects: C4 Model diagrams (Mermaid), ADRs, and 10-section docs/architecture/ tree; detects architecture style (Monolith, Microservices, Serverless, Event-Driven), tech stack, and existing doc gaps |
 | `code-review` | Structured PR reviews with severity classification and inline/general comment posting; language refs for Go, TypeScript, Python, Terraform; LLM security checks |
 | `git-workflow` | End-to-end GitHub repo management: branching (GitHub Flow / Git Flow / TBD), Conventional Commits v1.0.0, PRs, merging, SemVer releases, branch cleanup |
 | `llm-eval-generation` | Eval tests for LLM-integrated code (RAG, agents, tool-use, structured output, safety); scenario detection, framework detection (DeepEval/RAGAS/Promptfoo), multi-trial requirements |

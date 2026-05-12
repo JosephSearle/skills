@@ -45,6 +45,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for authoring guidelines, naming conventi
 
 | Skill | Description |
 |-------|-------------|
+| [architecture-docs](skills/architecture-docs/SKILL.md) | Generate comprehensive architectural documentation for a new or existing project: detects architecture style (Monolith, Microservices, Serverless, Event-Driven), scans the technology stack, inventories existing docs for gaps, and writes a complete docs/architecture/ tree with native C4 Model Mermaid diagrams, Architecture Decision Records, and stakeholder-aware narrative sections |
 | [code-review](skills/code-review/SKILL.md) | Perform structured code reviews on GitHub PRs: severity classification, inline and general comment posting, approval decisions, universal security checklist, and language-specific checks for Go, TypeScript, Python, and Terraform |
 | [dataset-preparation](skills/dataset-preparation/SKILL.md) | Transform raw data (CSV, JSON, PDF, images, audio) into Unsloth-compatible training datasets: detects target model type (LLM, Vision, TTS, Embedding), applies the correct chat template, and writes a `prepare_dataset.py` script to disk |
 | [git-workflow](skills/git-workflow/SKILL.md) | Manage a GitHub repository end-to-end: branching strategy, Conventional Commits v1.0.0, pull requests, merging, releases, and branch cleanup — with MCP server, `gh` CLI, and `git` CLI tooling guidance |
