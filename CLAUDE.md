@@ -73,4 +73,5 @@ Skills follow Semantic Versioning:
 | `git-workflow` | End-to-end GitHub repo management: branching (GitHub Flow / Git Flow / TBD), Conventional Commits v1.0.0, PRs, merging, SemVer releases, branch cleanup |
 | `llm-eval-generation` | Eval tests for LLM-integrated code (RAG, agents, tool-use, structured output, safety); scenario detection, framework detection (DeepEval/RAGAS/Promptfoo), multi-trial requirements |
 | `prompt-engineering` | Prompt design for agent nodes and pipelines; archetype identification; technique selection (Zero-Shot, CoT, ReAct, ToT, Reflexion, etc.); hardening checklist |
+| `readme-generation` | Generate or update a project README.md to industry standards; detects project type (library, CLI, web app, API, ML/data science) and tech stack; applies Standard-Readme spec, makeareadme.com guidelines, and banesullivan quality principles |
 | `test-generation` | Unit, integration, and benchmark tests for Python (pytest), TypeScript (Jest/Vitest), and Go (stdlib + go-cmp); language/framework auto-detection; AAA structure |
