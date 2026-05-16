@@ -2,15 +2,15 @@
 
 ## Local setup (optional but recommended)
 
-After cloning, link the pre-commit hook so the validator runs before every commit:
+After cloning, install the pre-commit hooks so the validator runs before every commit:
 
 ```bash
-ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit
-chmod +x scripts/pre-commit.sh
+pip install pre-commit
+pre-commit install
 ```
 
-This runs `scripts/validate-skills.sh` automatically on each commit and also runs
-`markdownlint` if it is installed (`npm install --global markdownlint-cli`).
+This runs `scripts/validate-skills.sh` and `markdownlint` automatically on each commit.
+`markdownlint` is installed automatically by pre-commit via Node — no manual setup needed.
 
 The same checks run on every pull request via GitHub Actions, so the hook is optional
 but catches issues earlier.
@@ -30,7 +30,7 @@ but catches issues earlier.
 **Pattern: `<domain>-<action>`** — domain first, action noun second, kebab-case, no abbreviations.
 
 | Element | Rule | Example |
-|---|---|---|
+| --- | --- | --- |
 | Directory name | `<domain>-<action>` kebab-case | `code-review`, `test-generation` |
 | `name` frontmatter field | Must match the directory name exactly | `name: code-review` |
 | Action noun | Full word — no abbreviations | `test-generation` not `test-gen` |
@@ -48,6 +48,7 @@ but catches issues earlier.
 ## Review criteria
 
 A skill will be merged when it:
+
 - Has complete and valid frontmatter
 - Has at least one trigger, one step, and one rule
 - Does not overlap with an existing skill (check the index in README.md first)
@@ -56,6 +57,7 @@ A skill will be merged when it:
 ## Versioning
 
 Follow [Semantic Versioning](https://semver.org/):
+
 - **Patch** — clarify wording, fix typos, add examples
 - **Minor** — add optional inputs/outputs, add steps that don't break existing behaviour
 - **Major** — change required inputs/outputs, remove or reorder steps, change the skill's core goal
