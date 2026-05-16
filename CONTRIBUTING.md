@@ -1,19 +1,36 @@
 # Contributing
 
+## Local setup (optional but recommended)
+
+After cloning, install the pre-commit hooks so the validator runs before every commit:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+This runs `scripts/validate-skills.sh` and `markdownlint` automatically on each commit.
+`markdownlint` is installed automatically by pre-commit via Node — no manual setup needed.
+
+The same checks run on every pull request via GitHub Actions, so the hook is optional
+but catches issues earlier.
+
 ## Adding a skill
 
 1. Create a new directory under `skills/`: `skills/<skill-name>/`
 2. Add a `SKILL.md` file inside it: `skills/<skill-name>/SKILL.md`
 3. Add a `references/` subdirectory for any language- or topic-specific reference files the skill loads
 4. Write clear, imperative steps — an agent reading this for the first time should not need to infer intent
-5. Open a pull request
+5. Update the Skills Index table in `README.md`
+6. Run `bash scripts/validate-skills.sh` to verify the skill passes all structural checks
+7. Open a pull request
 
 ## Naming conventions
 
 **Pattern: `<domain>-<action>`** — domain first, action noun second, kebab-case, no abbreviations.
 
 | Element | Rule | Example |
-|---|---|---|
+| --- | --- | --- |
 | Directory name | `<domain>-<action>` kebab-case | `code-review`, `test-generation` |
 | `name` frontmatter field | Must match the directory name exactly | `name: code-review` |
 | Action noun | Full word — no abbreviations | `test-generation` not `test-gen` |
@@ -31,6 +48,7 @@
 ## Review criteria
 
 A skill will be merged when it:
+
 - Has complete and valid frontmatter
 - Has at least one trigger, one step, and one rule
 - Does not overlap with an existing skill (check the index in README.md first)
@@ -39,6 +57,7 @@ A skill will be merged when it:
 ## Versioning
 
 Follow [Semantic Versioning](https://semver.org/):
+
 - **Patch** — clarify wording, fix typos, add examples
 - **Minor** — add optional inputs/outputs, add steps that don't break existing behaviour
 - **Major** — change required inputs/outputs, remove or reorder steps, change the skill's core goal
