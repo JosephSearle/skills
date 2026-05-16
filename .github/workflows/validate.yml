@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Make scripts executable
-        run: chmod +x scripts/validate-skills.sh scripts/pre-commit.sh
+        run: chmod +x scripts/validate-skills.sh
 
       - name: Run skill validator
         run: scripts/validate-skills.sh
