@@ -1,12 +1,29 @@
 # Contributing
 
+## Local setup (optional but recommended)
+
+After cloning, link the pre-commit hook so the validator runs before every commit:
+
+```bash
+ln -sf ../../scripts/pre-commit.sh .git/hooks/pre-commit
+chmod +x scripts/pre-commit.sh
+```
+
+This runs `scripts/validate-skills.sh` automatically on each commit and also runs
+`markdownlint` if it is installed (`npm install --global markdownlint-cli`).
+
+The same checks run on every pull request via GitHub Actions, so the hook is optional
+but catches issues earlier.
+
 ## Adding a skill
 
 1. Create a new directory under `skills/`: `skills/<skill-name>/`
 2. Add a `SKILL.md` file inside it: `skills/<skill-name>/SKILL.md`
 3. Add a `references/` subdirectory for any language- or topic-specific reference files the skill loads
 4. Write clear, imperative steps — an agent reading this for the first time should not need to infer intent
-5. Open a pull request
+5. Update the Skills Index table in `README.md`
+6. Run `bash scripts/validate-skills.sh` to verify the skill passes all structural checks
+7. Open a pull request
 
 ## Naming conventions
 

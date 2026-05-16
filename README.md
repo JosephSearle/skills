@@ -82,6 +82,7 @@ skills/
 | [model-finetuning](skills/model-finetuning/SKILL.md) | Generate a complete `train.py` using Unsloth for fine-tuning LLMs, Vision, Embedding, or TTS models: detects VRAM constraints, selects training method (QLoRA, LoRA, GRPO, DPO, CPT), configures hyperparameters, and writes a runnable training script with checkpoint and early-stopping configuration |
 | [prompt-engineering](skills/prompt-engineering/SKILL.md) | Design and generate effective prompts for AI agents, graph nodes, and multi-agent pipelines — including technique selection, archetype-based templates (ReAct, CoT, ToT, Reflexion, and more), and a prompt hardening checklist |
 | [readme-generation](skills/readme-generation/SKILL.md) | Generate or update a project README.md to top industry standards: detects project type (library, CLI, web app, API, ML/data science), extracts metadata from package manifests, applies Standard-Readme spec and makeareadme.com guidelines, and produces all required sections with real, runnable examples |
+| [skill-linting](skills/skill-linting/SKILL.md) | Review a SKILL.md file against all authoring standards: frontmatter validity, naming convention, body structure, README registration, trigger phrase presence, imperative voice in steps, reference file existence, and version correctness — produces a severity-classified Blocker/Major/Minor/Nit report with a PASS/FAIL verdict |
 | [spike-generation](skills/spike-generation/SKILL.md) | Generate or update a technical spike document; detects spike type (technical, functional, architecture, research, design, prototyping, performance, usability, data); applies Beck/Cohn timebox principles and SAFe 6.0 Enabler Story standards; supports both create-from-scratch and gap-fill update modes |
 | [test-generation](skills/test-generation/SKILL.md) | Generate unit tests, integration tests, and benchmarks for Python, TypeScript, and Go — grounded in ISO/IEC 29119, NIST IR 8397, and ISTQB conventions, with language-specific idioms for pytest, Jest/Vitest, and the Go testing package |
 
@@ -91,7 +92,7 @@ Open an issue if you find a bug in a skill, have a feature request, or want to p
 
 ## Roadmap
 
-- [ ] Automated skill validation on pull request (frontmatter linting)
+- [x] Automated skill validation on pull request (frontmatter linting)
 - [ ] Skill versioning and changelog conventions
 - [ ] Agent integration examples for Claude Code, LangGraph, and CrewAI
 - [ ] Composite skill bundles (multiple skills loaded together)

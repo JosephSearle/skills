@@ -13,7 +13,11 @@
       "Bash(git -C /Users/josephsearle/Documents/Projects/agent-skills status)",
       "Bash(git -C /Users/josephsearle/Documents/Projects/agent-skills log --oneline -5)",
       "WebFetch(domain:www.makeareadme.com)",
-      "Bash(gh api *)"
+      "Bash(gh api *)",
+      "Bash(git -C /Users/josephsearle/Documents/Projects/agent-skills log --oneline -10)",
+      "Bash(git -C /Users/josephsearle/Documents/Projects/agent-skills log --oneline HEAD)",
+      "Bash(chmod +x /Users/josephsearle/Documents/Projects/agent-skills/scripts/validate-skills.sh /Users/josephsearle/Documents/Projects/agent-skills/scripts/pre-commit.sh)",
+      "Bash(bash /Users/josephsearle/Documents/Projects/agent-skills/scripts/validate-skills.sh)"
     ]
   }
 }
