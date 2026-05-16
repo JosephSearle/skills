@@ -14,4 +14,4 @@ repos:
         language: node
         additional_dependencies: [markdownlint-cli]
         args: [--config, .markdownlint.json]
-        types: [markdown]
+        files: ^(skills/[^/]+/SKILL\.md|README\.md|CONTRIBUTING\.md|CLAUDE\.md)$
