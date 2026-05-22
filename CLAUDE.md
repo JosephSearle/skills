@@ -17,6 +17,8 @@ skills/
       <language>.md     # e.g. golang.md, python.md, typescript.md
       frameworks/       # framework-specific references (e.g. deepeval.md, ragas.md)
       scenarios/        # scenario-specific references (e.g. rag.md, agent-tool-use.md)
+    assets/             # optional: code/config templates Claude emits verbatim in GENERATE mode
+    scripts/            # optional: TypeScript audit scripts Claude runs in AUDIT mode
 ```
 
 ## Skill file anatomy
