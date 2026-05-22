@@ -1,0 +1,135 @@
+# Targets: Kubernetes 1.28+
+# Replace all <PLACEHOLDER> values before use.
+# Create secrets first: kubectl create secret generic mcp-server-secrets --from-literal=jwt-secret=...
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcp-server-config
+  namespace: <namespace>
+data:
+  MCP_SERVER_URL:    "https://<your-domain>/mcp"
+  MCP_RESOURCE_URI:  "https://<your-domain>/mcp"
+  CORS_ALLOWED_ORIGINS: "https://<your-frontend-domain>"
+  LOG_LEVEL:         "info"
+  NODE_ENV:          "production"
+  PORT:              "3000"
+  OTEL_SERVICE_NAME: "mcp-server"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-server
+  namespace: <namespace>
+  labels:
+    app: mcp-server
+spec:
+  replicas: 2              # minimum 2 for high availability
+  selector:
+    matchLabels:
+      app: mcp-server
+  template:
+    metadata:
+      labels:
+        app: mcp-server
+    spec:
+      # Allow K8s to send SIGTERM 30 seconds before SIGKILL
+      # Must be > NestJS graceful shutdown drain time (default 15s)
+      terminationGracePeriodSeconds: 30
+
+      securityContext:
+        runAsUser:  1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        fsGroup: 1001
+
+      containers:
+        - name: mcp-server
+          image: <registry>/<image>:<tag>    # never use :latest in production
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+
+          # Env from ConfigMap (non-sensitive)
+          envFrom:
+            - configMapRef:
+                name: mcp-server-config
+
+          # Secrets via secretKeyRef — never use env.value for sensitive data
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-server-secrets
+                  key:  jwt-secret
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-server-secrets
+                  key:  redis-url
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: mcp-server-secrets
+                  key:  otel-endpoint
+
+          # Resource limits — required for HPA and QoS Guaranteed class
+          resources:
+            requests:
+              cpu:    "250m"
+              memory: "256Mi"
+            limits:
+              cpu:    "1000m"
+              memory: "512Mi"
+
+          # Liveness: if this fails, pod is restarted (process stuck)
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 15   # > startup time; too short = restart loop
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          # Readiness: if this fails, pod is removed from Service endpoints (degraded)
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 2
+
+          # Writable tmpdir for any temp file writes (needed with readOnlyRootFilesystem)
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+
+      volumes:
+        - name: tmp
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-server
+  namespace: <namespace>
+spec:
+  selector:
+    app: mcp-server
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+  type: ClusterIP   # use LoadBalancer or Ingress for external access
