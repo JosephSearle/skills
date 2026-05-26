@@ -1,4 +1,4 @@
-# agent-skills
+# skills
 
 A curated library of reusable skills for AI agents — structured Markdown instruction sets that agents load at runtime to complete specific task classes reliably.
 
