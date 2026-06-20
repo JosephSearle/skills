@@ -1,0 +1,73 @@
+# OpenSSF Security Insights v2.2.0
+# Filename MUST be lowercase: security-insights.yml (uppercase is the deprecated v1.x convention)
+# Place at: repo root OR .github/security-insights.yml
+# Consumed by: CLOMonitor (CNCF), LFX Insights (Linux Foundation), si-tooling (OpenSSF)
+# Reference: https://github.com/ossf/security-insights-spec
+#
+# USAGE: Replace all <PLACEHOLDER: ...> values before committing.
+#        Required fields are marked [REQUIRED]. Optional fields can be removed if not applicable.
+
+header:
+  schema-version: "2.2.0"   # [REQUIRED] must be exactly "2.2.0"
+  project-url: <PLACEHOLDER: https://github.com/org/repo>   # [REQUIRED]
+  changelog-url: <PLACEHOLDER: https://github.com/org/repo/blob/main/CHANGELOG.md>
+  license-url: <PLACEHOLDER: https://github.com/org/repo/blob/main/LICENSE>
+
+project:
+  vulnerability-reporting:
+    reports-accepted: true   # [REQUIRED] set to false only if not accepting reports
+    bug-bounty-available: false   # set to true if you have a paid bounty program
+    contact:
+      - <PLACEHOLDER: https://github.com/org/repo/security/advisories/new>
+      # - mailto:security@example.com   # add email as fallback if desired
+    policy: <PLACEHOLDER: https://github.com/org/repo/blob/main/SECURITY.md>   # [REQUIRED]
+    in-scope:
+      - MCP server transport (stdio and Streamable HTTP)
+      - Tool definitions and input validation
+      - OAuth 2.1 authentication and authorisation layer
+      - <PLACEHOLDER: add additional in-scope items>
+    out-of-scope:
+      - Third-party dependencies (unless directly exploitable)
+      - Host operating system configuration
+      - <PLACEHOLDER: add additional out-of-scope items>
+
+  documentation:
+    quickstart-guide: <PLACEHOLDER: https://github.com/org/repo/blob/main/README.md>
+    # design: <PLACEHOLDER: URL to design doc if available>
+    # detailed-guide: <PLACEHOLDER: URL to detailed guide if available>
+    # release-process: <PLACEHOLDER: URL to release process doc if available>
+
+repository:
+  documentation:
+    contributing-guide: <PLACEHOLDER: https://github.com/org/repo/blob/main/CONTRIBUTING.md>
+    security-policy: <PLACEHOLDER: https://github.com/org/repo/blob/main/SECURITY.md>   # [REQUIRED]
+    # governance: <PLACEHOLDER: URL to governance doc if applicable>
+
+  security:
+    assessments: []   # [REQUIRED field — empty array is valid; fill with URLs when assessments exist]
+    # Example when filled:
+    # assessments:
+    #   - type: self
+    #     date: "2026-06-09"
+    #     url: https://github.com/org/repo/blob/main/docs/security/threat-model.md
+
+    champions:
+      - name: <PLACEHOLDER: Security Champion Full Name>
+        primary: true
+        # contact: mailto:security@example.com   # optional
+
+    tools:
+      []
+      # Example tools entry:
+      # - name: Dependabot
+      #   type: sca
+      #   url: https://docs.github.com/en/code-security/dependabot
+      #   integration:
+      #     adheres-to: https://github.com/org/repo/blob/main/.github/dependabot.yml
+
+  # dependencies:
+  #   env-dependencies-policy: <PLACEHOLDER: URL to dependency update policy>
+  #   sbom:
+  #     - name: cyclonedx-sbom
+  #       url: <PLACEHOLDER: URL to SBOM artifact>
+  #       format: CycloneDX

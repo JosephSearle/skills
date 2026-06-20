@@ -1,0 +1,46 @@
+customModes:
+  - slug: <mode-slug>
+    # slug: kebab-case, used with /mode <slug> command
+    # Must be unique across built-in and custom modes
+    # Valid built-in slugs to avoid: code, ask, plan, advanced, orchestrator
+
+    name: <Display Name>
+    # Human-readable name shown in the mode picker
+
+    roleDefinition: >-
+      You are a <persona description>.
+      <State the primary responsibility in one or two sentences.>
+      <State the most important constraint for this persona.>
+    # Written in second person ("You are a ...")
+    # This is the core of the mode — be specific about the persona and constraints
+
+    customInstructions: >-
+      <Specific behaviour rule 1.>
+      <Specific behaviour rule 2.>
+      <Output format requirements, if any.>
+      <Project-specific conventions Bob should follow.>
+    # Optional — additional rules appended to the system prompt after roleDefinition
+    # Use for: output format, tone, project conventions, things not to do
+
+    groups:
+      - read
+      # - edit      # Uncomment to allow file creation and modification
+      # - browser   # Uncomment to allow opening URLs and web search
+      # - command   # Uncomment to allow terminal command execution (HIGH PRIVILEGE — justify this)
+      # - mcp       # Uncomment to allow calling registered MCP server tools
+    # Only these five values are valid. Omit groups entirely to allow all.
+
+    # fileRegex: ".*\\.(ts|tsx)$"
+    # Optional — restrict Bob to editing only files matching this JS regex
+    # Remove the comment and set the pattern if a file-type restriction is needed
+    # Examples:
+    #   Python only:          ".*\\.py$"
+    #   TypeScript only:      ".*\\.(ts|tsx)$"
+    #   Go source only:       ".*\\.go$"
+    #   Docs only:            "docs/.*\\.md$"
+    #   Everything except env: "^(?!.*\\.env).*"
+
+    # source: global
+    # Optional — community-documented field (not in primary IBM docs)
+    # Controls whether this mode appears in global or project mode picker
+    # Prefer controlling scope by file location rather than this field

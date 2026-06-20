@@ -95,7 +95,39 @@ Is this a dedicated graph node with a fixed input/output contract?
 
 ---
 
-## Step 3 — Build the Prompt
+## Step 3 — Version and Store Prompts
+
+Before or after writing a prompt, decide how it will be versioned and deployed.
+
+### MLflow Prompt Registry (production standard)
+
+Prompts are registered as immutable versioned artefacts. Use the `prompts:/<name>@<alias>` URI
+pattern in production code so a new version can be promoted without redeploying the agent.
+
+```python
+import mlflow
+
+# Register (creates version 1)
+mlflow.genai.register_prompt(
+    name="react-agent-system",
+    template="You are a helpful assistant with access to tools. {{tools_description}}",
+    commit_message="Initial ReAct system prompt",
+)
+
+# Tag for environment routing
+mlflow.genai.set_prompt_alias("react-agent-system", alias="production", version=1)
+
+# Load in agent code — always load by alias
+prompt_obj = mlflow.genai.load_prompt("prompts:/react-agent-system@production")
+prompt_str = prompt_obj.to_single_brace_format()   # {{var}} → {var} for LangChain
+```
+
+See `observability` skill (`references/prompt-registry.md`) for the full Prompt Registry API
+including version promotion, alias management, and LangChain integration.
+
+---
+
+## Step 4 — Build the Prompt
 
 Use the appropriate template from the sections below.
 
@@ -422,7 +454,7 @@ Reflection:
 
 ---
 
-## Step 4 — Prompt Hardening Checklist
+## Step 5 — Prompt Hardening Checklist
 
 Before finalizing any prompt, verify:
 
@@ -439,7 +471,7 @@ Before finalizing any prompt, verify:
 
 ---
 
-## Step 5 — Context Engineering for Graph Nodes
+## Step 6 — Context Engineering for Graph Nodes
 
 When the node is part of a larger graph or pipeline, also consider:
 
