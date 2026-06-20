@@ -2,13 +2,16 @@
 name: langchain-core
 description: >
   Apply LangChain Core 1.x production patterns to Python 3.11+ projects using LCEL, the Runnable
-  protocol, and the standardized chat-model interface. Triggers on: init_chat_model, RunnablePassthrough,
-  with_structured_output, LCEL, pipe syntax, astream_events, RunnableConfig, content_blocks,
-  ToolCall, ChatPromptTemplate, MessagesPlaceholder, PydanticOutputParser, BaseCallbackHandler,
-  CacheBackedEmbeddings, langchain-community import, langchain-classic, hub.pull migration,
+  protocol, the standardized chat-model interface, and the canonical create_agent factory. Triggers
+  on: init_chat_model, RunnablePassthrough, with_structured_output, LCEL, pipe syntax, astream_events,
+  RunnableConfig, content_blocks, ToolCall, ChatPromptTemplate, MessagesPlaceholder,
+  PydanticOutputParser, BaseCallbackHandler, CacheBackedEmbeddings, langchain-community import,
+  langchain-classic, hub.pull migration, create_agent, AgentMiddleware, before_model, wrap_model_call,
+  wrap_tool_call, response_format, ProviderStrategy, ToolStrategy, AgentExecutor replacement,
   "how do I chain", "structured output strategy", "streaming events", "retriever composition",
   "LLMChain migration", "RetrievalQA migration", "AgentExecutor replacement", "callback handler",
-  "embed with caching", "output parser", "text splitter", "document loader", "vector store retriever".
+  "embed with caching", "output parser", "text splitter", "document loader", "vector store retriever",
+  "build an agent", "create_agent from scratch", "LangChain middleware".
 ---
 
 ## Core Philosophy
@@ -51,11 +54,14 @@ Cross-cutting checks:
 | `references/chat-models.md` | init_chat_model, message types, content_blocks, bind_tools, with_structured_output, configurable_fields | Any model invocation, provider switching, structured output, tool calling, streaming messages |
 | `references/prompts-output-parsers.md` | ChatPromptTemplate, MessagesPlaceholder, FewShot, hub.pull migration, all output parsers | Any prompt construction, few-shot, hub usage, PydanticOutputParser, StrOutputParser |
 | `references/loaders-splitters-embeddings.md` | Document/Blob, lazy_load, text splitters, SemanticChunker, init_embeddings, CacheBackedEmbeddings | Any document ingestion, chunking, embedding, caching embeddings |
-| `references/retrievers-callbacks.md` | BaseRetriever, VectorStoreRetriever, EnsembleRetriever, advanced retrievers, BaseCallbackHandler, async callbacks | Any retrieval, hybrid search, custom callbacks, token streaming to UI, LangSmith tracing |
+| `references/retrievers-callbacks.md` | BaseRetriever, VectorStoreRetriever, EnsembleRetriever, advanced retrievers, BaseCallbackHandler, async callbacks | Any retrieval, hybrid search, custom callbacks, token streaming to UI; for tracing see `observability` skill |
 | `references/migration.md` | Deprecated → current API table, LLMChain/RetrievalQA/AgentExecutor/memory rewrites, community import renames | Any migration, deprecated import warnings, chain/agent replacement, hub.pull fix |
+| `references/agents.md` | `create_agent` factory, AgentMiddleware, response_format strategies, AgentState, thread persistence | Any agent building, AgentExecutor migration, middleware, structured agent output |
 
 For GREENFIELD RAG: load `chat-models.md` + `runnables.md` + `loaders-splitters-embeddings.md` + `retrievers-callbacks.md`.
-For GREENFIELD agent: load `chat-models.md` + `runnables.md` + `prompts-output-parsers.md`.
+For GREENFIELD agent: load `chat-models.md` + `agents.md`.
+For RETROFIT AgentExecutor: load `migration.md` first, then `agents.md`.
+For RETROFIT chain: load `migration.md`, then topic reference.
 For RETROFIT: always start with `migration.md`, then the topic reference.
 
 ---
@@ -102,17 +108,20 @@ After writing code, provide:
 ```bash
 # Install packages (no pip — use uv)
 uv add langchain-core langchain langchain-openai  # add provider packages as needed
-uv add --dev pytest pytest-asyncio
+uv add --group test pytest pytest-asyncio
 
 # Verify imports resolve
 uv run python -c "from langchain_core.runnables import RunnablePassthrough; print('ok')"
 uv run python -c "from langchain.chat_models import init_chat_model; print('ok')"
 
-# Run type checking
-uv run mypy src/ --strict
+# Run type checking (Pyright — not mypy; see developer-experience skill)
+uv run pyright src/
 
 # Run tests
 uv run pytest -x -q
+
+# Enable MLflow tracing (see observability skill for full setup)
+# mlflow.langchain.autolog() covers all LangChain chains automatically
 ```
 
 For streaming verification:
@@ -143,3 +152,4 @@ asyncio.run(check())
 | [references/loaders-splitters-embeddings.md](references/loaders-splitters-embeddings.md) | Document loaders, splitters, embeddings, CacheBackedEmbeddings | Research §§5–6 |
 | [references/retrievers-callbacks.md](references/retrievers-callbacks.md) | Retrievers, EnsembleRetriever RRF, advanced retrievers, callbacks, tracing | Research §§7–8 |
 | [references/migration.md](references/migration.md) | All deprecated → current API with code for both sides | Research §10 |
+| [references/agents.md](references/agents.md) | `create_agent` factory, AgentMiddleware, response_format, AgentState, persistence | Absorbed from `langchain-agents` skill |

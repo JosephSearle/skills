@@ -1,0 +1,40 @@
+# RFC 9116 security.txt template
+#
+# USAGE: Replace all <PLACEHOLDER: ...> values.
+# Serve this file at: https://<your-domain>/.well-known/security.txt (HTTPS required)
+# In NestJS, serve as a static asset or add a route:
+#
+#   @Get('.well-known/security.txt')
+#   @Header('Content-Type', 'text/plain')
+#   securityTxt(): string {
+#     return readFileSync('.well-known/security.txt', 'utf8');
+#   }
+#
+# The Expires field MUST be updated at least annually.
+# Scanners (e.g., Google, security researchers) treat expired files as absent.
+
+Contact: https://github.com/<PLACEHOLDER: org>/<PLACEHOLDER: repo>/security/advisories/new
+# If you have a secondary contact (e.g., email), add it on a second Contact line:
+# Contact: mailto:<PLACEHOLDER: security@example.com>
+
+Policy: https://github.com/<PLACEHOLDER: org>/<PLACEHOLDER: repo>/blob/main/SECURITY.md
+
+# Expires: MUST be no more than 1 year from the date this file was created/last updated.
+# Format: RFC 3339 (ISO 8601 with timezone). Update this every time you redeploy.
+Expires: <PLACEHOLDER: YYYY-MM-DDT00:00:00Z>
+
+Preferred-Languages: en
+
+# Optional fields:
+
+# Acknowledgments: Link to your hall-of-fame / researcher credits page
+# Acknowledgments: https://github.com/<PLACEHOLDER: org>/<PLACEHOLDER: repo>/blob/main/SECURITY.md#security-acknowledgements
+
+# Canonical: The authoritative URL for this file (prevents caching of outdated copies)
+# Canonical: https://<PLACEHOLDER: your-domain>/.well-known/security.txt
+
+# Encryption: PGP public key URL for encrypted reports
+# Encryption: https://keys.openpgp.org/vks/v1/by-fingerprint/<PLACEHOLDER: fingerprint>
+
+# Hiring: Link to security engineering job openings (optional marketing)
+# Hiring: https://<PLACEHOLDER: your-domain>/careers

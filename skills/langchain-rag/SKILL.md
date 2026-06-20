@@ -111,6 +111,8 @@ Every produced pipeline must include:
 - A `SQLRecordManager` with `create_schema()` call and a `cleanup=` mode justified by the use-case.
 - Async variants when the context is async (FastAPI, LangGraph nodes, async pipelines).
 - At minimum: one `similarity_search` or `as_retriever` call verifying the store is queryable.
+- Exposure of `retrieval_context: list[str]` as a separate output field (required for RAGAS and
+  MLflow `RetrievalGroundedness` evaluation — see `llm-evaluation` and `observability` skills).
 
 Shell commands to verify a working pipeline:
 
@@ -128,9 +130,32 @@ print('PGEngine OK')
 # Run a round-trip ingest + retrieval smoke test
 uv run python scripts/rag_smoke_test.py
 
-# Trace with LangSmith (set env vars before running)
-LANGSMITH_TRACING=true LANGSMITH_API_KEY=<key> uv run python scripts/rag_smoke_test.py
+# Enable MLflow tracing (see observability skill for full setup)
+# mlflow.langchain.autolog() traces retriever calls automatically
 ```
+
+### RAGAS testability contract
+
+For the pipeline to be evaluable by RAGAS or MLflow `RetrievalGroundedness`, it **must** expose
+retrieved chunks separately from the final answer. Wrap your RAG chain to return both:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class RAGOutput:
+    answer: str
+    retrieval_context: list[str]   # chunks fed to LLM — NOT the full documents
+
+async def run_rag(question: str) -> RAGOutput:
+    docs = await retriever.ainvoke(question)
+    context_chunks = [d.page_content for d in docs]
+    answer = await chain.ainvoke({"question": question, "context": context_chunks})
+    return RAGOutput(answer=answer, retrieval_context=context_chunks)
+```
+
+This contract is consumed by the eval repo — see `llm-evaluation` skill for the full
+evaluation architecture.
 
 ---
 

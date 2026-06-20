@@ -96,6 +96,11 @@ Every implementation must produce:
 3. One shared `ConnectionPool` created in ASGI lifespan, reused by both `PostgresSaver` and
    `PostgresStore` with `autocommit=True`.
 
+**Testing rule**: Always use `InMemorySaver` (not `AsyncPostgresSaver`) and `InMemoryStore` (not
+`PostgresStore`) in tests, and always create fresh instances per test function — never share a
+checkpointer or store between tests (causes cross-test state bleed). See `testing-foundations`
+skill for the `@pytest.fixture` patterns.
+
 Verify with:
 
 ```bash

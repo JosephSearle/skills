@@ -54,12 +54,14 @@ Is the user converting existing .claude/ config?
 | LSP servers | Yes/No | `.lsp.json` |
 | Background monitors | Yes/No | `monitors/monitors.json` |
 | User config (credentials) | Yes/No | `userConfig` in `plugin.json` |
+| Marketplace listing | Yes/No | `.claude-plugin/marketplace.json` |
 
 **Scope**:
 ```
 Is this for personal use only, or for sharing via a marketplace?
   └─ Personal → suggest skills-dir deployment (~/.claude/skills/<name>/)
   └─ Marketplace → generate at a standalone path, include README.md + CHANGELOG.md
+                   and generate .claude-plugin/marketplace.json
 ```
 
 ---
@@ -75,13 +77,15 @@ MCP servers, LSP servers, or monitors.
 
 ## Step 3 — Scaffold Directory Structure
 
-Create the following layout. Place **only** `plugin.json` inside `.claude-plugin/`.
-All other directories belong at the plugin root.
+Create the following layout. Place **only** `plugin.json` (and optionally
+`marketplace.json`) inside `.claude-plugin/`. All other directories belong at the
+plugin root.
 
 ```
 <plugin-name>/
 ├── .claude-plugin/
-│   └── plugin.json
+│   ├── plugin.json
+│   └── marketplace.json             ← omit unless targeting the Claude Code marketplace
 ├── skills/                      ← omit if no skills
 │   └── <skill-name>/
 │       └── SKILL.md
@@ -127,6 +131,8 @@ Add fields based on what was determined in Step 1:
 - Add `userConfig` for any credentials or user-provided settings (mark secrets `sensitive: true`)
 - Add component path fields **only** when overriding the defaults — if all components live
   in their default locations, no path fields are needed
+- Use a descriptive filename for hooks when the plugin targets multiple hosts, e.g.
+  `"hooks": "./hooks/claude-codex-hooks.json"` instead of the default `hooks/hooks.json`
 
 Do **not** add path fields that just point at the default location (e.g. `"skills": "./skills/"`)
 — that is redundant and generates a warning from `claude plugin validate`.

@@ -126,8 +126,11 @@ g = b.compile(checkpointer=InMemorySaver())
 print(g.get_graph().draw_mermaid())
 "
 
-# Type-check
-uv run mypy src/
+# Type-check (Pyright — see developer-experience skill)
+uv run pyright src/
+
+# Enable MLflow tracing (single call covers all LangGraph graphs — see observability skill)
+# import mlflow; mlflow.langchain.autolog()
 
 # Security: confirm pickle fallback is disabled
 uv run python -c "

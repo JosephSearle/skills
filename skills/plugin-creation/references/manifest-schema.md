@@ -175,6 +175,48 @@ Follow semantic versioning when using explicit versions:
 
 ---
 
+## Marketplace Listing (`marketplace.json`)
+
+For plugins that will be published to the Claude Code marketplace, add a second file
+alongside `plugin.json`:
+
+**Location:** `.claude-plugin/marketplace.json`
+
+```json
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "my-plugin",
+  "description": "One-sentence description shown in the marketplace.",
+  "owner": {
+    "name": "Author Name",
+    "url": "https://github.com/author"
+  },
+  "plugins": [
+    {
+      "name": "my-plugin",
+      "description": "More detailed description for the marketplace listing.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
+```
+
+| Field | Description |
+|-------|-------------|
+| `$schema` | Always `https://anthropic.com/claude-code/marketplace.schema.json` |
+| `name` | Must match `plugin.json`'s `name` field |
+| `description` | Short description shown in marketplace search results |
+| `owner.name` | Display name for the publisher |
+| `owner.url` | Link to the publisher's profile or homepage |
+| `plugins[].source` | Relative path to the plugin root — use `"./"` when the plugin root is the repo root |
+| `plugins[].category` | Marketplace category, e.g. `"productivity"`, `"developer-tools"`, `"utilities"` |
+
+Only generate this file when the user is publishing to the marketplace. Omit for
+personal/team plugins installed via `claude plugin install <local-path>`.
+
+---
+
 ## Unrecognised Fields
 
 Claude Code ignores top-level fields it does not recognise, so a `plugin.json` can

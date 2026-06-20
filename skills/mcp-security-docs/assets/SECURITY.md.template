@@ -1,0 +1,136 @@
+# Security Policy
+
+<!-- USAGE: Replace all <PLACEHOLDER: ...> markers with project-specific values before committing.
+     This template follows the Node.js/Kubernetes SECURITY.md pattern, extended with an MCP
+     Threat Model Summary section required for any MCP server project. -->
+
+## Supported Versions
+
+The following versions of **<PLACEHOLDER: project name>** currently receive security fixes:
+
+| Version | Supported |
+|---------|-----------|
+| <PLACEHOLDER: e.g. 1.x> | ✅ Yes |
+| <PLACEHOLDER: e.g. 0.x> | ❌ No (end of life) |
+
+Older versions do not receive security patches. Upgrade to the latest supported release.
+
+---
+
+## Reporting a Vulnerability
+
+**Do not open a public GitHub issue for security vulnerabilities.**
+
+To report a vulnerability privately:
+
+1. **GitHub Private Vulnerability Reporting (preferred):**
+   Open a private advisory at:
+   `https://github.com/<PLACEHOLDER: org>/<PLACEHOLDER: repo>/security/advisories/new`
+
+2. **Email (alternative):**
+   Send to `<PLACEHOLDER: security@example.com>` with the subject line `[SECURITY] <brief description>`.
+   If you require confidentiality, encrypt with our PGP key: `<PLACEHOLDER: key fingerprint or omit>`.
+
+Please include:
+- A description of the vulnerability and its impact
+- Steps to reproduce or a proof-of-concept
+- Affected version(s)
+- Any suggested mitigations you are aware of
+
+---
+
+## Response Timeline
+
+| Milestone | Target |
+|-----------|--------|
+| Acknowledgement of report | ≤5 business days |
+| Detailed response (next steps / severity assessment) | ≤10 business days |
+| Fix or mitigation available | Depends on severity (see below) |
+| Coordinated public disclosure | See Disclosure Policy below |
+
+**Severity-based remediation targets:**
+
+| CVSS Score | Severity | Fix target |
+|------------|----------|-----------|
+| 9.0–10.0 | Critical | ≤7 days |
+| 7.0–8.9 | High | ≤30 days |
+| 4.0–6.9 | Medium | ≤90 days |
+| 0.1–3.9 | Low | Next scheduled release |
+
+---
+
+## Coordinated Disclosure Policy
+
+We follow responsible disclosure aligned with ISO/IEC 29147:
+
+1. Reporter submits via private channel above.
+2. We acknowledge within 5 business days.
+3. We verify, triage, and develop a fix in a private branch.
+4. We coordinate a disclosure date with the reporter — typically within 90 days of receipt.
+5. We publish a GitHub Security Advisory and, where applicable, request a CVE from GitHub's CNA.
+6. We credit the reporter unless they prefer to remain anonymous.
+
+If we are unable to reproduce the vulnerability or determine it is out of scope, we will notify the reporter within 10 business days with our reasoning.
+
+**Embargo:** We ask reporters to respect a maximum 90-day embargo from the date we acknowledge the report. We will not enforce longer embargoes without the reporter's explicit agreement.
+
+---
+
+## Scope
+
+**In scope:**
+- This MCP server's JSON-RPC transport (stdio and Streamable HTTP)
+- Tool definitions, input validation, and tool execution logic
+- Authentication and authorisation layer (OAuth 2.1 / JWT)
+- Rate limiting, input sanitisation, and output handling
+- Dependencies with vulnerabilities that directly affect this project
+- <PLACEHOLDER: NestJS-specific — if applicable: "Runtime hardening including Helmet (HTTP security headers), CORS allowlist, `@nestjs/throttler` rate limiting, and ValidationPipe input validation">
+
+**Out of scope:**
+- Vulnerabilities in third-party dependencies that are not exploitable in this project's context
+- Host operating system or infrastructure configuration
+- Denial-of-service attacks that require excessive resources beyond normal operation
+- Social engineering attacks
+- <PLACEHOLDER: any other explicit out-of-scope items>
+
+---
+
+## MCP Threat Model Summary
+
+This MCP server is designed to defend against the following MCP-specific threats. Full details are in [`docs/security/threat-model.md`](docs/security/threat-model.md).
+
+### Tool Poisoning
+Tool descriptions are loaded at connect time and injected into the LLM context. We prevent poisoning by:
+- Tool descriptions are static strings defined in source code; no user-supplied content is interpolated
+- All tool inputs validated against strict immutable Zod/JSON Schema
+- Egress from tool execution limited to an explicit allowlist of approved domains
+
+### Prompt Injection
+Adversarial instructions may arrive via tool input parameters or external API responses used as tool results. We mitigate by:
+- Treating all tool response content as untrusted data; never interpolating it directly into system prompts
+- Validating all tool inputs via `ValidationPipe` before processing
+
+### OAuth Token Audience Enforcement
+Per the MCP specification (2025-11-25), **token passthrough is forbidden**. This server:
+- Validates the `aud` (audience) claim on every inbound Bearer token
+- Rejects tokens where `aud` does not match this server's registered resource identifier
+- Implements RFC 8707 Resource Indicators; does not accept ambient credentials
+
+### Confused-Deputy Prevention
+This server acts as an OAuth Resource Server only and never forwards tokens to downstream services. For proxy configurations: per-client consent is enforced; redirect URIs are matched exactly.
+
+### Developer Tooling
+MCP Inspector and other developer tooling must be run authenticated and on a non-public port. Upgrade to MCP Inspector ≥0.14.1 (fixes CVE-2025-49596, CVSS 9.4).
+
+---
+
+## Security Acknowledgements
+
+We thank the following researchers for responsibly disclosing vulnerabilities:
+
+<PLACEHOLDER: List researcher names and CVEs, or "No disclosures to date.">
+
+---
+
+*Security policy last reviewed: <PLACEHOLDER: YYYY-MM-DD>*
+*MCP specification version referenced: 2025-11-25*

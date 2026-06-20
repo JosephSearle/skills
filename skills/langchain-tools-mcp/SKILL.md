@@ -105,8 +105,8 @@ After implementation, verify with:
 # Install deps
 uv add langchain langchain-core langchain-openai langchain-anthropic langchain-mcp-adapters
 
-# Type check
-uv run mypy src/ --strict
+# Type check (Pyright — see developer-experience skill)
+uv run pyright src/
 
 # Run tests
 uv run pytest tests/ -x -q

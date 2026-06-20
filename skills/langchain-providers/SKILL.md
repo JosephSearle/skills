@@ -94,8 +94,9 @@ After configuring a provider, provide the exact verification commands:
 
 ```bash
 # Verify package versions match pinned values
-uv pip show langchain-openai langchain-anthropic langchain-aws langchain-mistralai \
-    langchain-groq langchain-ollama langchain-huggingface langchain-cohere
+uv run python -c "import langchain_openai, langchain_anthropic; print('imports OK')"
+# Or check versions via:
+# uv pip show langchain-openai langchain-anthropic langchain-aws
 
 # Smoke test provider auth (replace model/provider as needed)
 uv run python -c "

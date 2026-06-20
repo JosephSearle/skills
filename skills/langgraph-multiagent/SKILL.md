@@ -46,9 +46,10 @@ Then detect cross-cutting requirements:
 | Requirement | Action |
 |---|---|
 | Long-horizon / planning / filesystem / summarization | Load `references/deepagents.md` |
-| Independent deployment / Agent Server / async task management | Load `references/remote-graphs.md` |
+| Independent deployment / Agent Server / async task management | Load `references/remote-graphs.md`; also see `langgraph-deployment` skill for self-hosted LangGraph Server setup |
 | Hundreds or thousands of tools | Load `references/bigtool.md` |
 | Pattern selection in doubt | Load `references/patterns.md` first |
+| Tracing multi-agent spans | See `observability` skill — `mlflow.langchain.autolog()` captures the full multi-agent span hierarchy |
 
 ---
 
@@ -97,6 +98,7 @@ Every multi-agent system must address all of:
 | Error handling | Wrap remote calls with `.with_fallbacks([...])` or node-level retry |
 | Context cost | Set `output_mode="last_message"` unless full history is required |
 | Checkpoint growth | Enable DeltaChannel (langgraph ≥1.2) for threads exceeding ~50 turns |
+| Tracing | Add `mlflow.langchain.autolog()` before graph construction — each sub-agent appears as a child span (see `observability` skill) |
 
 ### Handoff mechanics summary
 

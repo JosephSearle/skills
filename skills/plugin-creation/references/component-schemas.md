@@ -19,6 +19,8 @@ name: stable-name          # optional — overrides directory name as the invoca
 description: >
   What this skill does and when Claude should invoke it automatically.
   Include trigger phrases. Be specific — this is what Claude reads to decide relevance.
+argument-hint: "[mode]"          # optional — shown in the UI next to the skill name
+license: MIT                     # optional — SPDX identifier
 disable-model-invocation: true   # optional — skill only runs when user explicitly calls it
 ---
 ```
@@ -27,6 +29,8 @@ disable-model-invocation: true   # optional — skill only runs when user explic
 |-------|----------|-------------|
 | `description` | Recommended | Tells Claude when to auto-invoke this skill. Omit only for user-only skills. |
 | `name` | No | Stable invocation name, independent of the directory name. |
+| `argument-hint` | No | Short hint shown in the Claude Code UI next to the skill name to indicate what the user can type after it, e.g. `"[lite|full|ultra]"`. |
+| `license` | No | SPDX license identifier for this skill, e.g. `"MIT"`. Useful for marketplace-distributed plugins. |
 | `disable-model-invocation` | No | If `true`, Claude cannot auto-invoke — only the user can call it directly. |
 
 ### Skill Content
@@ -118,6 +122,27 @@ The `matcher` field is optional for events that aren't tool-specific (e.g. `Sess
 | `mcp_tool` | Call a tool on a configured MCP server | `server`, `tool`, optional `arguments` |
 | `prompt` | Evaluate a prompt with an LLM | `prompt` (use `$ARGUMENTS` for context) |
 | `agent` | Run an agentic verifier with tools | `agent` name |
+
+### Additional `command` Hook Fields
+
+These optional fields apply to hooks of type `command`:
+
+| Field | Description |
+|-------|-------------|
+| `commandWindows` | PowerShell equivalent of `command`. Provide this when the plugin must run on Windows. Uses `$env:CLAUDE_PLUGIN_ROOT` instead of `${CLAUDE_PLUGIN_ROOT}`. |
+| `timeout` | Maximum seconds the hook is allowed to run before it is killed. Defaults to no limit. |
+| `statusMessage` | Text shown in the Claude Code status bar while the hook is executing, e.g. `"Loading plugin..."`. |
+
+Cross-platform example:
+```json
+{
+  "type": "command",
+  "command": "command -v node >/dev/null 2>&1 && node \"${CLAUDE_PLUGIN_ROOT}/hooks/activate.js\" || exit 0",
+  "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\activate.js\" }",
+  "timeout": 5,
+  "statusMessage": "Activating plugin..."
+}
+```
 
 ### Hook Events
 
