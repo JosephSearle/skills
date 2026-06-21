@@ -1,11 +1,27 @@
 # Deep Agents Reference — `create_deep_agent` and the deepagents Harness
 
-> **Version: `deepagents` 0.6.7** (verified June 1 2026). Python 3.11+ required.
+> **Version: `deepagents` 0.6.10** (verified June 20 2026). Python 3.11+ required.
 > Install: `uv add deepagents`
 >
 > **Critical:** The entry point is `create_deep_agent` — NOT `create_agent`.
 > `create_agent` is a LangChain / LangGraph prebuilt; `create_deep_agent` is the deepagents
 > batteries-included harness. Confusing them produces a working but unharnessed agent.
+
+---
+
+## Dedicated Skills — Go Here for In-Depth Coverage
+
+This file is a breadth-first reference. For subsystem depth, load the dedicated skill:
+
+| Subsystem | Skill | Key topics |
+|---|---|---|
+| Filesystem, permissions, eviction | `deepagents-filesystem` | FilesystemPermission, virtual_mode, file tools, large results, multimodal reads |
+| Sandbox providers, lifecycle, security | `deepagents-sandbox` | Modal/Daytona/Runloop/AgentCore/LangSmith, TTL, secrets model, network |
+| Skills authoring and memory | `deepagents-skills-and-memory` | SKILL.md spec, L1/L2/L3 disclosure, AGENTS.md, source precedence |
+| Harness profiles and Claude | `deepagents-harness-and-claude` | HarnessProfile, prompt assembly, AnthropicPromptCachingMiddleware, built-in profiles |
+| Subagents and async tasks | `deepagents-subagents-and-async` | AsyncSubAgent, 5 async tools, async_tasks channel, Agent Protocol |
+| dcode CLI and codegen | `deepagents-codegen-dcode` | dcode flags, headless/CI, QuickJS interpreter, Terminal-Bench |
+| Rubric evaluation (beta) | `deepagents-rubric-and-eval` | RubricMiddleware, grader subagent, LLM-as-judge at runtime |
 
 ---
 
@@ -346,10 +362,12 @@ Auth for LangGraph Platform: automatic via `LANGGRAPH_API_KEY` / `LANGSMITH_API_
 |---|---|---|
 | `create_deep_agent`, sync subagents, filesystem, TodoList, Summarization, prompt caching | **GA / stable** | 0.1.x |
 | Sandboxes (Modal / Daytona / Runloop / LangSmith) | **Stable** | 0.4 |
-| Harness profiles, `ContextHubBackend` | **Beta** | 0.6 |
+| Harness profiles, `ContextHubBackend` | **Beta** | 0.6 / 0.5.4 |
 | DeltaChannel (langgraph ≥1.2 required) | **Beta** | 0.6 |
 | Async subagents (`AsyncSubAgent`) | **Preview** — APIs may change | 0.5 (Apr 7 2026) |
-| `CodeInterpreterMiddleware` / QuickJS REPLMiddleware | **Experimental** | 0.6 |
+| `CodeInterpreterMiddleware` / QuickJS interpreter | **Experimental** | deepagents-code 0.1.4 |
+| `RubricMiddleware` (LLM-as-judge iteration) | **Beta** — API may change | 0.6.5 |
+| `LangSmithSandbox` backend | **Private beta** — contact LangChain | 0.6.x |
 | Deep Agents Code CLI (`dcode`) | Stable CLI, rapidly iterating | 0.1.0 (separate package) |
 | `model=None` default | **Deprecated** since 0.5.3 | **Removed in 1.0.0** |
 
@@ -364,6 +382,8 @@ Auth for LangGraph Platform: automatic via `LANGGRAPH_API_KEY` / `LANGSMITH_API_
 | 0.5 | Apr 7 2026 | Async subagents (`AsyncSubAgent`); multimodal filesystem (PDF/audio/video via `read_file`) |
 | 0.5.3 | — | `model=None` default deprecated |
 | 0.6 | — | Harness profiles; `ContextHubBackend`; DeltaChannel (beta); `CodeInterpreterMiddleware` (QuickJS); `stream_events` v3 support |
+| 0.6.5 | May 27 2026 | `RubricMiddleware` — LLM-as-judge grader subagent for self-evaluated iteration (beta) |
+| deepagents-code 0.1.4 | May 21 2026 | Interpreter middleware via `langchain-quickjs`; `CodeInterpreterMiddleware`; `eval` tool |
 | CLI 0.1.0 | — | Interactive REPL moved to `deepagents-code` (`dcode`); `deepagents-cli` now holds only `init`/`dev`/`deploy` subcommands |
 
 > **Versioning rule:** `0.Y.Z` — **minor (Y) bumps may carry breaking changes** to public
