@@ -53,7 +53,7 @@ git restore --staged path/to/file
 ## Committing (mutating -- only after developer approval, per SKILL.md step 4)
 
 ### Always write the message to a file first
-Multi-line Conventional Commits messages (header, blank line, body, blank line, footer) are fragile to pass inline -- shell quoting mangles blank lines and special characters like `!` or backticks. Write the exact approved message to a temp file, then:
+Multi-line Conventional Commits messages (header, blank line, body, blank line, footer) are fragile to pass inline -- shell quoting mangles blank lines and special characters like `!` or backticks. Write the exact approved message to a temp file -- exactly what the developer approved, with no `Co-Authored-By:` or other AI-attribution trailer appended, even if that would otherwise be a session default -- then:
 ```
 git commit -F /path/to/commit-message.txt
 ```
