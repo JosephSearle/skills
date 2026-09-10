@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build:index": "node scripts/build-skills-index.mjs",
+    "validate:evals": "node scripts/validate-evals.mjs",
     "predev": "npm run build:index",
     "dev": "next dev",
     "prebuild": "npm run build:index",
@@ -12,6 +13,7 @@
     "start": "next start",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "pretypecheck": "npm run build:index",
     "typecheck": "tsc --noEmit",
     "lint": "biome check .",
     "lint:ci": "biome ci .",

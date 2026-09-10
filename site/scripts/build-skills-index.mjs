@@ -1,13 +1,10 @@
 #!/usr/bin/env node
-// Scans the repo's top-level skill folders and produces:
+// Scans catalog/'s skill folders and produces:
 //   site/generated/skills-index.json  (metadata for the frontend, §5.1)
 //   site/public/downloads/<slug>.skill (one zip archive per skill, §5.2)
 //
-// A top-level directory counts as a skill iff it directly contains a
-// SKILL.md file (§3.1's inclusion rule) — this naturally skips
-// `Claude outputs/`, `.git/`, `.gitignore`, `README.md`, `intent.md`,
-// `spec.md`, and `site/` itself, with `.claude/` additionally excluded by
-// name regardless (§3.2).
+// A catalog/ subdirectory counts as a skill iff it directly contains a
+// SKILL.md file (§3.1's inclusion rule).
 
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
@@ -21,15 +18,13 @@ const matter = require('gray-matter');
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_SITE_ROOT = path.resolve(__dirname, '..');
 const DEFAULT_REPO_ROOT = path.resolve(DEFAULT_SITE_ROOT, '..');
+const DEFAULT_CATALOG_ROOT = path.join(DEFAULT_REPO_ROOT, 'catalog');
 
-const EXCLUDED_NAMES = new Set(['.claude', '.git', 'site', 'node_modules']);
-
-function findSkillFolders(repoRoot) {
+function findSkillFolders(catalogRoot) {
   return fs
-    .readdirSync(repoRoot, { withFileTypes: true })
+    .readdirSync(catalogRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
-    .filter((entry) => !EXCLUDED_NAMES.has(entry.name))
-    .filter((entry) => fs.existsSync(path.join(repoRoot, entry.name, 'SKILL.md')))
+    .filter((entry) => fs.existsSync(path.join(catalogRoot, entry.name, 'SKILL.md')))
     .map((entry) => entry.name)
     .sort();
 }
@@ -68,12 +63,12 @@ function buildSkillArchive(slug, skillDir, downloadsDir) {
   });
 }
 
-// Builds the skills index and .skill archives for `repoRoot`, writing
+// Builds the skills index and .skill archives for `catalogRoot`, writing
 // output under `siteRoot`/generated and `siteRoot`/public/downloads.
 // Exported so a test can point both roots at a temp directory instead of
 // the real repo (spec §7's fixture-skill smoke test).
 export async function buildIndex({
-  repoRoot = DEFAULT_REPO_ROOT,
+  catalogRoot = DEFAULT_CATALOG_ROOT,
   siteRoot = DEFAULT_SITE_ROOT,
 } = {}) {
   const generatedDir = path.join(siteRoot, 'generated');
@@ -82,13 +77,13 @@ export async function buildIndex({
   fs.mkdirSync(generatedDir, { recursive: true });
   fs.mkdirSync(downloadsDir, { recursive: true });
 
-  const slugs = findSkillFolders(repoRoot);
+  const slugs = findSkillFolders(catalogRoot);
   const errors = [];
   const warnings = [];
   const skills = [];
 
   for (const slug of slugs) {
-    const skillDir = path.join(repoRoot, slug);
+    const skillDir = path.join(catalogRoot, slug);
     const skillMdPath = path.join(skillDir, 'SKILL.md');
     const raw = fs.readFileSync(skillMdPath, 'utf-8');
     const { data: frontmatter, content } = matter(raw);

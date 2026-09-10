@@ -4,19 +4,13 @@ on:
   pull_request:
     paths:
       - 'site/**'
-      - '*/SKILL.md'
-      - '*/references/**'
-      - '*/scripts/**'
-      - '*/evals/**'
+      - 'catalog/**'
       - '.github/workflows/ci.yml'
   push:
     branches: [main]
     paths:
       - 'site/**'
-      - '*/SKILL.md'
-      - '*/references/**'
-      - '*/scripts/**'
-      - '*/evals/**'
+      - 'catalog/**'
       - '.github/workflows/ci.yml'
 
 concurrency:
@@ -76,6 +70,19 @@ jobs:
       - run: npm ci
       - name: Validate skill content and build index
         run: npm run build:index
+
+  validate-evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - name: Validate skill evals structure
+        run: npm run validate:evals
 
   e2e:
     needs: build-index

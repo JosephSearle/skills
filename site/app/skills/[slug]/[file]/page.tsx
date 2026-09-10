@@ -3,7 +3,7 @@ import path from 'node:path';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { formatBytes } from '@/lib/format-bytes';
 import { MarkdownBody } from '@/lib/markdown';
-import { REPO_ROOT } from '@/lib/repo-root';
+import { CATALOG_ROOT } from '@/lib/repo-root';
 import { getAllSkills, getReferenceBasename, getSkillBySlug } from '@/lib/skills-index';
 import { notFound } from 'next/navigation';
 
@@ -28,7 +28,7 @@ export default async function ReferenceFilePage({
   const reference = skill.references.find((ref) => getReferenceBasename(ref.path) === file);
   if (!reference) notFound();
 
-  const absolutePath = path.join(REPO_ROOT, skill.slug, reference.path);
+  const absolutePath = path.join(CATALOG_ROOT, skill.slug, reference.path);
   const content = fs.readFileSync(absolutePath, 'utf-8');
 
   return (
