@@ -1,6 +1,7 @@
 ---
 name: cl-creation
 description: Drafts the title, description body, and metadata (tags/labels, linked issue) for a change list (CL) or pull request, so a developer who has just finished a branch can hand reviewers something clear to read. Use this whenever someone asks to write, draft, or improve a PR/CL title or description, wants help summarizing a branch's diff for review, says something like "help me write up this PR" or "I finished my branch, need a description for the reviewer," or asks you to fill in a pull request template. This skill is strictly about authoring the CL itself — it does not judge whether a diff is well-scoped, perform code review, or reason about how review bots/changelog tooling/release automation will consume the text. If the request is instead about reviewing code, critiquing a diff's size or structure, or acting on CI/bot output, this skill does not apply.
+summary: Drafts a pull request or CL's title and description from your branch's diff.
 ---
 
 # CL Creation
