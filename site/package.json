@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build:index": "node scripts/build-skills-index.mjs",
+    "validate:evals": "node scripts/validate-evals.mjs",
     "predev": "npm run build:index",
     "dev": "next dev",
     "prebuild": "npm run build:index",
