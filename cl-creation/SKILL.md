@@ -69,6 +69,8 @@ Suggested metadata: <tags / linked issue / reviewers, only if applicable>
 
 This is a draft for the developer to review and adjust, not a final artifact to submit on their behalf — they know context you don't (team conventions, who should review, whether a link will resolve for others). If asked to actually open or update the PR, that's a separate action requiring the developer's explicit go-ahead, following the same rule as any other action that posts or publishes something. `references/github-commands.md` has the exact `gh pr create` / `gh pr edit` commands for this step, including how to pass a multi-paragraph body safely — but treat running them as strictly gated on that explicit confirmation, not something to chain on automatically once the draft looks good.
 
+When the body is actually posted (not just shown as a draft here), it carries its own attribution trailer, `Generated with cl-creation skill`, in place of any generic AI-attribution line a session might otherwise add — see `references/github-commands.md` for exactly how that's formatted.
+
 ## Notes on approach (why the skill works this way)
 
 - Treating this as "summarize the diff and the intent behind it" rather than inventing new information is a deliberate choice, not a shortcut — generating a description is fundamentally a summarization task over the diff and the commit history, and this skill should behave accordingly: it condenses what already happened rather than speculating about it.

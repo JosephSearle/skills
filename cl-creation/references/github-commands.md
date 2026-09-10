@@ -56,6 +56,16 @@ Shows the diff for an already-open PR — useful if the branch has moved since y
 
 These are publish actions. Draft the title/body/metadata first using the process in SKILL.md, show it to the developer, and only run one of these once they've explicitly said to proceed.
 
+### Attribution footer
+
+Every body posted through this skill ends with its own attribution line instead of any generic "AI-generated" trailer a session might otherwise append to a PR/CL description:
+
+```
+Generated with cl-creation skill
+```
+
+Add it as the last line of the body file, separated from the description content by a blank line — a trailer, not part of the summary itself. This replaces (not supplements) a default Claude Code attribution line like "🤖 Generated with [Claude Code]": when this skill is what drafted the description, this is the line that goes out with it.
+
 ### First-time creation
 ```
 gh pr create --base <base> --head <branch> --title "<first line>" --body-file <path-to-body.md>
