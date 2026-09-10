@@ -5,13 +5,14 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { buildIndex } from './build-skills-index.mjs';
 
 let tempRoot;
-let repoRoot;
+let catalogRoot;
 let siteRoot;
 
 beforeEach(() => {
   tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'skills-index-test-'));
-  repoRoot = path.join(tempRoot, 'repo');
-  siteRoot = path.join(repoRoot, 'site');
+  catalogRoot = path.join(tempRoot, 'repo', 'catalog');
+  siteRoot = path.join(tempRoot, 'repo', 'site');
+  fs.mkdirSync(catalogRoot, { recursive: true });
   fs.mkdirSync(siteRoot, { recursive: true });
 });
 
@@ -20,7 +21,7 @@ afterEach(() => {
 });
 
 function writeSkill(slug, frontmatter, body = '# Body\n\nHello.') {
-  const skillDir = path.join(repoRoot, slug);
+  const skillDir = path.join(catalogRoot, slug);
   fs.mkdirSync(skillDir, { recursive: true });
   const fm = Object.entries(frontmatter)
     .map(([key, value]) => `${key}: ${value}`)
@@ -37,7 +38,7 @@ describe('buildIndex', () => {
       summary: 'A one-line human summary of the fixture skill.',
     });
 
-    const index = await buildIndex({ repoRoot, siteRoot });
+    const index = await buildIndex({ catalogRoot, siteRoot });
 
     expect(index.skills).toHaveLength(1);
     expect(index.skills[0]).toMatchObject({
@@ -61,7 +62,7 @@ describe('buildIndex', () => {
       description: 'Has a description but no summary.',
     });
 
-    await expect(buildIndex({ repoRoot, siteRoot })).rejects.toThrow(/broken-skill.*summary/s);
+    await expect(buildIndex({ catalogRoot, siteRoot })).rejects.toThrow(/broken-skill.*summary/s);
   });
 
   it('warns but does not fail when frontmatter name does not match the folder', async () => {
@@ -71,7 +72,7 @@ describe('buildIndex', () => {
       summary: 'Mismatched name summary.',
     });
 
-    const index = await buildIndex({ repoRoot, siteRoot });
+    const index = await buildIndex({ catalogRoot, siteRoot });
     expect(index.skills).toHaveLength(1);
   });
 
@@ -88,7 +89,7 @@ describe('buildIndex', () => {
     fs.mkdirSync(path.join(skillDir, 'evals'));
     fs.writeFileSync(path.join(skillDir, 'evals', 'evals.json'), '[]');
 
-    const index = await buildIndex({ repoRoot, siteRoot });
+    const index = await buildIndex({ catalogRoot, siteRoot });
     const skill = index.skills[0];
 
     expect(skill.hasScripts).toBe(true);
