@@ -1,5 +1,5 @@
-import type { ArchiveEntry } from '@/lib/types';
 import { buildTreeLines } from '@/lib/build-tree-lines';
+import type { ArchiveEntry } from '@/lib/types';
 
 export function ArchiveTree({ slug, items }: { slug: string; items: ArchiveEntry[] }) {
   const lines = buildTreeLines(items);

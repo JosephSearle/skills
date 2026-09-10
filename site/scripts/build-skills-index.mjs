@@ -9,8 +9,8 @@
 // `spec.md`, and `site/` itself, with `.claude/` additionally excluded by
 // name regardless (§3.2).
 
-import { createRequire } from 'node:module';
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import archiver from 'archiver';
@@ -29,9 +29,7 @@ function findSkillFolders(repoRoot) {
     .readdirSync(repoRoot, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .filter((entry) => !EXCLUDED_NAMES.has(entry.name))
-    .filter((entry) =>
-      fs.existsSync(path.join(repoRoot, entry.name, 'SKILL.md'))
-    )
+    .filter((entry) => fs.existsSync(path.join(repoRoot, entry.name, 'SKILL.md')))
     .map((entry) => entry.name)
     .sort();
 }
@@ -74,7 +72,10 @@ function buildSkillArchive(slug, skillDir, downloadsDir) {
 // output under `siteRoot`/generated and `siteRoot`/public/downloads.
 // Exported so a test can point both roots at a temp directory instead of
 // the real repo (spec §7's fixture-skill smoke test).
-export async function buildIndex({ repoRoot = DEFAULT_REPO_ROOT, siteRoot = DEFAULT_SITE_ROOT } = {}) {
+export async function buildIndex({
+  repoRoot = DEFAULT_REPO_ROOT,
+  siteRoot = DEFAULT_SITE_ROOT,
+} = {}) {
   const generatedDir = path.join(siteRoot, 'generated');
   const downloadsDir = path.join(siteRoot, 'public', 'downloads');
 
@@ -92,9 +93,7 @@ export async function buildIndex({ repoRoot = DEFAULT_REPO_ROOT, siteRoot = DEFA
     const raw = fs.readFileSync(skillMdPath, 'utf-8');
     const { data: frontmatter, content } = matter(raw);
 
-    const missing = ['name', 'description', 'summary'].filter(
-      (field) => !frontmatter[field]
-    );
+    const missing = ['name', 'description', 'summary'].filter((field) => !frontmatter[field]);
     if (missing.length > 0) {
       errors.push(`"${slug}": SKILL.md is missing required field(s): ${missing.join(', ')}`);
       continue;
@@ -102,7 +101,7 @@ export async function buildIndex({ repoRoot = DEFAULT_REPO_ROOT, siteRoot = DEFA
 
     if (frontmatter.name !== slug) {
       warnings.push(
-        `"${slug}": frontmatter name "${frontmatter.name}" does not match folder name "${slug}"`
+        `"${slug}": frontmatter name "${frontmatter.name}" does not match folder name "${slug}"`,
       );
     }
 
@@ -120,21 +119,17 @@ export async function buildIndex({ repoRoot = DEFAULT_REPO_ROOT, siteRoot = DEFA
       : [];
 
     const scriptsDir = path.join(skillDir, 'scripts');
-    const hasScripts =
-      fs.existsSync(scriptsDir) && fs.readdirSync(scriptsDir).length > 0;
+    const hasScripts = fs.existsSync(scriptsDir) && fs.readdirSync(scriptsDir).length > 0;
 
     const evalsDir = path.join(skillDir, 'evals');
-    const hasEvals =
-      fs.existsSync(evalsDir) && fs.readdirSync(evalsDir).length > 0;
+    const hasEvals = fs.existsSync(evalsDir) && fs.readdirSync(evalsDir).length > 0;
 
-    const archiveTree = listFilesRecursive(skillDir).sort((a, b) =>
-      a.path.localeCompare(b.path)
-    );
+    const archiveTree = listFilesRecursive(skillDir).sort((a, b) => a.path.localeCompare(b.path));
 
     const { downloadPath, downloadSizeBytes } = await buildSkillArchive(
       slug,
       skillDir,
-      downloadsDir
+      downloadsDir,
     );
 
     skills.push({
@@ -153,7 +148,7 @@ export async function buildIndex({ repoRoot = DEFAULT_REPO_ROOT, siteRoot = DEFA
   }
 
   if (errors.length > 0) {
-    const message = 'Skills index build failed:\n' + errors.map((e) => `  - ${e}`).join('\n');
+    const message = `Skills index build failed:\n${errors.map((e) => `  - ${e}`).join('\n')}`;
     throw new Error(message);
   }
 
@@ -168,10 +163,7 @@ export async function buildIndex({ repoRoot = DEFAULT_REPO_ROOT, siteRoot = DEFA
     skills,
   };
 
-  fs.writeFileSync(
-    path.join(generatedDir, 'skills-index.json'),
-    JSON.stringify(index, null, 2)
-  );
+  fs.writeFileSync(path.join(generatedDir, 'skills-index.json'), JSON.stringify(index, null, 2));
 
   return index;
 }

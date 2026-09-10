@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { formatBytes } from '@/lib/format-bytes';
+import { useState } from 'react';
 import { DownloadIcon } from './Icons';
 
 export function DownloadButton({

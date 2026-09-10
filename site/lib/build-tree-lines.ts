@@ -13,10 +13,12 @@ function buildTree(entries: ArchiveEntry[]): TreeNode {
     let node = root;
     parts.forEach((part, i) => {
       const isFile = i === parts.length - 1;
-      if (!node.children.has(part)) {
-        node.children.set(part, { name: part, children: new Map(), isFile });
+      let child = node.children.get(part);
+      if (!child) {
+        child = { name: part, children: new Map(), isFile };
+        node.children.set(part, child);
       }
-      node = node.children.get(part)!;
+      node = child;
     });
   }
   return root;

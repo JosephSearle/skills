@@ -1,6 +1,6 @@
 import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
+import remarkGfm from 'remark-gfm';
 
 export function MarkdownBody({ source }: { source: string }) {
   return (

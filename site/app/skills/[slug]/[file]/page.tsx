@@ -1,18 +1,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { notFound } from 'next/navigation';
-import { getAllSkills, getSkillBySlug, getReferenceBasename } from '@/lib/skills-index';
-import { REPO_ROOT } from '@/lib/repo-root';
-import { MarkdownBody } from '@/lib/markdown';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { formatBytes } from '@/lib/format-bytes';
+import { MarkdownBody } from '@/lib/markdown';
+import { REPO_ROOT } from '@/lib/repo-root';
+import { getAllSkills, getReferenceBasename, getSkillBySlug } from '@/lib/skills-index';
+import { notFound } from 'next/navigation';
 
 export function generateStaticParams() {
   return getAllSkills().flatMap((skill) =>
     skill.references.map((ref) => ({
       slug: skill.slug,
       file: getReferenceBasename(ref.path),
-    }))
+    })),
   );
 }
 
@@ -25,9 +25,7 @@ export default async function ReferenceFilePage({
   const skill = getSkillBySlug(slug);
   if (!skill) notFound();
 
-  const reference = skill.references.find(
-    (ref) => getReferenceBasename(ref.path) === file
-  );
+  const reference = skill.references.find((ref) => getReferenceBasename(ref.path) === file);
   if (!reference) notFound();
 
   const absolutePath = path.join(REPO_ROOT, skill.slug, reference.path);

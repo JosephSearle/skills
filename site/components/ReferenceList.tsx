@@ -1,10 +1,13 @@
-import Link from 'next/link';
-import type { ReferenceEntry } from '@/lib/types';
 import { formatBytes } from '@/lib/format-bytes';
 import { getReferenceBasename } from '@/lib/skills-index';
-import { FileIcon, ChevronRightIcon } from './Icons';
+import type { ReferenceEntry } from '@/lib/types';
+import Link from 'next/link';
+import { ChevronRightIcon, FileIcon } from './Icons';
 
-export function ReferenceList({ slug, references }: { slug: string; references: ReferenceEntry[] }) {
+export function ReferenceList({
+  slug,
+  references,
+}: { slug: string; references: ReferenceEntry[] }) {
   if (references.length === 0) return null;
 
   return (

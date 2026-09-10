@@ -3,3 +3,7 @@ site/node_modules/
 site/.next/
 site/generated/
 site/public/downloads/
+site/test-results/
+site/playwright-report/
+site/out/
+site/tsconfig.tsbuildinfo

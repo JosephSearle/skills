@@ -10,7 +10,12 @@
     "prebuild": "npm run build:index",
     "build": "next build",
     "start": "next start",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:ci": "biome ci .",
+    "format": "biome format --write ."
   },
   "dependencies": {
     "archiver": "^7.0.1",
@@ -23,6 +28,8 @@
     "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@playwright/test": "^1.48.0",
     "@tailwindcss/typography": "^0.5.15",
     "@types/archiver": "^6.0.2",
     "@types/node": "^22.0.0",

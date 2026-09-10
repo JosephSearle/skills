@@ -1,11 +1,11 @@
-import { notFound } from 'next/navigation';
-import { getAllSkills, getSkillBySlug } from '@/lib/skills-index';
-import { MarkdownBody } from '@/lib/markdown';
-import { Breadcrumb } from '@/components/Breadcrumb';
-import { ReferenceList } from '@/components/ReferenceList';
 import { ArchiveTree } from '@/components/ArchiveTree';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { DownloadButton } from '@/components/DownloadButton';
+import { ReferenceList } from '@/components/ReferenceList';
 import { UsingItElsewhere } from '@/components/UsingItElsewhere';
+import { MarkdownBody } from '@/lib/markdown';
+import { getAllSkills, getSkillBySlug } from '@/lib/skills-index';
+import { notFound } from 'next/navigation';
 
 export function generateStaticParams() {
   return getAllSkills().map((skill) => ({ slug: skill.slug }));

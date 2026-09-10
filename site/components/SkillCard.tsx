@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import type { SkillEntry } from '@/lib/types';
+import Link from 'next/link';
 import { BadgeRow } from './BadgeRow';
 import { DownloadButton } from './DownloadButton';
 
@@ -12,7 +12,10 @@ export function SkillCard({ skill }: { skill: SkillEntry }) {
       </div>
       <BadgeRow skill={skill} />
       <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-800">
-        <Link href={`/skills/${skill.slug}`} className="text-sm text-sky-600 hover:underline dark:text-sky-400">
+        <Link
+          href={`/skills/${skill.slug}`}
+          className="text-sm text-sky-600 hover:underline dark:text-sky-400"
+        >
           Read skill
         </Link>
         <DownloadButton

@@ -1,12 +1,23 @@
 export function UsingItElsewhere() {
   const steps = [
-    <>
-      Download the <code className="font-mono text-sky-600 dark:text-sky-400">.skill</code> file
-    </>,
-    <>
-      Rename it to <code className="font-mono text-sky-600 dark:text-sky-400">.zip</code> and unzip
-    </>,
-    <>Drop the folder into your skills directory</>,
+    {
+      id: 'download',
+      content: (
+        <>
+          Download the <code className="font-mono text-sky-600 dark:text-sky-400">.skill</code> file
+        </>
+      ),
+    },
+    {
+      id: 'rename',
+      content: (
+        <>
+          Rename it to <code className="font-mono text-sky-600 dark:text-sky-400">.zip</code> and
+          unzip
+        </>
+      ),
+    },
+    { id: 'drop', content: 'Drop the folder into your skills directory' },
   ];
 
   return (
@@ -15,8 +26,8 @@ export function UsingItElsewhere() {
         Using it elsewhere
       </h2>
       <ol className="mt-2 list-decimal space-y-1 pl-4 text-sm text-slate-600 dark:text-slate-400">
-        {steps.map((step, i) => (
-          <li key={i}>{step}</li>
+        {steps.map((step) => (
+          <li key={step.id}>{step.content}</li>
         ))}
       </ol>
     </div>

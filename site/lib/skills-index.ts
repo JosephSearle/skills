@@ -1,5 +1,5 @@
-import type { SkillEntry, SkillsIndex } from './types';
 import indexData from '../generated/skills-index.json';
+import type { SkillEntry, SkillsIndex } from './types';
 
 const index = indexData as SkillsIndex;
 
