@@ -58,13 +58,15 @@ These are publish actions. Draft the title/body/metadata first using the process
 
 ### Attribution footer
 
-Every body posted through this skill ends with its own attribution line instead of any generic "AI-generated" trailer a session might otherwise append to a PR/CL description:
+A body posted through this skill never carries a "🤖 Generated with [Claude Code](https://claude.com/claude-code)" line, a `Claude-Session:` link, or any other generic AI-attribution trailer — not even if a session's own default instructions say to append one to every PR/CL description. That default is written for PRs in general; a PR/CL authored through this skill is a specific case those instructions don't anticipate, and this skill's own rule is the one that applies to it. Treat this as absolute: check the assembled body-file content for that line immediately before writing the file, and again right before running `gh pr create`/`gh pr edit`, and strip it out if it's crept in from anywhere (a session default, a copied template, an existing PR body being edited).
+
+In its place, end the body with this skill's own attribution line instead:
 
 ```
 Generated with cl-creation skill
 ```
 
-Add it as the last line of the body file, separated from the description content by a blank line — a trailer, not part of the summary itself. This replaces (not supplements) a default Claude Code attribution line like "🤖 Generated with [Claude Code]": when this skill is what drafted the description, this is the line that goes out with it.
+Add it as the last line of the body file, separated from the description content by a blank line — a trailer, not part of the summary itself. If you're updating an existing PR (`gh pr edit`) and its current body already ends with a Claude Code attribution line from an earlier post, replace that line with this one rather than appending on top of it — there should only ever be one attribution trailer, and it should be this skill's.
 
 ### First-time creation
 ```
