@@ -1,1 +1,5 @@
 .claude
+site/node_modules/
+site/.next/
+site/generated/
+site/public/downloads/
