@@ -1,0 +1,26 @@
+{
+  "skill_name": "architectural-decision-record",
+  "evals": [
+    {
+      "id": 1,
+      "name": "full-context-single-decision",
+      "prompt": "We're switching our public product/order API from REST to GraphQL. We considered sticking with REST and adding field-filtering query params, and we also considered gRPC, but we landed on GraphQL because our frontend team needs flexible querying across nested product/order/customer data without over-fetching or under-fetching. Can you write the ADR for this in our repo?",
+      "expected_output": "Investigates the repo (finds the existing REST routes, dependencies, and an existing docs/adr/ log with ADR-0001/ADR-0002), recognizes this as one coherent interface decision needing no split, and writes exactly one new ADR (correctly numbered next in sequence) using the template: Considered Options lists all three options actually given, Rationale names the specific trade-off that ruled out each rejected option, Consequences are honest (including real risks like N+1 queries and caching loss), Related Decisions references the existing ADRs it touches, and Status defaults to Proposed since nothing indicated the decision was already signed off.",
+      "files": ["repo fixture: package.json, src/routes/*.js, docs/adr/ADR-0001-*.md, docs/adr/ADR-0002-*.md"]
+    },
+    {
+      "id": 2,
+      "name": "vague-no-context",
+      "prompt": "We're switching from SQLite to Postgres for the reporting service. Can you make an ADR for this?",
+      "expected_output": "Investigates the repo (finds the sqlite3 dependency, no existing docs/adr/ log) but recognizes the request itself doesn't supply real considered options or a concrete mechanism for the decision. Asks what alternatives were actually considered and what the concrete reasoning is, rather than inventing a plausible-sounding 'Considered Options' section (e.g. fabricating MySQL or a managed analytics store as if the user had named them) to produce a complete-looking document.",
+      "files": ["repo fixture: package.json (sqlite3, express), src/db.js"]
+    },
+    {
+      "id": 3,
+      "name": "bundled-decisions",
+      "prompt": "We want an ADR for moving off our billing monolith: splitting billing/invoicing/reporting into microservices (vs. a modular monolith, chosen because reporting's scaling needs differ from billing's), switching from long-lived feature branches to trunk-based development (vs. feature flags, chosen for faster deploy cadence), and adopting gRPC for inter-service calls (vs. REST+OpenAPI, chosen for latency and compile-time type safety) -- with reasoning and alternatives given for each. Can you write this up as an ADR?",
+      "expected_output": "Recognizes and explicitly flags that this is three separable decisions (different axes: structure, construction technique, interfaces; consequences that don't rise and fall together) rather than one, per the skill's splitting heuristic. Produces multiple distinct ADR files (not one undifferentiated document), each following the template with real considered options, named trade-offs, and honest consequences grounded in what the repo shows (e.g. no CI gating yet, no existing service boundaries), each at Status: Proposed, and cross-referenced under Related Decisions.",
+      "files": ["repo fixture: package.json, src/app/index.js (monolith), CONTRIBUTING.md (current branching workflow)"]
+    }
+  ]
+}
