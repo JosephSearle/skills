@@ -17,7 +17,6 @@ export default function BrowsePage() {
             <strong className="text-slate-900 dark:text-slate-100">{skills.length}</strong> skills
           </span>
           <span>Alphabetical by folder</span>
-          <span>Rebuilt on every deploy</span>
         </div>
       </div>
 
