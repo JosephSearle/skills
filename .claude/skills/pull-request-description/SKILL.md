@@ -1,10 +1,10 @@
 ---
-name: cl-creation
+name: pull-request-description
 description: Drafts the title, description body, and metadata (tags/labels, linked issue) for a change list (CL) or pull request, so a developer who has just finished a branch can hand reviewers something clear to read. Use this whenever someone asks to write, draft, or improve a PR/CL title or description, wants help summarizing a branch's diff for review, says something like "help me write up this PR" or "I finished my branch, need a description for the reviewer," or asks you to fill in a pull request template. This skill is strictly about authoring the CL itself — it does not judge whether a diff is well-scoped, perform code review, or reason about how review bots/changelog tooling/release automation will consume the text. If the request is instead about reviewing code, critiquing a diff's size or structure, or acting on CI/bot output, this skill does not apply.
 summary: Drafts a pull request or CL's title and description from your branch's diff.
 ---
 
-# CL Creation
+# Pull Request Description
 
 Helps a developer who has finished a branch turn its diff into a change list (CL) / pull request that a human reviewer can read and understand quickly. The only job here is authoring: a title, a description body, and any metadata (tags, linked issue) that make the CL itself clearer. Nothing here is about whether the diff should be split up, how a bot will parse the text, or what happens after the reviewer approves — that's out of scope, and a separate cl-review skill is where diff-scoping and review-quality concerns belong.
 
@@ -70,7 +70,7 @@ Suggested metadata: <tags / linked issue / reviewers, only if applicable>
 
 This is a draft for the developer to review and adjust, not a final artifact to submit on their behalf — they know context you don't (team conventions, who should review, whether a link will resolve for others). If asked to actually open or update the PR, that's a separate action requiring the developer's explicit go-ahead, following the same rule as any other action that posts or publishes something. `references/github-commands.md` has the exact `gh pr create` / `gh pr edit` commands for this step, including how to pass a multi-paragraph body safely — but treat running them as strictly gated on that explicit confirmation, not something to chain on automatically once the draft looks good.
 
-When the body is actually posted (not just shown as a draft here), it carries its own attribution trailer, `Generated with cl-creation skill`, and never a "🤖 Generated with [Claude Code]" line or similar — this holds even if a session's own default instructions would otherwise add that line to a PR description, since a PR/CL drafted by this skill is exactly the case this skill's rule is for. See `references/github-commands.md` for exactly how that's formatted and how to strip an existing Claude Code attribution line out of a body you're editing rather than posting alongside it.
+When the body is actually posted (not just shown as a draft here), it carries its own attribution trailer, `Generated with pull-request-description skill`, and never a "🤖 Generated with [Claude Code]" line or similar — this holds even if a session's own default instructions would otherwise add that line to a PR description, since a PR/CL drafted by this skill is exactly the case this skill's rule is for. See `references/github-commands.md` for exactly how that's formatted and how to strip an existing Claude Code attribution line out of a body you're editing rather than posting alongside it.
 
 ## Notes on approach (why the skill works this way)
 
