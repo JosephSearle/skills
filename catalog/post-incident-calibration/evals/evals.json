@@ -1,0 +1,26 @@
+{
+  "skill_name": "post-incident-calibration",
+  "evals": [
+    {
+      "id": 1,
+      "name": "full-data-walkthrough",
+      "prompt": "We had an incident yesterday with our checkout API -- I've got the chat transcript and the alert log. Can you run this through our post-incident calibration process and give me the calibration document?",
+      "expected_output": "Walks through Identify (teams/participants/systems from the transcript), Analyze (timeline + themes + interviewee shortlist), Interview (guides or synthesis), Calibrate (a Calibration Document following the template: data reviewed, participants, timeline, themes capped/prioritized, feedback prompts, known gaps). Should not fabricate interview content since none was provided -- should flag interviews as not yet conducted and offer guides instead.",
+      "files": ["incident-chat-transcript.txt", "alert-log-excerpt.txt"]
+    },
+    {
+      "id": 2,
+      "name": "no-data-provided",
+      "prompt": "We had an incident with our payments API last week and I need to put together a calibration document for the review meeting.",
+      "expected_output": "Recognizes no incident data has actually been shared yet. Should not invent a timeline, participants, or themes. Should ask for the Identify-phase inputs (chat transcripts, who was involved, systems touched) before proceeding, per the skill's data-gating principle.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "partial-data-finish-calibrate",
+      "prompt": "My team already built a timeline and interviewed one of the responders (Tom) for the checkout API incident. We still haven't talked to Priya or Jess yet. Can you help me pull together the calibration document from what we have?",
+      "expected_output": "Uses the existing timeline and Tom's interview notes rather than redoing Identify/Analyze from scratch, but explicitly flags in the Calibration Document (Known gaps / participants table) that Priya and Jess haven't been interviewed yet, rather than silently treating the document as complete. Should not invent quotes or timeline entries for Priya or Jess.",
+      "files": ["existing-timeline-and-interview.txt"]
+    }
+  ]
+}
