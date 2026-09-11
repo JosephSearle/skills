@@ -1,0 +1,26 @@
+{
+  "skill_name": "post-incident-report",
+  "evals": [
+    {
+      "id": 1,
+      "name": "full-data-walkthrough",
+      "prompt": "We had an incident with our checkout API a while back. Here's the calibration document from before the review meeting, and here are the notes from the meeting itself. Can you write up the final incident report for us?",
+      "expected_output": "Produces a final 'how we got here' report following the template (header metadata, executive summary, narrative, contributing factors, impact, three-way lessons-learned split, consolidated action-item table with owner/category/priority/completion condition, glossary). Resolves the calibration document's open questions using the meeting notes rather than leaving them phrased as open questions, incorporates new information that only surfaced in the meeting (e.g. a cross-service impact nobody flagged during the incident itself), explicitly flags impact as unquantified if no real numbers exist rather than inventing them, and honestly carries forward anything the meeting itself left unresolved (e.g. an audit with no owner yet) instead of inventing a resolution.",
+      "files": ["calibration_document.md", "meeting_notes.md"]
+    },
+    {
+      "id": 2,
+      "name": "no-data-provided",
+      "prompt": "We had an incident with our payments API last month. Can you write the final post-incident report for the eng wiki?",
+      "expected_output": "Recognizes that no calibration document or meeting output has been provided at all. Does not invent incident-specific details (dates, systems, metrics, names, root cause, action items) to fill a 'final report' template. Asks for the calibration document and/or meeting notes/summary before proceeding, per the skill's data-gating principle -- offering a blank structural template with no invented content is an acceptable way to be immediately useful while still asking.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "no-meeting-yet",
+      "prompt": "Here's the calibration document from our checkout API incident review. Can you finalize this into the incident report? We haven't scheduled the review meeting yet but I want the report ready to go.",
+      "expected_output": "Explicitly flags that the learning-review meeting hasn't happened yet and that a calibration document alone is not sufficient input for a truly final report, per the Meet-phase data-gating guidance. Does not treat the calibration document's open questions as resolved, and does not invent assigned action items with owners/priorities/deadlines, since those come from the meeting. May offer a clearly-labeled draft built from the calibration document as long as it keeps the open questions genuinely open and marks itself as pending the meeting.",
+      "files": ["calibration_document.md"]
+    }
+  ]
+}
