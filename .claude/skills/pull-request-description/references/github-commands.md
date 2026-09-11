@@ -1,4 +1,4 @@
-# Git & GitHub commands for CL creation
+# Git & GitHub commands for pull request descriptions
 
 Two separate jobs need commands: **seeing what changed** (safe to run freely — read-only) and **actually creating or updating the PR** (posting to GitHub — never run without the developer's explicit go-ahead, matching the rule in SKILL.md's Output format section). Keep these two groups mentally separate; don't chain a `gh pr create` onto the end of a diff-gathering pass without a confirmation step in between.
 
@@ -63,7 +63,7 @@ A body posted through this skill never carries a "🤖 Generated with [Claude Co
 In its place, end the body with this skill's own attribution line instead:
 
 ```
-Generated with cl-creation skill
+Generated with pull-request-description skill
 ```
 
 Add it as the last line of the body file, separated from the description content by a blank line — a trailer, not part of the summary itself. If you're updating an existing PR (`gh pr edit`) and its current body already ends with a Claude Code attribution line from an earlier post, replace that line with this one rather than appending on top of it — there should only ever be one attribution trailer, and it should be this skill's.
