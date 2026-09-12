@@ -1,0 +1,26 @@
+{
+  "skill_name": "prompt-evaluation",
+  "evals": [
+    {
+      "id": 1,
+      "name": "seems-fine-on-a-few-examples",
+      "prompt": "I wrote a prompt that classifies support tickets into 'billing', 'technical', or 'account' categories. I tried it on like 5 tickets and it got them all right, so I think it's ready to ship. Anything else I should do?",
+      "expected_output": "Pushes back on treating 5 manually-checked examples as sufficient, naming the specific risk Anthropic describes (production users interact with it in ways you never anticipated). Proposes defining success criteria (task fidelity as the main one here), building a larger eval dataset that deliberately includes edge cases (ambiguous tickets spanning categories, sarcasm, typos), and recommends code-based exact-match grading against labeled examples since this is a fixed-category classification task -- not model-based grading, since an objective check is available and preferable per Anthropic's own 'fastest, most reliable' guidance.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "build-llm-grader-for-tone",
+      "prompt": "I need to evaluate whether my chatbot's responses stay warm and empathetic even when customers are angry. This isn't something I can check with a simple string match. How do I set up grading for this?",
+      "expected_output": "Correctly identifies this as needing LLM-based (model) grading rather than code-based grading, since tone/empathy isn't objectively checkable. Specifies a detailed rubric rather than a vague 'is this good' question, asks for a discrete/empirical output (e.g. 1-5 scale) rather than open commentary, and explicitly includes the reasoning-before-score technique (e.g. <thinking> before a final score) with a mention of the 'defaults to middling scores around 6' risk if reasoning isn't requested. Recommends grading with a different model than the one generating responses.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "eval-scores-flat-what-now",
+      "prompt": "I ran an eval on my code-generation prompt across 20 test cases and got an average score of 4.2 out of 10. What do I do with that number?",
+      "expected_output": "Explains that the score alone isn't the deliverable -- the next step is diagnosing what's failing by looking at the distribution/categories of low scores, not just the average. Recommends changing one thing at a time based on the failure pattern (e.g., if format is inconsistent, that maps to Increase Consistency techniques in prompt-engineering; if factual/logical correctness is the issue, that's a different fix), then rerunning the eval to measure the specific change -- following the 'Change Prompt and Repeat' step and the 'one change at a time' principle rather than making several changes at once and rerunning.",
+      "files": []
+    }
+  ]
+}

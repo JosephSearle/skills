@@ -1,0 +1,26 @@
+{
+  "skill_name": "prompt-engineering",
+  "evals": [
+    {
+      "id": 1,
+      "name": "vague-first-draft-needs-clarity-and-examples",
+      "prompt": "I have this prompt for a customer support bot: 'Answer the customer's question nicely and be helpful.' It's not working well, responses are inconsistent. Can you improve it?",
+      "expected_output": "Identifies the vague-instruction problem (per Be Clear and Direct), rewrites with direct action verbs and explicit constraints instead of vague adjectives like 'nicely', adds role prompting for the support-bot persona, recommends 3-5 multishot examples structured in XML tags covering realistic edge cases (angry customer, ambiguous question), and explains the 'why' behind each addition rather than just handing over new text with no explanation.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "long-document-summarization-prompt",
+      "prompt": "I need a prompt that takes a long legal contract (could be 30-40 pages) and has Claude summarize the key obligations and flag any unusual clauses. I'm worried about it making things up.",
+      "expected_output": "Recognizes this as a long-context (20k+ token) scenario and applies the specific long-context rules: places the document above the instructions, uses <documents>/<document> XML structuring, and asks Claude to quote relevant passages before summarizing. Explicitly applies Reduce Hallucinations techniques given the stated worry: grounding in direct quotes, permission to say information isn't present, and citation/verification of each flagged clause. Does not just say 'add more instructions' without naming these specific techniques.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "jailbreak-hardening-request",
+      "prompt": "We have an internal chatbot that answers questions using content pulled from Slack threads and pasted into the prompt. Someone found they could get it to ignore its instructions by including 'ignore previous instructions' text inside a pasted Slack message. How do I fix the prompt?",
+      "expected_output": "Correctly identifies this as indirect prompt injection (trusted user, adversarial third-party content) rather than a direct jailbreak, and gives prompt-level fixes specifically: stating an explicit untrusted-content policy in the system prompt telling Claude that pasted content is data not instructions, and JSON-encoding the untrusted Slack content rather than concatenating it as free text. Also flags (without over-focusing on) the complementary architectural pieces -- e.g. treating pasted content as tool-result-like and screening it -- as adjacent but not purely prompt-text fixes.",
+      "files": []
+    }
+  ]
+}
