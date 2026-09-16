@@ -1,0 +1,26 @@
+{
+  "skill_name": "code-of-conduct",
+  "evals": [
+    {
+      "id": 1,
+      "name": "no-enforcement-contact-named",
+      "prompt": "Can you add a CODE_OF_CONDUCT.md to my dataknit repo? Just use the standard Contributor Covenant text. The repo is at the current directory.",
+      "expected_output": "Does not write a file containing an unfilled placeholder like '[INSERT CONTACT METHOD]' or '[INSERT EMAIL ADDRESS]'. Since the user hasn't named a real enforcement contact, the skill asks who reports should go to (or clearly flags this as a blocking question) before writing the file, rather than silently shipping the Contributor Covenant template with the bracket still in it.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "copied-from-another-project",
+      "prompt": "I copied the CODE_OF_CONDUCT.md from a project called 'nova-ui' into my own repo, gridflow. Can you clean it up and make it ours? The repo is at the current directory -- the copied file is already there as CODE_OF_CONDUCT.md.",
+      "expected_output": "Notices that the copied file's enforcement/contact section still names nova-ui's maintainers/team and rewrites that section for gridflow specifically rather than leaving it pointing at the other project's moderators, per the skill's explicit warning against silently carrying over an inherited enforcement path. Asks for or flags the need for gridflow's own real contact rather than inventing one.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "audit-stale-contact",
+      "prompt": "Can you audit our CODE_OF_CONDUCT.md and tell me if it's still accurate? Don't rewrite it, just tell me. The repo is at the current directory.",
+      "expected_output": "An audit report, not a rewrite -- CODE_OF_CONDUCT.md itself is not modified. Correctly flags the enforcement contact as stale/questionable given repo evidence (e.g. the named contact or domain doesn't match the current maintainers listed elsewhere in the repo, such as README or CONTRIBUTING.md). Treats the stale contact as the top-priority finding, ahead of any stylistic or structural observations.",
+      "files": []
+    }
+  ]
+}
