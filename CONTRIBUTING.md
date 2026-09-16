@@ -4,6 +4,11 @@ Thanks for considering a contribution to this catalog. Contributions of all kind
 just new skills: fixing a `SKILL.md` that gives Claude bad instructions, improving the site,
 tightening an eval, or just filing a good bug report all help.
 
+## Security issues
+
+Found a security vulnerability? Please don't open a public issue — see [SECURITY.md](SECURITY.md)
+for how to report it privately.
+
 ## Code of Conduct
 
 There's no formal `CODE_OF_CONDUCT.md` in this repo yet — in the meantime, be respectful and
@@ -59,9 +64,9 @@ investing time in the implementation.
 
 ## Reporting a bug
 
-This repo doesn't currently have a separate security-disclosure process — if you find a security
-issue (e.g. something that could make a skill exfiltrate data or execute unintended commands),
-please open an issue and flag it clearly as a security concern so it can be prioritized.
+If you find a security issue (e.g. something that could make a skill exfiltrate data or execute
+unintended commands), please don't open a public issue — see [SECURITY.md](SECURITY.md) for how to
+report it privately instead.
 
 For a regular bug, please include:
 
