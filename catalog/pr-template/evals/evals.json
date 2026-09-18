@@ -1,0 +1,26 @@
+{
+  "skill_name": "pr-template",
+  "evals": [
+    {
+      "id": 1,
+      "name": "jira-smart-commit-placement",
+      "prompt": "Our current PULL_REQUEST_TEMPLATE.md just says 'link the Jira ticket in the description' -- can you rewrite our PR template? We use Jira Smart Commits, project key ITZ (e.g. ITZ-1234), to tie commits back to tickets. The repo is at the current directory.",
+      "expected_output": "Recognizes that Jira Smart Commits are parsed from commit messages (and/or the PR title, depending on the integration), not from an arbitrary line inside the PR description body, and that the existing template's 'link it in the description' instruction is exactly the kind of placement that won't reliably fire. The rewritten template either moves the ticket-key instruction to the title/commit-message surface, or explicitly flags this as something to confirm against the repo's actual Jira integration config rather than asserting a placement that wasn't verified. Explains Smart Commits as a command language (mentions at least one of #comment/#time/#resolve) rather than treating ITZ-1234 as a plain hyperlink-style reference.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "oss-develop-branch-gotcha",
+      "prompt": "Can you set up a PULL_REQUEST_TEMPLATE.md for parsekit? We get PRs from outside contributors we've never met, and we want to track what's a bug fix vs. a feature. The repo is at the current directory.",
+      "expected_output": "Notices from the README that feature/bugfix PRs target the `develop` branch, not the repo's default branch (`main`), and flags that GitHub closing keywords (Closes #10, Fixes #10) will be silently ignored on PRs targeting a non-default branch -- either omitting closing-keyword syntax from the template or including it with an explicit caveat that it only works for PRs that target main directly. Produces an OSS/external-contributor-shaped template (classification of change type, a why/context prompt, not just a checkbox list) appropriate for contributors who are unknown quantities, per the Kubernetes-style model.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "gitlab-multi-template-shop",
+      "prompt": "We're migrating invoice-portal from GitHub to GitLab and want separate MR templates for bug fixes, features, and docs changes instead of one template that doesn't fit any of them well. The repo is at the current directory.",
+      "expected_output": "Produces multiple separate template files under `.gitlab/merge_request_templates/` (one per change type: e.g. Bug.md, Feature.md, Docs.md) rather than a single generic template or a GitHub-style `.github/PULL_REQUEST_TEMPLATE/` structure. Does not invent GitHub-style closing keywords or Jira Smart Commit syntax for this repo, since the README states there is no Jira/GitHub-Issues integration and tickets are referenced informally with no auto-linking tooling -- the ticket-reference field is a plain, non-auto-closing reference, not dressed up as something it isn't.",
+      "files": []
+    }
+  ]
+}
