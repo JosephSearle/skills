@@ -11,8 +11,8 @@ for how to report it privately.
 
 ## Code of Conduct
 
-There's no formal `CODE_OF_CONDUCT.md` in this repo yet — in the meantime, be respectful and
-assume good faith in issues and pull requests.
+This project follows a [Code of Conduct](CODE_OF_CONDUCT.md). Please read it before participating
+in issues and pull requests.
 
 ## Project layout
 
