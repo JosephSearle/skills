@@ -74,6 +74,6 @@ Don't retry with `--no-verify` to force it through -- skipping hooks is the deve
 git push                        # pushing is a separate, explicitly-gated action
 git commit --amend              # rewrites history; not implied by "commit this"
 git commit -m "<multi-line>"    # unsafe quoting -- always use -F with a file instead
-gh pr create / gh pr edit       # PR creation is out of scope here -- see the pull-request-description skill
+gh pr create / gh pr edit       # PR creation is out of scope here -- see the pr-description skill
 git reset --hard                # destructive; never run as part of drafting or fixing a commit
 ```

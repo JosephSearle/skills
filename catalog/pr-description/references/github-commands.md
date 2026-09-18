@@ -63,7 +63,7 @@ A body posted through this skill never carries a "🤖 Generated with [Claude Co
 In its place, end the body with this skill's own attribution line instead:
 
 ```
-Generated with pull-request-description skill
+Generated with pr-description skill
 ```
 
 Add it as the last line of the body file, separated from the description content by a blank line — a trailer, not part of the summary itself. If you're updating an existing PR (`gh pr edit`) and its current body already ends with a Claude Code attribution line from an earlier post, replace that line with this one rather than appending on top of it — there should only ever be one attribution trailer, and it should be this skill's.

@@ -53,7 +53,7 @@ Copy or symlink the one you want into your project:
 
 ```bash
 mkdir -p .claude/skills
-cp -r catalog/pull-request-description .claude/skills/
+cp -r catalog/pr-description .claude/skills/
 ```
 
 Claude Code picks it up automatically the next time it lists available skills. You can also

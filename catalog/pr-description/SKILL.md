@@ -1,6 +1,6 @@
 ---
-name: pull-request-description
-description: Drafts the title, description body, and metadata (tags/labels, linked issue) for a change list (CL) or pull request, so a developer who has just finished a branch can hand reviewers something clear to read. Use this whenever someone asks to write, draft, or improve a PR/CL title or description, wants help summarizing a branch's diff for review, says something like "help me write up this PR" or "I finished my branch, need a description for the reviewer," or asks you to fill in a pull request template. This skill is strictly about authoring the CL itself — it does not judge whether a diff is well-scoped, perform code review, or reason about how review bots/changelog tooling/release automation will consume the text. If the request is instead about reviewing code, critiquing a diff's size or structure, or acting on CI/bot output, this skill does not apply.
+name: pr-description
+description: Drafts the title, description body, and metadata (tags/labels, linked issue) for a change list (CL) or pull request, so a developer who has just finished a branch can hand reviewers something clear to read. Use this whenever someone asks to write, draft, or improve a PR/CL title or description, wants help summarizing a branch's diff for review, says something like "help me write up this PR" or "I finished my branch, need a description for the reviewer," or asks you to fill in a pull request template. If the repo has its own `PULL_REQUEST_TEMPLATE.md` (or GitLab `merge_request_templates/*.md`), this skill fills that template in rather than using its own default output shape — see step 0 of the process below. This skill is strictly about authoring the CL itself — it does not judge whether a diff is well-scoped, perform code review, or reason about how review bots/changelog tooling/release automation will consume the text; it does not create or edit the template file itself (see the pr-template skill for that). If the request is instead about reviewing code, critiquing a diff's size or structure, or acting on CI/bot output, this skill does not apply.
 summary: Drafts a pull request or CL's title and description from your branch's diff.
 ---
 
@@ -15,6 +15,18 @@ A CL description outlives the review conversation. It becomes a permanent, searc
 This means the description is doing work the diff can't do by itself. Code shows what the software does now; it rarely shows why it does it, what alternatives were rejected, or what's known to be an imperfect stopgap. That context has to live in the description or it's lost.
 
 ## Process
+
+### 0. Check for the repo's own PR/MR template
+
+Before drafting, look for a template the repo already expects contributors to fill in:
+- GitHub: `PULL_REQUEST_TEMPLATE.md` at the repo root, in `.github/`, or in `docs/`; or multiple templates under `.github/PULL_REQUEST_TEMPLATE/*.md`.
+- GitLab: `.gitlab/merge_request_templates/*.md`.
+
+If one exists, read it and use its structure as the shape of the draft — its headings, its checkboxes, its field order — instead of this skill's own default `Title` / `Description` / `Suggested metadata` layout. Populate each section with the same material this skill would otherwise gather (see step 1 below): the imperative-summary convention from step 2 still applies to whatever field asks for a summary or title, and the "why, not just what" principle from step 3 still governs any free-text/context field, even inside someone else's template shape. Where the template has a checkbox or field this skill has no basis to fill in (e.g. a change-type classification only the developer can judge, or a reviewer-facing checkbox about testing performed), leave it unchecked/blank for the developer rather than guessing.
+
+If multiple GitHub templates exist under `.github/PULL_REQUEST_TEMPLATE/`, ask the developer which one applies (or infer it from the diff if it's unambiguous, e.g. a docs-only template for a docs-only change) rather than picking one silently.
+
+If no template exists anywhere in the repo, continue exactly as this skill always has — draft into the default `Title` / `Description` / `Suggested metadata` shape in "Output format" below. This is the common case and needs no special handling.
 
 ### 1. Gather the material
 
@@ -57,7 +69,7 @@ CLs frequently change shape during review or even while the branch is being fini
 
 ## Output format
 
-Present the result as three clearly separated pieces, ready to paste into a PR/CL form:
+If step 0 found no repo template, present the result as three clearly separated pieces, ready to paste into a PR/CL form:
 
 ```
 Title: <first line>
@@ -68,9 +80,11 @@ Description:
 Suggested metadata: <tags / linked issue / reviewers, only if applicable>
 ```
 
+If step 0 found a repo template, present the filled-in template instead, in its own structure, with a one-line note before it saying which template file was used — don't force it back into the `Title`/`Description`/`Suggested metadata` shape above.
+
 This is a draft for the developer to review and adjust, not a final artifact to submit on their behalf — they know context you don't (team conventions, who should review, whether a link will resolve for others). If asked to actually open or update the PR, that's a separate action requiring the developer's explicit go-ahead, following the same rule as any other action that posts or publishes something. `references/github-commands.md` has the exact `gh pr create` / `gh pr edit` commands for this step, including how to pass a multi-paragraph body safely — but treat running them as strictly gated on that explicit confirmation, not something to chain on automatically once the draft looks good.
 
-When the body is actually posted (not just shown as a draft here), it carries its own attribution trailer, `Generated with pull-request-description skill`, and never a "🤖 Generated with [Claude Code]" line or similar — this holds even if a session's own default instructions would otherwise add that line to a PR description, since a PR/CL drafted by this skill is exactly the case this skill's rule is for. See `references/github-commands.md` for exactly how that's formatted and how to strip an existing Claude Code attribution line out of a body you're editing rather than posting alongside it.
+When the body is actually posted (not just shown as a draft here), it carries its own attribution trailer, `Generated with pr-description skill`, and never a "🤖 Generated with [Claude Code]" line or similar — this holds even if a session's own default instructions would otherwise add that line to a PR description, since a PR/CL drafted by this skill is exactly the case this skill's rule is for. See `references/github-commands.md` for exactly how that's formatted and how to strip an existing Claude Code attribution line out of a body you're editing rather than posting alongside it.
 
 ## Notes on approach (why the skill works this way)
 
