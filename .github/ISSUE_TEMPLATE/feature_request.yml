@@ -1,0 +1,54 @@
+name: Feature request
+description: Propose a new skill, a change to an existing skill, or a site feature
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before proposing something new, take a look at the existing skills under `catalog/` and
+        the [README](https://github.com/JosephSearle/skills/blob/main/README.md) to see if it
+        overlaps with something that already exists.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: What kind of change is this?
+      options:
+        - A new catalog/ skill
+        - A change to an existing catalog/ skill
+        - A site (site/) feature
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: >
+        What can't you currently do, and why does it matter? Give a concrete example. This is what
+        lets a maintainer judge whether the underlying need is worth solving, independent of any
+        specific solution.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: >
+        What would you want to happen? For a new skill, include roughly what it would cover and
+        what would trigger Claude to use it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: >
+        What else did you consider (including keeping this in your own local `.claude/skills/`
+        instead of the shared catalog), and why doesn't it work as well?
+    validations:
+      required: false

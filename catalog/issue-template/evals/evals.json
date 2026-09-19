@@ -1,0 +1,26 @@
+{
+  "skill_name": "issue-template",
+  "evals": [
+    {
+      "id": 1,
+      "name": "oss-strict-forms",
+      "prompt": "Can you set up issue templates for parsekit? We keep getting bug reports with no repro steps, no version info, nothing we can actually work with. The repo is at the current directory.",
+      "expected_output": "Produces separate bug-report and feature-request templates rather than one generic issue template. Uses GitHub YAML issue forms (.github/ISSUE_TEMPLATE/*.yml) rather than legacy Markdown, and marks the load-bearing fields on the bug-report form -- at minimum steps to reproduce and environment/version -- as structurally required (required: true), not just requested in prose, since this is exactly the mechanism that fixes the stated problem (reports with no repro steps or version info). The bug-report form separates the factual 'what happened' from an optional 'possible cause'/speculation field rather than one blended free-text box. The feature-request template uses a different backbone (problem/motivation, proposed solution, alternatives) rather than reusing the bug-report fields.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "internal-light-markdown",
+      "prompt": "Can you add a simple issue template to ledger-sync? Nothing fancy -- it's just used by our own team and adjacent teams who already know the system. The repo is at the current directory.",
+      "expected_output": "Recognizes the internal/trusted-team case and produces a lightweight template (a simple Markdown checklist is acceptable here, not a full YAML issue-form apparatus with many required fields) rather than defaulting to the same strict, heavily-gated structure appropriate for an OSS repo fielding reports from strangers. Still keeps bug-report and feature-request concerns structurally distinct (does not blend them into one single generic template), even though the fields within each can be much lighter than the OSS case.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "legacy-to-yaml-migration",
+      "prompt": "We want to convert our current ISSUE_TEMPLATE.md to GitHub's newer YAML issue forms, and split it into a proper bug report and feature request instead of the one combined template we have now. The repo is at the current directory.",
+      "expected_output": "Produces separate bug_report.yml and feature_request.yml issue forms (plus a config.yml) rather than a single migrated YAML file that still blends both concerns. The bug-report form includes reproduction-focused fields (steps to reproduce, environment/version, expected vs. actual behavior) with required fields marked appropriately for this public/OSS repo. The feature-request form uses the problem/motivation -> proposed solution -> alternatives backbone rather than carrying over the old template's generic 'Description' / 'Additional context' fields verbatim.",
+      "files": []
+    }
+  ]
+}

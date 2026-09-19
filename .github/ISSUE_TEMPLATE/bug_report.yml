@@ -1,0 +1,96 @@
+name: Bug report
+description: Report something broken in a catalog skill or the site
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Found a security vulnerability (e.g. something that could make a skill exfiltrate data or
+        execute unintended commands)? Please don't file it here — see
+        [SECURITY.md](https://github.com/JosephSearle/skills/blob/main/SECURITY.md) for how to
+        report it privately instead.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where is the bug?
+      options:
+        - A catalog/ skill
+        - The site (site/)
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: skill-or-page
+    attributes:
+      label: Which skill or page?
+      description: e.g. "catalog/pr-description" or "the /skills/[slug] page"
+      placeholder: catalog/<skill-name> or the affected page/route
+    validations:
+      required: false
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: >
+        Describe only what you observed — the objective fact of what went wrong. Put any theory
+        about the cause in "Possible cause" below instead.
+      placeholder: When I did X, Y happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: Steps to reproduce
+      description: A numbered sequence someone else could follow exactly to see the same failure.
+      placeholder: |
+        1. Run `npm run dev` in site/
+        2. Open ...
+        3. Click ...
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened? Include exact error output if there was any.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: >
+        Node version, OS, and whether you hit this via `npm run dev`/`build` or the published
+        site.
+      placeholder: |
+        Node: v20.11.0
+        OS: macOS 14.5
+        Context: npm run dev / npm run build / published site (skills.<domain>)
+    validations:
+      required: true
+
+  - type: textarea
+    id: possible-cause
+    attributes:
+      label: Possible cause (optional)
+      description: >
+        If you have a theory about what's causing this, put it here — clearly separate from what
+        you actually observed above. It's fine to leave this blank if you don't have a guess.
+    validations:
+      required: false

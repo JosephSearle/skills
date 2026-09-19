@@ -1,0 +1,28 @@
+name: Question
+description: Ask about using a skill or the site (there's no separate chat/forum — this is the place)
+labels:
+  - question
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before asking, check whether it's already answered:
+        - The skill's own `SKILL.md` under `catalog/<skill-name>/` — the source of truth for what
+          a skill does and how to trigger it.
+        - The [README](https://github.com/JosephSearle/skills/blob/main/README.md), for how the
+          catalog and site fit together.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+
+  - type: input
+    id: skill-or-page
+    attributes:
+      label: Which skill or page is this about (if any)?
+      placeholder: catalog/<skill-name> or the affected page/route
+    validations:
+      required: false
