@@ -1,0 +1,44 @@
+{
+  "skill_name": "runbook",
+  "evals": [
+    {
+      "id": 1,
+      "name": "simple-known-fix-runbook",
+      "prompt": "Our order-consumer service keeps wedging (stops pulling from the queue but the pod looks healthy) -- it's undocumented and we keep having to figure out the restart procedure from memory each time. Can you write us a runbook for this? Check the order-consumer README for the details of what we currently do.",
+      "expected_output": "Produces a genuine runbook (not a playbook) -- a fixed, followable sequence with a specific trigger (the order-consumer-queue-depth PagerDuty alert / queue depth exceeding 500 for 5 minutes), prerequisites (kubectl access to the checkout namespace), numbered concrete steps drawn from the README's existing manual procedure, and an escalation path (page #checkout-oncall / payments team on-call if depth doesn't drop within 5 minutes of restart, per the README's noted history of Postgres connection pool exhaustion). Since the repo has no severity scale, should recommend PagerDuty's SEV-1..5 taxonomy rather than staying silent on it or inventing something else. Should ask or note where this will actually be discovered during an incident (e.g., linked from the PagerDuty alert), not just write the file and stop.",
+      "files": [],
+      "assertions": [
+        "Explicitly recommends adopting PagerDuty's SEV-1..5 taxonomy, given the repo has no existing severity scale (not just noting that none exists)",
+        "Explicitly notes how the runbook should be discovered during a real incident (e.g. linked directly from the order-consumer-queue-depth PagerDuty alert), not just that the file was written",
+        "The restart procedure is preserved as a concrete, followable sequence (specific kubectl commands, specific verification step)",
+        "Escalation path correctly names paging #checkout-oncall / payments on-call specifically because of the known history of Postgres connection pool exhaustion, not just a generic 'escalate if it doesn't work'"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "undiagnosed-degradation-playbook",
+      "prompt": "Our API's 5xx error rate spikes have happened three times in the last couple months with three totally different root causes each time, and there's no documentation for what to check -- whoever's on call just starts from scratch. Can you write something for this? There's an existing runbook in docs/runbooks/certificate-expiry.md you can look at for house style.",
+      "expected_output": "Recognizes this needs a playbook, not a runbook, since the root cause varies and there is no single fixed fix -- despite the existing house-style example (certificate-expiry.md) being a runbook, doesn't mechanically copy its rigid-numbered-steps structure onto a fundamentally different kind of problem. Produces an investigation/triage guide: a broad trigger (the api-gateway-5xx-rate alert), dashboards to check first (API Gateway Overview, Deploys, billing-service/auth-service dashboards), and a way to reason about which of several likely causes (bad deploy, downstream service timeout cascade, database failover) is happening, rather than a fixed sequence. Includes coordination/escalation guidance for when this looks bigger than one person can resolve. Uses the org's existing PagerDuty SEV-1..5 scale (already established in the README) rather than re-proposing a scheme.",
+      "files": [],
+      "assertions": [
+        "The document is explicitly labeled/framed as a playbook, not a runbook, in its title or opening text",
+        "Does not use a rigid numbered 'Steps:' fixed-sequence structure copied from the runbook house style -- uses an investigation-guide/decision-points structure instead",
+        "Includes explicit incident-coordination guidance (e.g. a separate Incident Commander role, or pointing to the org's incident-command process) rather than only naming on-call channels to page",
+        "Correctly uses the org's existing PagerDuty SEV-1..5 scale rather than proposing a new severity scheme"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "post-incident-runbook-audit",
+      "prompt": "We had an incident today where a deploy got stuck, and the existing runbook at docs/runbooks/stuck-deploy.md was basically useless -- it's still written for our old Jenkins setup which we decommissioned when we moved to GitHub Actions. Read INCIDENT_NOTES.md for what actually happened and what on-call had to do instead, then fix the runbook.",
+      "expected_output": "Reads INCIDENT_NOTES.md and identifies the specific stale references (Jenkins host, /var/jenkins/workspace/, the archived #eng-deploys-legacy channel) and updates them to match the actual GitHub Actions-based deploy process. Also recognizes the structural issue the incident notes hint at -- 'deploy stuck' can have more than one cause (a genuine Terraform state lock vs. the runner running out of disk space this time), so a rigid single-fix runbook may not be the right shape anymore; should at minimum flag this mismatch rather than only patching the tool references, and ideally restructure toward a triage-first approach for identifying which cause applies before prescribing a fix for that specific cause. Treats this as incident follow-up (per the skill's audit-mode framing) rather than a generic doc edit.",
+      "files": [],
+      "assertions": [
+        "All stale Jenkins references (SSH host, /var/jenkins/workspace/, #eng-deploys-legacy) are removed and replaced with the actual GitHub Actions-based process",
+        "Restructures the runbook into distinguishable branches for the two known causes (disk space vs. Terraform state lock), identified by a knowable signal (what the job log shows), rather than either a single fixed fix or an open-ended playbook",
+        "Adds an explicit tracked follow-up action item to prevent the disk-space cause from recurring (e.g. a workflow cleanup step), framed as incident follow-up rather than left unaddressed",
+        "Gives an explicit severity classification with reasoning for this specific scenario, not just a generic reference to 'the usual SEV scale'"
+      ]
+    }
+  ]
+}

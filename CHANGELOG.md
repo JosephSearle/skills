@@ -9,13 +9,16 @@ grouped under the date they landed on `main`.
 ## [Unreleased]
 
 ### Added
-- New "changelog" skill for generating and maintaining a `CHANGELOG.md` following Keep a
-  Changelog 2.0.0.
+- New "runbook" skill for creating and maintaining incident-response runbooks, playbooks, and
+  on-call reference documentation.
 
 ## [2026-09-20]
 
 ### Added
 - New "codeowners" skill, plus a CODEOWNERS file for the repo.
+- New "changelog" skill for generating and maintaining a `CHANGELOG.md` following Keep a
+  Changelog 2.0.0.
+- This project's own `CHANGELOG.md`.
 
 ## [2026-09-19]
 
