@@ -1,0 +1,12 @@
+# See GOVERNANCE.md: this project currently has a single maintainer, so this
+# file is deliberately flat. If a co-maintainer is ever added, prefer
+# splitting `catalog/` and `site/` ownership at that point rather than
+# guessing at boundaries now.
+
+# Default owner for everything in the repo.
+* @JosephSearle
+
+# Ownership of this file itself, so a review is always required to change
+# who gets requested on PRs. Comes after the catch-all above so it actually
+# takes effect (CODEOWNERS is last-match-wins).
+/.github/CODEOWNERS @JosephSearle

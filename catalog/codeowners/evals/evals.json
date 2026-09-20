@@ -1,0 +1,45 @@
+{
+  "skill_name": "codeowners",
+  "evals": [
+    {
+      "id": 1,
+      "name": "generate-catchall-ordering-trap",
+      "prompt": "We need a CODEOWNERS file for this repo. Everything should default to @orbit-org/platform-team unless something more specific applies, then services/billing should go to @orbit-org/billing-team, and infra/terraform should go to @orbit-org/infra-team. Can you write the file for us?",
+      "expected_output": "Generates a CODEOWNERS file ordered broadest-to-narrowest (the catch-all * placed first/at the top, with the specific services/billing and infra/terraform rules after it) -- this matches the order the user described, and the response should explain that the catch-all must come first precisely because last-match-wins would otherwise make a later catch-all silently override the specific rules. Also adds an owner for the CODEOWNERS file's own path without being asked (placed after the catch-all so it actually takes effect), and places it in the conventional .github/ location since none exists yet.",
+      "files": [],
+      "assertions": [
+        "Catch-all (*) line appears before both the services/billing and infra/terraform rule lines",
+        "CODEOWNERS file's own path has an explicit owner line, placed after the catch-all",
+        "No line uses '!' or '[]' syntax",
+        "Response explains why last-match-wins requires the catch-all to come first"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "audit-silent-syntax-failures",
+      "prompt": "Reviews aren't routing the way we expect on this repo -- can you look at our CODEOWNERS file and tell us what's wrong?",
+      "expected_output": "Audits .github/CODEOWNERS and identifies, in priority order: the negation line (!src/web/generated/) that silently does not work as a negation, so src/web/generated/ is still routed to web-team via the plain src/web/ rule instead of being excluded as intended; the character-range pattern (legacy[0-9].go) that also silently does not work, so src/api/legacy1.go falls through to the catch-all instead of the dedicated rule (currently masked because both name the same team); and the fact that nothing explicitly owns the CODEOWNERS file's own path (it's only accidentally covered by the catch-all), so any contributor on the catch-all's team could edit it freely without admin-team oversight. The catch-all's own position (first, before the specific rules) is actually correct in this fixture and should be confirmed as fine, not flagged as a bug.",
+      "files": [],
+      "assertions": [
+        "Identifies the '!' negation line as a silent syntax failure that doesn't work as intended",
+        "Identifies the '[0-9]' bracket-range line as a silent syntax failure",
+        "Flags that the CODEOWNERS file's own path has no explicit/dedicated owner",
+        "Does not incorrectly claim the catch-all's position is a bug (correctly recognizes catch-all-first as fine in this fixture)"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "two-tier-trust-request",
+      "prompt": "We want to set up review routing for this repo where our regular engineers can review and comment on PRs in their area, but only our staff engineers (@corebank/staff-engineers) can actually approve and merge changes to src/payments. Can you set that up in CODEOWNERS?",
+      "expected_output": "States plainly that CODEOWNERS has one flat owner role and cannot natively express a reviewer-vs-approver trust split, rather than trying to fake it with clever syntax (e.g. listing staff-engineers first, or some ordering trick). Offers the real paths forward: layering a GitHub branch-protection rule requiring approval from @corebank/staff-engineers on top of a CODEOWNERS file that still handles routing, or (if that's insufficient) a bot-driven OWNERS-style system modeled on Kubernetes' reviewers/approvers split.",
+      "files": [],
+      "assertions": [
+        "States plainly that CODEOWNERS cannot express a two-tier reviewer/approver split",
+        "Does not attempt to fake the split via CODEOWNERS syntax tricks",
+        "Recommends GitHub branch-protection ('Require review from Code Owners') layered on top of CODEOWNERS as the mechanism",
+        "Mentions the bot-driven/OWNERS-style (Kubernetes) alternative for a fuller two-tier system",
+        "If a CODEOWNERS file is written for src/payments, lists only staff-engineers (not payments-team) as owner"
+      ]
+    }
+  ]
+}
