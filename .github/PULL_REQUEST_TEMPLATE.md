@@ -14,9 +14,11 @@
 
 - [ ] `catalog/` (skill content)
 - [ ] `site/` (Next.js app)
+- [ ] `docs/` (project documentation)
 
 <!-- Per CONTRIBUTING.md's ground rules, a catalog change and a site change are usually better as
-     separate PRs — if this touches both, say why below. -->
+     separate PRs — if this touches both, say why below. A docs-only change paired with either is
+     usually fine (e.g. a runbook update alongside the feature it documents). -->
 
 ## Linked issue
 
