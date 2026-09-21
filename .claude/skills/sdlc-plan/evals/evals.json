@@ -1,0 +1,77 @@
+{
+  "skill_name": "sdlc-plan",
+  "evals": [
+    {
+      "id": 1,
+      "name": "vague-non-engineer-idea",
+      "prompt": "Priya (support team lead, not an engineer) describes a messy weekly manual-export problem with no existing issue and no connector available.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "The committed document is named exactly intent.md, placed at docs/sdlc/<issue-or-TBD>-<slug>/intent.md, and has YAML frontmatter with author, status, linked_issue, and created fields -- not a differently-named or differently-placed doc, and not missing that frontmatter",
+          "id": "exact-file-and-frontmatter"
+        },
+        {
+          "text": "The document body uses exactly the five required section headers (Problem, Proposed outcome, Affected users and systems, Constraints, Open questions) and does not add Stage-2 sections like a Proposed Solution, Design, or Acceptance Criteria section",
+          "id": "no-stage2-sections"
+        },
+        {
+          "text": "linked_issue is set to TBD rather than an invented issue key or ticket number, since no connector or existing issue was available",
+          "id": "linked-issue-tbd-not-invented"
+        },
+        {
+          "text": "Open questions capture at least one thing Priya genuinely couldn't answer (e.g. which ticketing platform is in use, or who owns it) rather than the document silently deciding it on her behalf",
+          "id": "genuine-open-questions-preserved"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "engineer-with-existing-issue",
+      "prompt": "Sam (backend engineer) already has GitHub issue #482 and gives a well-specified ask for partial refunds on subscription cancellations.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Produces intent.md at docs/sdlc/482-<slug>/intent.md with linked_issue set to the existing issue (#482), not TBD",
+          "id": "uses-existing-issue-key"
+        },
+        {
+          "text": "The commit message follows the exact 'intent: <short title>' convention, without restating the author or date inside the file body as if the file itself were the source of truth for those",
+          "id": "commit-message-convention"
+        },
+        {
+          "text": "The commit lands on a dedicated branch rather than being pushed straight to the repo's default branch (master/main)",
+          "id": "committed-on-a-branch"
+        },
+        {
+          "text": "No production code, tests, or other implementation artifacts are produced -- the deliverable stays a Stage-1 intent document, not an implementation of the feature",
+          "id": "no-implementation-produced"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "idea-drifts-into-design",
+      "prompt": "Alex (engineer) pitches search caching with a full implementation plan already attached (Redis, cache key, TTL, response schema) and no ticket yet.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Produces intent.md using the exact five-section template rather than a design document with sections that prescribe a specific technical solution (cache technology, key strategy, TTL values, invalidation mechanism, rollout plan)",
+          "id": "stays-at-intent-level"
+        },
+        {
+          "text": "Technical/design-level risks that surfaced during the interview (e.g. personalization leaking into a cache key, new infra needing approval, partner API staleness requirements) are captured as Constraints or Open questions rather than resolved into a prescribed design decision",
+          "id": "design-risks-as-open-questions-not-decisions"
+        },
+        {
+          "text": "linked_issue is TBD rather than an invented issue key, since no connector and no existing ticket were available",
+          "id": "linked-issue-tbd-not-invented"
+        },
+        {
+          "text": "The Problem and Proposed outcome sections describe the underlying problem and desired outcome in the originator's own terms, not just a restatement of Alex's original technical implementation plan as if that were the outcome",
+          "id": "problem-framed-not-just-transcribed-plan"
+        }
+      ]
+    }
+  ]
+}
