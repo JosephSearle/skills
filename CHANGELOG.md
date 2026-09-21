@@ -12,6 +12,10 @@ grouped under the date they landed on `main`.
 - New "runbook" skill for creating and maintaining incident-response runbooks, playbooks, and
   on-call reference documentation.
 
+### Changed
+- Renamed the "issue-filing" skill to "gh-issue-filing" to make its GitHub-specific scope
+  explicit in the slug itself.
+
 ## [2026-09-20]
 
 ### Added

@@ -1,0 +1,33 @@
+{
+  "skill_name": "gh-issue-filing",
+  "evals": [
+    {
+      "id": 1,
+      "name": "vague-bug-two-symptoms",
+      "prompt": "Hey, can you file a bug for this -- when I export my notes to PDF, the formatting gets messed up, the headers overlap the body text. Also, separately, I've noticed the app crashes if I try to have more than about 50 note tabs open at once. Can you write this up as a GitHub issue?",
+      "expected_output": "Recognizes these are two unrelated bugs (PDF export formatting vs. a tab-count crash) bundled into one report, says so explicitly, and either drafts two separate issues or asks which to file first -- does not silently pick one symptom and drop the other, and does not draft one bloated issue covering both.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "feature-idea-two-issues",
+      "prompt": "We should let people tag tasks with custom colors so they're easier to scan on the board. Also it'd be great to have a bulk-edit mode where you select multiple tasks and change their status all at once instead of one by one. Can you turn this into an issue for the backlog?",
+      "expected_output": "Recognizes these are two independent, separately-shippable feature ideas (color tagging vs. bulk-edit mode) rather than one coherent unit of work, flags this via the atomicity check / INVEST's Small criterion, and drafts them as two separate issues (or asks which to file first) rather than one issue trying to cover both.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "blocked-by-unfinished-work",
+      "prompt": "Can you write up an issue for adding SSO login support for enterprise customers via SAML? Some of our bigger customers are asking for it.",
+      "expected_output": "Checks the repo's open-issues snapshot, discovers issue #41 (pluggable auth-provider layer, in progress) is a real prerequisite for SAML/SSO work, and surfaces this explicitly as a blocking dependency (not just a passing mention) rather than drafting the SSO issue as if it were independently actionable right now.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "already-filed-duplicate",
+      "prompt": "I found a bug -- when I run `parsekit convert --format=json` on a CSV that has a quoted field with a newline inside it, it throws an 'unexpected token' error and crashes instead of parsing the row correctly. Can you write this up as an issue?",
+      "expected_output": "Checks the repo's open-issues snapshot for duplicates before drafting, finds that issue #58 already describes this exact bug, says so, and asks whether to add to the existing issue instead of proceeding to draft and present a new one.",
+      "files": []
+    }
+  ]
+}
