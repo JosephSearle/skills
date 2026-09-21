@@ -5,6 +5,7 @@
       "id": 1,
       "name": "simple-technical-spike-create",
       "prompt": "Read the linkbox README. We need a spike for LB-441 -- can you write one up for the Postgres full-text search vs. dedicated search index question?",
+      "expected_output": "Classifies this as an Exploration-type technical spike comparing two concrete options and writes a document with the skill's full mandatory structure, including a falsifiable, directional Hypothesis (not a restatement of the question) and time-bound Acceptance Criteria tied to evaluation/learning rather than to shipping or picking a winner.",
       "files": [],
       "assertions": [
         {
@@ -29,6 +30,7 @@
       "id": 2,
       "name": "safe-enabler-story-spike",
       "prompt": "Read the ledgerflow README. We need a spike written up for the LEDG-EPIC-12 event-streaming viability question ahead of PI Planning.",
+      "expected_output": "Recognizes this as a SAFe Enabler-workflow spike ahead of PI Planning and produces a document with a structured Stakeholders and Demo Audience table, checkbox-style acceptance criteria reflecting the Enabler workflow, a 'Shared to' checklist in Findings for System Demo/ART/Enabler Story tracking, and a Risks section that explicitly names the risk of missing the System Demo/PI Planning date.",
       "files": [],
       "assertions": [
         {
@@ -53,6 +55,7 @@
       "id": 3,
       "name": "update-mode-anti-pattern-audit",
       "prompt": "Read the catalog-service README, then read and clean up the spike document it references at docs/spikes/2026-08-01-technical-spike-redis-cache.md.",
+      "expected_output": "Audits and updates the existing spike document in place: rewrites the Hypothesis into falsifiable, directional form, turns the Evidence and Links section into actual links (or explicit TODO placeholders) instead of unlinked prose, makes the Timebox's hard stop explicit and independent of completion status, and preserves the original document's substantive load-testing methodology and results while fixing these structural anti-patterns.",
       "files": [],
       "assertions": [
         {
