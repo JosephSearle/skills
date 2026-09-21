@@ -1,0 +1,77 @@
+{
+  "skill_name": "spike",
+  "evals": [
+    {
+      "id": 1,
+      "name": "simple-technical-spike-create",
+      "prompt": "Read the linkbox README. We need a spike for LB-441 -- can you write one up for the Postgres full-text search vs. dedicated search index question?",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Document uses the skill's full mandatory structure, including a dedicated 'Hypothesis' section and a dedicated 'Acceptance Criteria' section (not folded into a general recommendation or background writeup)",
+          "id": "mandatory-structure"
+        },
+        {
+          "text": "Hypothesis is stated as a falsifiable, directional belief ('we believe X will produce outcome Y') rather than a restatement of the question or an open-ended investigation prompt",
+          "id": "falsifiable-hypothesis"
+        },
+        {
+          "text": "Acceptance criteria are bound to time-spent/learning-produced ('we have spent N days evaluating...', 'we have documented...') rather than to shipping or choosing a specific implementation",
+          "id": "time-bound-acceptance-criteria"
+        },
+        {
+          "text": "Spike is classified with an explicit type label (e.g. 'Exploration') appropriate to a two-option technical comparison, per the skill's type-detection guidance",
+          "id": "explicit-type-classification"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "safe-enabler-story-spike",
+      "prompt": "Read the ledgerflow README. We need a spike written up for the LEDG-EPIC-12 event-streaming viability question ahead of PI Planning.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Document includes a structured 'Stakeholders and Demo Audience' table naming the ART/team, System Demo date, requesting stakeholder, and other interested parties -- not just loose mentions of these in prose or a header",
+          "id": "stakeholders-table"
+        },
+        {
+          "text": "Findings section includes a 'Shared to' checklist tracking whether the spike was demonstrated at the System Demo, shared with the ART, and reflected in the Enabler Story ticket",
+          "id": "shared-to-checklist"
+        },
+        {
+          "text": "Acceptance criteria are written as checkbox items reflecting a SAFe Enabler workflow (e.g. timebox elapsed, approaches evaluated, findings documented, presented at System Demo, Enabler Story updated)",
+          "id": "safe-checkbox-acceptance-criteria"
+        },
+        {
+          "text": "Risks and Open Questions explicitly names the risk that missing the System Demo / PI Planning date delays Epic sizing to the next PI, not just a generic 'timebox may be tight' risk",
+          "id": "critical-path-risk-named"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "update-mode-anti-pattern-audit",
+      "prompt": "Read the catalog-service README, then read and clean up the spike document it references at docs/spikes/2026-08-01-technical-spike-redis-cache.md.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Hypothesis is rewritten into falsifiable, directional form ('we believe X will produce outcome Y, which will allow us to Z') rather than left as or reworded into an open-ended 'we will investigate whether...' statement",
+          "id": "hypothesis-made-falsifiable"
+        },
+        {
+          "text": "'Evidence and Links' section is rewritten as an actual list of links (or explicit TODO link placeholders), not left as prose describing a spreadsheet or screenshots without linking to them",
+          "id": "evidence-links-not-prose"
+        },
+        {
+          "text": "Timebox section states the hard stop explicitly as independent of completion status (e.g. 'regardless of completion status'), not just that the timebox 'was fully used' or 'closed on schedule'",
+          "id": "timebox-hard-stop-explicit"
+        },
+        {
+          "text": "Findings section retains and preserves the substantive load-testing methodology and results from the original document (concurrency levels tested, cache hit rate methodology, memory/eviction checks) rather than being thinned out while fixing the structural anti-patterns",
+          "id": "findings-content-preserved"
+        }
+      ]
+    }
+  ]
+}
