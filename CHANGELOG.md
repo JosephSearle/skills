@@ -11,6 +11,9 @@ grouped under the date they landed on `main`.
 ### Added
 - New "runbook" skill for creating and maintaining incident-response runbooks, playbooks, and
   on-call reference documentation.
+- New "playbook" skill for creating and maintaining incident-response playbooks and their
+  live-incident cheat sheets, for situations needing investigation or judgment rather than a
+  known fix.
 
 ### Changed
 - Renamed the "issue-filing" skill to "gh-issue-filing" and the "issue-template" skill to
