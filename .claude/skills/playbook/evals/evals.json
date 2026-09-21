@@ -1,0 +1,44 @@
+{
+  "skill_name": "playbook",
+  "evals": [
+    {
+      "id": 1,
+      "name": "security-incident-picerl",
+      "prompt": "Check the vaultline README for what happened overnight with our svc-ledger-admin service account. We don't have any security incident response documentation. Can you write us a playbook for this kind of situation?",
+      "expected_output": "Recognizes this is a security-incident situation and uses the NIST SP 800-61 PICERL lineage with its real phase names (Preparation; Detection and Analysis; Containment, Eradication, and Recovery grouped as one phase; Post-Incident Activity) rather than a generic incident-phase list. States an explicit invocation boundary covering both what counts (suspected/confirmed compromise, unusual credential behavior, possible lateral movement) and what doesn't (fully explained/root-caused issues, a phishing click with no compromise, contained commodity malware). Recommends a concrete severity scale (e.g. PagerDuty's SEV-1..5) since none exists, and ties playbook invocation to a concrete severity line. Produces two separate, genuinely standalone documents: the full playbook and a one-page cheat sheet.",
+      "files": [],
+      "assertions": [
+        "Uses NIST SP 800-61's PICERL phase names correctly -- explicitly names 'Detection and Analysis' as one phase and groups Containment/Eradication/Recovery as a single phase, rather than splitting them into separate numbered phases (e.g. a generic 'Identification / Containment / Eradication / Recovery / Lessons Learned' structure)",
+        "Produces two separate, standalone files -- a full playbook and a distinct one-page cheat sheet -- not a single document with a summary section at the end",
+        "States an explicit invocation boundary covering both what's in scope (suspected/confirmed compromise, anomalous credential behavior, possible lateral movement) and what's explicitly out of scope (e.g. a phishing click with no compromise, contained commodity malware, or a fully root-caused issue with no remaining security question)",
+        "Recommends a concrete severity scale (e.g. PagerDuty's SEV-1..5) as a default since none exists, and ties this playbook's invocation to a concrete severity line rather than leaving 'how bad is bad enough' purely abstract"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "general-outage-playbook",
+      "prompt": "Read the shopfront README -- we need an incident response playbook so our next checkout outage (whatever causes it this time) doesn't turn into the same chaotic scramble as the last three.",
+      "expected_output": "Recognizes this is a general operational/availability situation (no adversary) and uses the Atlassian-style detect/assess/escalate/communicate/resolve/postmortem arc rather than security-incident (PICERL) terminology. Recommends PagerDuty's SEV-1..5 taxonomy as the default severity scale since shopfront has none, and sets the major-incident (playbook-applies) line at SEV-1/SEV-2. Clearly separates the Incident Commander role from a distinct Communications Lead role rather than folding communications into the IC's job by default. Produces two separate, standalone documents: the full playbook and a one-page cheat sheet meant to be used live, rather than a single document with an inline 'quick reference' section at the bottom.",
+      "files": [],
+      "assertions": [
+        "Uses general operational/availability lineage language (detect/assess/escalate/communicate/resolve/postmortem) rather than security-incident PICERL terms like containment/eradication",
+        "Recommends PagerDuty's SEV-1..5 taxonomy as the default severity scale (rather than inventing a custom scale, e.g. a 3-tier SEV1/2/3 scheme) and sets the major-incident line at SEV-1/SEV-2",
+        "Clearly separates the Incident Commander role from a distinct, non-optional Communications Lead role, rather than making communications an optional add-on the IC handles by default",
+        "Produces the cheat sheet as a separate, standalone file distinct from the full playbook -- not an inline 'quick reference' section embedded at the bottom of the same document"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "invocation-boundary",
+      "prompt": "Check the gridwave README. We already have PagerDuty's SEV-1 through SEV-5 scale and some runbooks, but on-call keeps getting confused about when to actually pull people into a full incident response versus just handling it via a runbook. Can you help us nail this down and build us a proper incident playbook?",
+      "expected_output": "Anchors the major-incident/playbook threshold to the org's existing SEV-1/SEV-2 line rather than inventing a new severity scheme. Directly resolves both real confusion cases from the README: states explicitly that a known, fast fix does not exempt a broad-impact event from being declared (addressing the silently-patched 40%-of-customers data-drop that should have been declared), and that a single-customer, known-cause, runbook-covered issue stays out of scope even if it feels urgent (addressing the over-escalated SEV-3 bridge call). Produces two separate, standalone documents: the full playbook and a one-page cheat sheet.",
+      "files": [],
+      "assertions": [
+        "Anchors the major-incident/playbook threshold to the org's existing PagerDuty SEV-1/SEV-2 line rather than inventing a new severity scheme",
+        "States explicitly that a known/fast fix does not exempt a broad-impact event from being declared an incident, directly addressing the silently-patched 40%-of-customers scenario from the README",
+        "States explicitly that a single-customer, known-cause, runbook-covered issue stays out of scope even if it feels urgent, directly addressing the over-escalated SEV-3 bridge-call scenario from the README",
+        "Produces two separate, standalone files -- a full playbook and a distinct one-page cheat sheet -- not a single document"
+      ]
+    }
+  ]
+}

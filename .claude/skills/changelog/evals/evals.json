@@ -1,0 +1,46 @@
+{
+  "skill_name": "changelog",
+  "evals": [
+    {
+      "id": 1,
+      "name": "simple-single-package",
+      "prompt": "We're about to cut a new release of linkbox. Since v1.3.0 we've added fuzzy matching to the search command, and fixed a crash that happened when you ran `linkbox add` without the --tag flag. Can you set up a CHANGELOG.md for this project and add these two changes?",
+      "expected_output": "Creates a new CHANGELOG.md following Keep a Changelog 2.0.0 -- correct six-category structure, ISO 8601 date, an Unreleased section, ideally version-link references. Places the fuzzy-search addition under Added and the crash fix under Fixed (not the other way around, since the crash was a bug being corrected, and the fuzzy matching is new functionality). Does not invent extra categories or leave empty ones in. Since there's no existing Conventional Commits convention here, drafts primarily from the user's conversational description rather than blindly pattern-matching git log.",
+      "files": [],
+      "assertions": [
+        "Fuzzy search addition is placed under Added and the crash fix under Fixed",
+        "No invented category names and no empty categories left in the file",
+        "An Unreleased section is present at the top",
+        "Explicitly references or is consistent with Keep a Changelog 2.0.0, not an older version like 1.0.0/1.1.0"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "conventional-commits-automated",
+      "prompt": "semantic-release just cut our v3.2.0 release and generated CHANGELOG.md automatically from our commits, but the entries read like raw commit logs and I don't think our users will find them very readable. Can you clean up the CHANGELOG.md for this release?",
+      "expected_output": "Recognizes that semantic-release is already running (via .releaserc.json and the release workflow) and that the repo uses Conventional Commits, so the task is reviewing/rewriting the existing auto-generated entries for readability and correct Keep a Changelog categorization -- not writing from scratch or re-deciding the version number. Rewrites entries to describe user-facing effect rather than restating commit subjects verbatim (e.g. the checksum/resume fix, the auth token rotation fix). Correctly sorts entries into Added/Changed/Fixed/Security rather than keeping semantic-release's own Features/Bug Fixes/BREAKING CHANGES headings. Keeps the --dest to --target rename marked as a breaking change with **Breaking:** and names the affected interface. Surfaces the CVE-2026-41221 security fix under a Security category (or at least flags it prominently) rather than burying it in Fixed. Does not paste raw commit messages or commit-hash links directly as entries.",
+      "files": [],
+      "assertions": [
+        "Uses only Keep a Changelog's six category names (Added/Changed/Deprecated/Removed/Fixed/Security), not semantic-release's own headings like 'Features'/'Bug Fixes'/'BREAKING CHANGES'",
+        "The --dest to --target rename is marked inline with a '**Breaking:**' prefix and names the specific flag/interface affected",
+        "The CVE-2026-41221 fix appears under a distinct Security category, leading with or clearly citing the CVE identifier",
+        "Non-notable commits (README typo fix, dependency bump) are dropped rather than carried into the changelog",
+        "No raw commit-hash markdown links (e.g. '([abc1234](...))') are pasted into the entries themselves"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "monorepo-multi-package",
+      "prompt": "We've got this root-level CHANGELOG.md but it's got entries from both our core package and the CLI mixed together under one Unreleased section, and each package actually has its own version number. Can you help us fix up the changelog situation here?",
+      "expected_output": "Recognizes the monorepo/independent-versioning mismatch (pnpm-workspace.yaml, two packages each with their own package.json version) rather than just tidying the single flat file in place. Proposes per-package CHANGELOG.md files (packages/core/CHANGELOG.md, packages/cli/CHANGELOG.md), splitting the existing mixed entries by which package they actually belong to (cron recurrence and timezone/DST fix -> core; --parallel flag and missing-config crash fix -> cli). Does not silently force everything into one file, and does not invent a made-up single version number spanning both packages. May also suggest an optional central root changelog that summarizes across packages, per Keep a Changelog 2.0.0's monorepo guidance, but the core deliverable is the per-package split.",
+      "files": [],
+      "assertions": [
+        "Creates separate CHANGELOG.md files for packages/core and packages/cli rather than keeping one flat file",
+        "Entries are correctly split by package (cron recurrence + DST timezone fix under core; --parallel flag + missing-config crash fix under cli)",
+        "No single fabricated version number is invented spanning both packages -- each package's changelog stands on its own",
+        "The root CHANGELOG.md becomes a pointer/summary linking to the per-package changelogs rather than being deleted or left as the old mixed flat file",
+        "Explicitly references or is consistent with Keep a Changelog 2.0.0, not an older version like 1.0.0/1.1.0"
+      ]
+    }
+  ]
+}
