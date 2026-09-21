@@ -133,25 +133,26 @@ you've misunderstood before going further — this step is not optional, and it'
 just mention the draft is ready. The whole value of this stage is that the intent stays theirs;
 skipping the correction step defeats the purpose even if the draft looks right to you.
 
-## Step 5: Commit it
+## Step 5: Write the file
 
 Once the originator has signed off:
 
 - **Path**: `docs/sdlc/<ISSUE-KEY>-<kebab-case-slug>/intent.md` — e.g.
   `docs/sdlc/ITZ-22065-mlflow-observability/intent.md`. If there's no issue key yet, use
   `docs/sdlc/TBD-<kebab-case-slug>/intent.md` and say it should be renamed once a real key exists.
-- **Commit message**: `intent: <short title>` — nothing more. Author and timestamp live in the
-  Git commit metadata itself; don't restate them anywhere as if the file were the source of truth
-  for who wrote it or when.
-- If a version-control tool is available (`gh`, a Git remote reachable from a shell, a connected
-  GitHub/GitLab integration), commit the file on a branch and open a PR rather than pushing
-  straight to the default branch — the whole point of committing this way is that the product
-  owner's later accept/reject decision *is* the merge (accept) or the closed/rejected PR (reject).
-  A push straight to `main` skips that decision point entirely. If the repo's own conventions
-  don't support PRs for some reason, follow local convention rather than fighting it.
-- If no version-control tool is available at all, write the file locally and tell the user the
-  exact path and exact commit message to use themselves — don't skip creating the file just
-  because you can't commit it.
+- Write the file to that path and stop there. Committing it and raising the PR is not this
+  skill's job — that's for the user to do themselves, or by invoking the `conventional-commits`
+  and `pr-description` skills. Don't run `git commit`, `git push`, or `gh pr create` (or
+  equivalent) as part of this skill.
+- Tell the user the exact path you wrote, and that the recommended commit message is
+  `intent: <short title>` — nothing more. Author and timestamp live in the Git commit metadata
+  itself; don't restate them anywhere as if the file were the source of truth for who wrote it or
+  when.
+- Remind them that this should go on a branch with a PR, not straight to the default branch — the
+  whole point of committing this way is that the product owner's later accept/reject decision *is*
+  the merge (accept) or the closed/rejected PR (reject). A push straight to `main` skips that
+  decision point entirely. If the repo's own conventions don't support PRs for some reason, that's
+  a call for the user to make, not this skill.
 
 You don't need to do anything about the actual accept/reject decision — that happens later, by
 someone else, as an ordinary PR review. Your job ends at making sure the artifact is structured to
