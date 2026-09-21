@@ -112,6 +112,27 @@ worth deciding rather than leaving to chance -- the SRE Workbook's own guidance 
 link straight to the relevant playbook entry, not that someone should have to search for it while
 the system is on fire. Note the answer in the doc itself if there's a natural place for it (e.g., "linked from the `high-queue-depth` PagerDuty alert").
 
+### 1e. Where does the file itself live, and what's it named?
+
+Check the repo for an existing convention first -- a `docs/runbooks/` or `runbooks/` directory
+that's already in use, a wiki, or a stated policy elsewhere (e.g. a CLAUDE.md/CONTRIBUTING.md
+note). If one exists, follow it rather than introducing a second location or naming scheme.
+
+If there's no existing convention, default to a single standard rather than inventing a new one
+per document:
+
+- **Location**: `docs/runbooks/`, one file per runbook or playbook, flat (no further nesting by
+  team/service unless the repo already organizes docs that way).
+- **Filename**: a descriptive kebab-case slug of the subject only -- `add-a-skill.md`,
+  `high-queue-depth.md`, `payment-webhook-failures.md`. Don't prefix the filename with `runbook-`
+  or `playbook-` -- the directory already says what the file is, so the prefix is redundant on
+  every single file in it. (If a project genuinely mixes runbooks and playbooks in one directory
+  and wants the type visible at a glance, a suffix like `-playbook.md` on the handful that are
+  playbooks is more useful than prefixing every file with `runbook-`, since runbooks are the
+  common case here and playbooks are the exception worth flagging.)
+- Once a project has adopted this convention (or its own), keep applying it consistently for
+  every runbook/playbook in that repo -- don't let each new document introduce a fresh scheme.
+
 ## Step 2 -- Runbook mode: the fixed sequence
 
 A runbook should read as a sequence someone can execute without stopping to make a judgment call.
@@ -212,6 +233,8 @@ changed, a case the doc didn't anticipate at all). Then:
   SEV-1..5 was proposed explicitly rather than assumed silently.
 - Confirm related links point to real, specific things (an actual alert name, an actual dashboard,
   an actual related doc) rather than generic placeholders like "see monitoring."
+- Confirm the file was placed and named per Step 1e -- the repo's existing convention if one
+  exists, otherwise `docs/runbooks/<subject-slug>.md` with no `runbook-`/`playbook-` prefix.
 
 ## Step 6 -- Automation: what to recommend, and what not to build
 
