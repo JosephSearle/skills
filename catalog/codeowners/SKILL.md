@@ -54,7 +54,7 @@ already answers most of it:
    (an internal repo can tolerate looser catch-all ownership; a public repo benefits from tighter,
    more deliberate coverage so external PRs always get a real owner's eyes) -- reuse the answer if
    this session has already established it for a sibling skill on this repo (e.g. `pr-template`,
-   `issue-template`).
+   `gh-issue-template`).
 3. **Does this team actually want two tiers of trust -- people who can weigh in vs. people who can
    actually approve/merge?** Ask this plainly rather than assuming flat ownership is always fine.
    If the answer is genuinely "yes, we want that split": say plainly that CODEOWNERS cannot express

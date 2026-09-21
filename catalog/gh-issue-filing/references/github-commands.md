@@ -51,7 +51,7 @@ If the user's report doesn't mention a version, or mentions one that predates th
 ls .github/ISSUE_TEMPLATE/ 2>/dev/null
 cat .github/ISSUE_TEMPLATE/*.yml .github/ISSUE_TEMPLATE/*.md 2>/dev/null
 ```
-No `gh` needed — these are just files in the checkout. If templates exist, match their actual field names/structure (see the sibling `issue-template` skill for how these are designed) rather than free-texting a generically-shaped issue.
+No `gh` needed — these are just files in the checkout. If templates exist, match their actual field names/structure (see the sibling `gh-issue-template` skill for how these are designed) rather than free-texting a generically-shaped issue.
 
 ### Check the repo's actual label scheme before suggesting labels (Step 5)
 ```

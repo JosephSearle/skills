@@ -13,8 +13,8 @@ grouped under the date they landed on `main`.
   on-call reference documentation.
 
 ### Changed
-- Renamed the "issue-filing" skill to "gh-issue-filing" to make its GitHub-specific scope
-  explicit in the slug itself.
+- Renamed the "issue-filing" skill to "gh-issue-filing" and the "issue-template" skill to
+  "gh-issue-template" to make their GitHub-specific scope explicit in the slug itself.
 
 ## [2026-09-20]
 
