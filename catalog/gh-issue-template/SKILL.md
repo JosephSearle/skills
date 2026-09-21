@@ -1,10 +1,10 @@
 ---
-name: issue-template
+name: gh-issue-template
 description: 'Generate, update, or audit GitHub issue templates -- both modern YAML issue forms (.github/ISSUE_TEMPLATE/*.yml, with dropdowns, checkboxes, and required fields) and legacy plain-Markdown templates (.github/ISSUE_TEMPLATE.md), plus the config.yml template chooser that controls whether freeform issues are still allowed. This is a companion skill to a separate pr-template skill and an existing README-standard skill -- scoped strictly to issue templates. Produces a small family of templates rather than one generic form, because a bug report and a feature request need genuinely different fields: bug reports need reproduction facts (grounded in Simon Tatham''s "How to Report Bugs Effectively" -- steps to reproduce, expected vs. actual behavior, environment/version, and a structural separation of observed fact from the reporter''s speculation about the cause), while feature requests need problem/motivation first, proposed solution second, alternatives considered third. Recommends YAML issue forms over legacy Markdown by default since they''re the more capable, current mechanism, matches template strictness to whether the repo is an internal/trusted-team repo or a public OSS repo fielding reports from strangers, and helps decide whether config.yml should set blank_issues_enabled: false to force every report through a template. Triggers on: "set up issue templates", "add a bug report template", "create a feature request template for GitHub", "convert our issue template to a YAML form", "should we allow blank issues", "our bug reports never have enough info to reproduce", "audit our issue templates", "does our ISSUE_TEMPLATE still make sense", or any instruction to create, write, update, improve, or review the templates GitHub shows when someone opens a new issue (not the PR/MR template -- that''s a different skill).'
 summary: Generates, updates, or audits a family of GitHub issue templates (bug report, feature request, and others as needed), in YAML issue-form or legacy Markdown format, matched to the repo's trust model.
 ---
 
-# Issue Template Generation Skill
+# GitHub Issue Template Generation Skill
 
 GitHub issue templates are what a reporter sees before they've written a word -- the form shapes
 whether what comes back is something a maintainer can act on, or a two-line "it's broken" that
