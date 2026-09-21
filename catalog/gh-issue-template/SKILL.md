@@ -72,7 +72,7 @@ This skill has two modes: **generate/update** (produce or revise the templates o
    missing-docs reports, usually lighter than a bug report) or a **question/support** template --
    but if the repo already has a SUPPORT.md or a "getting help" channel, point questions there instead
    of adding a template that duplicates it; a "question" issue template and a support doc solving the
-   same problem is the same duplication the sibling pr-template and support skills warn against for
+   same problem is the same duplication the sibling pr-template and tech-doc-support skills warn against for
    their own files.
 3. **Should blank (templateless) issues stay allowed?** GitHub's `config.yml` has a
    `blank_issues_enabled` setting -- `true` (default) lets someone open an issue with no template at

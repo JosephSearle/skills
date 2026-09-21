@@ -18,6 +18,10 @@ grouped under the date they landed on `main`.
 ### Changed
 - Renamed the "issue-filing" skill to "gh-issue-filing" and the "issue-template" skill to
   "gh-issue-template" to make their GitHub-specific scope explicit in the slug itself.
+- Renamed the eight repo-standard-docs skills ("changelog", "code-of-conduct", "codeowners",
+  "contributing", "governance", "readme", "security", "support") to a "tech-doc-" prefix (e.g.
+  "tech-doc-readme") so the catalog listing groups them as one recognizable family rather than
+  generic bare names.
 
 ## [2026-09-20]
 
