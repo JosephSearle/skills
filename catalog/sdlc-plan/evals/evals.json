@@ -5,6 +5,7 @@
       "id": 1,
       "name": "vague-non-engineer-idea",
       "prompt": "Priya (support team lead, not an engineer) describes a messy weekly manual-export problem with no existing issue and no connector available.",
+      "expected_output": "Interviews Priya until the problem, outcome, users, and constraints are concrete, then commits intent.md at docs/sdlc/TBD-<slug>/intent.md using the exact five-section template, with linked_issue set to TBD and genuine open questions preserved rather than invented.",
       "files": [],
       "assertions": [
         {
@@ -29,6 +30,7 @@
       "id": 2,
       "name": "engineer-with-existing-issue",
       "prompt": "Sam (backend engineer) already has GitHub issue #482 and gives a well-specified ask for partial refunds on subscription cancellations.",
+      "expected_output": "Commits intent.md at docs/sdlc/482-<slug>/intent.md linked to the existing issue #482 on a dedicated branch, using the 'intent: <short title>' commit message convention, with no implementation artifacts produced.",
       "files": [],
       "assertions": [
         {
@@ -53,6 +55,7 @@
       "id": 3,
       "name": "idea-drifts-into-design",
       "prompt": "Alex (engineer) pitches search caching with a full implementation plan already attached (Redis, cache key, TTL, response schema) and no ticket yet.",
+      "expected_output": "Declines to draft a design document, instead reframing Alex's implementation plan back into the five-section intent template -- capturing the technical risks as Constraints/Open questions rather than resolved decisions -- with linked_issue set to TBD.",
       "files": [],
       "assertions": [
         {
