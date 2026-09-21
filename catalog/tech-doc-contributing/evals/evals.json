@@ -1,0 +1,26 @@
+{
+  "skill_name": "tech-doc-contributing",
+  "evals": [
+    {
+      "id": 1,
+      "name": "small-single-maintainer-library",
+      "prompt": "This is my repo for tiny-date-fmt, a small utility library I maintain by myself. Can you add a CONTRIBUTING.md? The repo is at the current directory.",
+      "expected_output": "A CONTRIBUTING.md scaled to a small single-maintainer library: welcome/why-contribute, ground rules, getting started (pulling the real `vitest run` test command and `eslint .` lint command from package.json, not invented ones), how to report a bug, how to suggest an enhancement, and PR/review process. Does NOT include a label taxonomy, a CLA/DCO section, or a multi-repo/package-naming section, since none of those apply to this project. Does not duplicate the README's install/usage instructions.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "plugin-monorepo-structure",
+      "prompt": "We're DocEngine, a pluggable document-processing engine split across packages/core, packages/plugin-markdown, and packages/plugin-yaml. Please generate a CONTRIBUTING.md that explains how someone would contribute a new plugin. The repo is at the current directory.",
+      "expected_output": "A CONTRIBUTING.md that includes a project-structure section explaining the packages/core vs packages/plugin-* layout and the plugin-* naming convention, links to the existing CODE_OF_CONDUCT.md and the .github/ISSUE_TEMPLATE/bug_report.md rather than restating them, and pulls the real `turbo run test` command from the root package.json (not an invented one). Explains how to add a new plugin package specifically, not just generic contribution steps.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "audit-stale-contributing",
+      "prompt": "Can you audit our CONTRIBUTING.md and tell me what's missing or out of date? Don't rewrite it yet, just tell me. The repo is at the current directory.",
+      "expected_output": "An audit report, not a rewrite -- the existing CONTRIBUTING.md file itself is not modified. Correctly flags that the documented command `npm run test:old` does not exist in package.json (the real script is `test: jest`) as stale/inaccurate. Notes there is no security-disclosure path separate from general bug reports. Notes the CLA requirement is asserted but nothing else in the repo (no CLA file, no CI check) confirms it's real, flagging it as worth double-checking rather than assuming it's accurate. Identifies what's appropriately minimal for this project's size versus what's a genuine gap.",
+      "files": []
+    }
+  ]
+}

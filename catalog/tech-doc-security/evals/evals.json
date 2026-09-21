@@ -1,0 +1,26 @@
+{
+  "skill_name": "tech-doc-security",
+  "evals": [
+    {
+      "id": 1,
+      "name": "no-process-yet",
+      "prompt": "This is my streamql repo. We don't have any formal security process yet, but people should have a way to report vulnerabilities privately. Can you add a SECURITY.md? The repo is at the current directory.",
+      "expected_output": "A SECURITY.md whose primary content is a concrete, real reporting channel (GitHub private vulnerability reporting recommended, or a real contact method), a short list of what to include in a report, and a confidentiality/embargo expectation. Does NOT invent a supported-versions table, a response-time SLA, or an escalation path, since none of those are real for this project -- instead states honestly that there's no fixed response timeline yet (or asks the user before assuming one). Does not duplicate CONTRIBUTING.md's general bug-report guidance.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "solo-maintainer-wants-sla-and-versions-table",
+      "prompt": "Add a SECURITY.md to my quickcache repo. Include a supported-versions table and say we respond to reports within 24 hours. The repo is at the current directory.",
+      "expected_output": "Pushes back on or questions the 24-hour response promise and the supported-versions table before writing them verbatim, given this is a solo, spare-time-maintained project with no visible maintenance-branch policy or team backing that SLA -- asks whether this is a commitment the maintainer can actually honor, or explains the risk of promising something unenforceable, rather than silently complying. Does not fabricate a plausible-looking versions table when the repo shows no evidence of multiple maintained release lines.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "audit-stale-security-policy",
+      "prompt": "Can you audit our SECURITY.md and tell me if anything's out of date? Don't rewrite it, just tell me. The repo is at the current directory.",
+      "expected_output": "An audit report, not a rewrite -- SECURITY.md itself is not modified. Correctly flags the supported-versions table as stale: it lists 1.x and 2.x as supported, but the README states the project is on the 4.x line and 3.x was already retired, so the table references version lines that are long gone. Flags the 24-hour response / 48-hour fix promise as a claim that should be verified with the maintainers rather than assumed accurate, especially since the version table is already known to be wrong. Treats the stale/misleading claims as a higher priority finding than any missing optional section.",
+      "files": []
+    }
+  ]
+}

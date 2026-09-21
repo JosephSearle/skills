@@ -1,0 +1,26 @@
+{
+  "skill_name": "tech-doc-readme",
+  "evals": [
+    {
+      "id": 1,
+      "name": "generate-new-library-readme",
+      "prompt": "Generate a README for this project. repo is at <REPO_PATH> (a small Node.js library with no README.md yet)",
+      "expected_output": "CREATE-mode README with Title, a `>` blockquote short description, Installation, Usage (a real, verified example with expected output shown), an API section documenting the actual exported members, a Contributing section, and License as the final section stating the SPDX identifier plus the named copyright owner (pulled from the LICENSE file). No placeholder text; every code fence has a language identifier.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "update-readme-with-spec-violations",
+      "prompt": "Update my README to meet best practices. repo is at <REPO_PATH> (an existing README with License as the very first section instead of the last, a bare 'MIT' with no owner even though the LICENSE file names one, no Table of Contents, an undocumented CLI despite package.json declaring a bin entry, and CI configured but no Badges section)",
+      "expected_output": "UPDATE-mode rewrite that: moves License to the final section and completes it with the SPDX id plus the named copyright owner; adds a Badges section since CI exists; adds a Table of Contents; adds a CLI subsection under Usage documenting the actual bin commands; and explicitly tells the user what was reordered/fixed and why, without silently dropping any existing valid content.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "audit-only-no-rewrite",
+      "prompt": "Can you audit my README against best practices and tell me what's wrong with it? Don't rewrite it yet, I just want to know what needs fixing. repo is at <REPO_PATH> (a README with License positioned mid-document with no owner named, Contributing missing entirely, Badges missing despite CI, a code block with no language identifier, a placeholder left in a Configuration section, and an 'Author' heading instead of 'Maintainer(s)')",
+      "expected_output": "A compliance report only -- README.md is left completely unmodified. Walks the canonical Standard-Readme section order and flags: License's wrong position and missing owner, Contributing missing (required), Badges missing (required given CI), the unlabeled code fence, the Configuration placeholder, and 'Author' not satisfying the spec's exact 'Maintainer(s)' heading requirement. Best-README-Template style suggestions (badges row, centered header, collapsible ToC) are reported separately from the structural/content compliance findings, and the report ends by offering -- not automatically doing -- to apply the fixes.",
+      "files": []
+    }
+  ]
+}

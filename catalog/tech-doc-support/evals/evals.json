@@ -1,0 +1,26 @@
+{
+  "skill_name": "tech-doc-support",
+  "evals": [
+    {
+      "id": 1,
+      "name": "readme-duplication-trap",
+      "prompt": "Can you add a SUPPORT.md to my parsekit repo? Just cover how people should get help. The repo is at the current directory.",
+      "expected_output": "Reads README.md first and notices it already has a 'Getting Help' section pointing to GitHub Discussions. Does not just restate the README's getting-started/installation instructions in SUPPORT.md under a new filename. Either adds real triage logic on top (routing bugs to the issue tracker, distinguishing usage questions from bug reports) or explicitly says a dedicated SUPPORT.md may not add much beyond what the README already covers -- rather than generating a thin, redundant file just because one was requested.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "internal-tooling-fork",
+      "prompt": "Add a SUPPORT.md to the billing-sync repo. This is one of our internal platform tools, not an open-source project -- there's no public issue tracker or community. The repo is at the current directory.",
+      "expected_output": "Recognizes this as the internal/community fork case (Microsoft's pattern) rather than defaulting to a public-open-source channel list (Stack Overflow, Discord, a public forum) that wouldn't make sense for an internal tool with no public issue tracker or community. Routes to internal channels (e.g. an owning team, an internal Slack channel, an internal ticket system) rather than inventing public-facing ones. Does not fabricate specific internal channel names/links that were never confirmed -- names the kind of resource needed and asks or flags rather than guessing a plausible-sounding Slack channel name.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "audit-dead-channel",
+      "prompt": "Can you audit our SUPPORT.md and tell me if it still holds up? Don't rewrite it, just tell me. The repo is at the current directory.",
+      "expected_output": "An audit report, not a rewrite -- SUPPORT.md itself is not modified. Correctly flags that the SUPPORT.md points to a Slack workspace/Gitter room that other files in the repo (e.g. README.md) indicate has been shut down or replaced by GitHub Discussions. Treats this dead/wrong channel as the top-priority finding, ahead of secondary observations like formatting or missing boundary statements.",
+      "files": []
+    }
+  ]
+}
