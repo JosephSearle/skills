@@ -1,0 +1,80 @@
+{
+  "skill_name": "sdlc-design",
+  "evals": [
+    {
+      "id": 1,
+      "name": "clean-case-no-conflicts",
+      "prompt": "An accepted intent (NTFY-501, digest email frequency) with loaded security/brand/compliance/UX policy skills, where the design doesn't actually collide with any of them.",
+      "expected_output": "Commits spec.md at docs/sdlc/NTFY-501-digest-email-frequency/spec.md using the exact required frontmatter and four section headers, resolves both of intent.md's open questions explicitly, lists the actual policy skills consulted in skills_applied, and raises no fabricated Areas of concern since none of the loaded policies actually conflict with this design.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "spec.md exists at docs/sdlc/NTFY-501-digest-email-frequency/spec.md with the exact required frontmatter (status, linked_intent, skills_applied, created) and the exact four section headers (Requirements, Design approach, Open questions resolved, Areas of concern)",
+          "id": "exact-file-and-template"
+        },
+        {
+          "text": "Both open questions from intent.md (default frequency for new users; a possible 'pause all' option) are explicitly addressed under Open questions resolved -- either resolved with reasoning or explicitly carried forward, not silently dropped",
+          "id": "open-questions-addressed"
+        },
+        {
+          "text": "Areas of concern does not fabricate a policy violation that doesn't exist -- it may still flag genuine tensions or unconfirmed assumptions, but doesn't claim any loaded policy is being violated by this design when none actually is",
+          "id": "no-fabricated-conflicts"
+        },
+        {
+          "text": "skills_applied in the frontmatter lists the specific policy skill files actually referenced (security, brand, compliance, ux), not a generic placeholder",
+          "id": "skills-applied-populated"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "policy-collision-case",
+      "prompt": "An accepted intent (PH-212, team contact bulk export) whose proposed outcome directly collides with a loaded security/compliance policy against unencrypted bulk PII export.",
+      "expected_output": "Commits spec.md at docs/sdlc/PH-212-team-contact-export/spec.md using the exact required frontmatter and four section headers, leaves intent.md byte-identical, resolves both of intent.md's open questions, and surfaces the CSV-vs-secure-export-service collision as a named, policy-tagged Areas of concern item routed to a policy owner rather than silently deciding it either way.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "spec.md exists at docs/sdlc/PH-212-team-contact-export/spec.md using the exact required frontmatter and the exact four section headers (Requirements, Design approach, Open questions resolved, Areas of concern)",
+          "id": "exact-file-and-template"
+        },
+        {
+          "text": "intent.md is left completely unmodified -- byte-identical to the version that existed before this task ran, since editing intent.md is explicitly out of scope for this skill",
+          "id": "intent-md-untouched"
+        },
+        {
+          "text": "The CSV-vs-secure-export-service collision appears as a named Areas of concern item tagged with the policy area that raised it (security and/or compliance) and routed to a named or explicitly-unnamed-but-flagged policy owner for sign-off, rather than being presented as an already-settled decision with no owner attached",
+          "id": "collision-routed-not-silently-decided"
+        },
+        {
+          "text": "Both open questions from intent.md (employee notification on export; export staleness) are explicitly addressed under Open questions resolved",
+          "id": "open-questions-addressed"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "unaccepted-intent-guard",
+      "prompt": "The BP-77 intent exists but its PR (#58) is still open and unmerged, per PULL_REQUESTS.md and its own draft status -- not yet accepted by a product owner.",
+      "expected_output": "Refuses to produce spec.md or any other design/requirements document, makes no new commit, and tells the user explicitly that BP-77's intent hasn't been accepted yet (citing its still-open PR and draft status) plus what needs to happen -- the intent must be merged -- before this stage can proceed.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "No spec.md, requirements.md, design.md, or any other new design/requirements document is created or committed to the repo, since the intent has not been accepted",
+          "id": "no-document-produced"
+        },
+        {
+          "text": "The response explicitly identifies that the intent's PR is still open/unmerged (citing PULL_REQUESTS.md and/or the intent's own draft status) as the reason for not proceeding",
+          "id": "cites-unmerged-status-as-reason"
+        },
+        {
+          "text": "No new commit is made to the repo -- git history stays at the single initial commit",
+          "id": "no-commit-made"
+        },
+        {
+          "text": "The response tells the user what needs to happen before this stage can proceed (i.e. the intent needs to be accepted/merged first)",
+          "id": "explains-what-unblocks-it"
+        }
+      ]
+    }
+  ]
+}
