@@ -1,20 +1,23 @@
 ---
 name: sdlc-design
 description: >-
-  Runs Stage 2 (Requirements and Design) of Anthropic's AI-Native SDLC: takes an already-accepted
-  intent.md and turns it into a committed spec.md, constrained by every organizational policy
-  skill available (brand, security, compliance, UX), with every policy collision surfaced as a
-  named, routable concern rather than silently resolved. Requires an accepted intent.md to already
-  exist at docs/sdlc/<issue-key>-<slug>/intent.md -- if there's no intent.md, or it's still open
-  and unmerged, stop and say this stage needs an accepted intent first rather than drafting one.
-  Trigger this whenever someone has an accepted or merged intent.md and asks to move it forward,
-  produce requirements, start design, turn the intent into a spec, or mentions "spec.md" in the
-  context of an existing intent -- even without using that exact vocabulary, e.g. "what would it
-  take to build this," "can we get requirements together for this," or "/sdlc-design". Do not use
-  this to draft intent.md itself (that's the separate sdlc-plan skill), and do not use it to write
-  implementation code, a build plan, or task breakdown (that's a later Build stage, out of scope
-  here) -- this skill's output stops at a reviewable spec.md.
-summary: Reads an already-accepted intent.md and generates spec.md (Requirements, Design approach, Open questions resolved, Areas of concern) constrained by whatever brand/security/compliance/UX policy skills are loaded, surfacing every policy collision as a named concern routed to a policy owner rather than resolving it silently, then commits spec.md alongside intent.md for the product owner to review (never to draft) and accept into Build.
+  Runs Stage 2 (Requirements and Design) of the AI-Native SDLC: turns an already-accepted
+  intent.md into a committed spec.md, constrained by whichever policy skills a persona lookup
+  (references/personas.md) resolves for the project -- e.g. security-baseline,
+  security-api/llm/mcp/agent, compliance-gdpr/eu-ai-act, brand-personal, ux-personal -- surfacing
+  every policy collision as a named, routable concern rather than resolving it silently. Requires
+  an accepted intent.md at docs/sdlc/ISSUE-KEY-slug/intent.md; if none exists, or it's still open
+  and unmerged, stop and say so. Trigger whenever someone has an accepted/merged intent.md and
+  wants to move it forward, get requirements together, start design, or turn it into a spec --
+  even without that vocabulary, e.g. "what would it take to build this," or "/sdlc-design". Not
+  for drafting intent.md itself (sdlc-plan's job), or for implementation code/build plans (later
+  Build stage) -- output stops at a reviewable spec.md.
+summary: Reads an already-accepted intent.md, resolves which policy skills apply via a persona lookup
+  (references/personas.md), and generates spec.md (Requirements, Design approach, Open
+  questions resolved, Areas of concern) constrained by those policy skills, surfacing every
+  policy collision as a named concern routed to a policy owner rather than resolving it
+  silently, then commits spec.md alongside intent.md for the product owner to review (never to
+  draft) and accept into Build.
 ---
 
 # SDLC Design (Requirements and Design)
@@ -60,13 +63,9 @@ if brand/security/compliance/UX simply don't apply to this change.
    it and confirm it's actually been accepted (merged), not just drafted and sitting open. If it's
    still an open/unmerged PR, stop here and tell the user this stage needs an accepted intent
    first — don't proceed on a draft that could still change underneath you.
-2. **Organizational policy skills should be available** — brand, security, compliance, UX, or
-   whatever your organization has encoded. Check what's loaded. If the organization hasn't written
-   these as skills yet, ask the user which policies apply and what they require, rather than
-   silently generating a spec as if no policy constraints exist and calling it done. A spec
-   produced with zero policy grounding isn't wrong to produce, but it needs to say so plainly
-   (as an area of concern) rather than looking as complete as one that actually applied real
-   constraints.
+2. **Resolve which policy skills apply via the persona lookup** — see Step 2 below. Don't
+   proceed on a guess about which policies apply; the lookup exists precisely so nobody has to
+   guess or remember.
 
 ## Step 1: Load context
 
@@ -76,7 +75,34 @@ explicit in `spec.md`: either answered (with the reasoning), or explicitly carri
 still open. Silently dropping one because it's inconvenient, or because the answer isn't obvious,
 defeats the entire point of having flagged it upstream.
 
-## Step 2: Generate the requirements-and-design spec
+## Step 2: Resolve which policy skills apply (persona lookup)
+
+Read `references/personas.md` before generating anything. It's a flat lookup table, not a skill
+in its own right — each row names a persona (e.g. `personal`, `newrocket`) and the exact policy
+skills that apply to it, drawn from whatever domains exist (security, compliance, brand, UX).
+
+1. Ask which persona this project falls under, unless it's already established for this session
+   (e.g. the user's said "this is a personal project" or the repo context makes it obvious).
+2. Look up that persona's row and load every skill it lists. As of this writing that can include
+   `security-baseline` (always present when security applies at all), the domain-specific
+   security skills (`security-api`, `security-llm`, `security-mcp`, `security-agent`) loaded
+   selectively based on which layers the project actually touches, `compliance-gdpr` and
+   `compliance-eu-ai-act` where personal-data or AI-system obligations apply, and
+   `brand-personal`/`ux-personal` for voice, naming, and UX standards. Treat this list as
+   illustrative, not fixed — always defer to whatever `personas.md` actually says, since it's
+   the file that changes as new policy skills get added.
+3. If a skill the row names isn't actually available/loaded in this session, say so as an
+   explicit limitation on the resulting spec (an Area of concern, not a silent gap) rather than
+   proceeding as if that policy simply doesn't apply.
+4. If the project's real scope suggests a skill beyond the persona's defaults — a `personal`
+   project that's suddenly standing up an MCP server, say — ask before silently adding or
+   omitting it, rather than assuming the persona's row is exhaustive for every case.
+5. Unknown or new persona: fall back to asking per-skill which policies apply, then offer to
+   record the answer as a new row in `personas.md` for next time.
+6. Note in `spec.md`'s frontmatter (see Step 4) which persona was resolved, so the governance
+   trail shows not just which skill versions were used but which persona's row put them there.
+
+## Step 3: Generate the requirements-and-design spec
 
 Apply every available policy skill as a real constraint on what you write, not a checklist you
 consult afterward. The lesson this stage is built on frames the task this way — it's worth using
@@ -96,13 +122,14 @@ goal is what the user asked for; don't let the policy silently override the inte
 feels more authoritative. Neither call is yours to make — surface it and let a policy owner and
 the product owner make it together.
 
-## Step 3: Write spec.md using this structure
+## Step 4: Write spec.md using this structure
 
 ```markdown
 ---
 status: draft
 linked_intent: docs/sdlc/<ISSUE-KEY>-<slug>/intent.md
-skills_applied: [<list of skill names/versions used>]
+persona: <persona resolved in Step 2, e.g. "personal" or "newrocket">
+skills_applied: [<list of skill names/versions actually consulted, drawn from that persona's row>]
 created: <ISO date>
 ---
 
@@ -119,7 +146,7 @@ created: <ISO date>
 
 ## Areas of concern
 <flagged policy collisions — each one tagged with which policy skill raised it, e.g.
-"security: ...", "brand: ...">
+"security-baseline: ...", "brand-personal: ...", "compliance-gdpr: ...">
 ```
 
 If the change is front-end/UI-facing, don't embed a UI design directly in the spec — note instead
@@ -127,16 +154,21 @@ that a design mock should be produced from `intent.md` and iterated on separatel
 Build. Spec.md describes the requirement for a UI and the constraints it must satisfy; it isn't
 the place to actually design the UI.
 
-`skills_applied` matters more than it looks — it's part of the governance trail this stage exists
-to create. Someone reading this spec in six months should be able to reconstruct not just what was
-decided, but which policy versions were actually in force when it was decided.
+`persona` and `skills_applied` together matter more than they look — they're part of the
+governance trail this stage exists to create. Someone reading this spec in six months should be
+able to reconstruct not just what was decided, but which persona's row was resolved and which
+policy skill versions were actually in force when it was decided. `skills_applied` should list
+the actual skill names consulted (e.g. `security-baseline`, `brand-personal`), not a generic
+placeholder like "security" or "brand" — the same discipline the eval suite checks for.
 
-## Step 4: Route concerns before the product owner reviews the whole spec
+## Step 5: Route concerns before the product owner reviews the whole spec
 
 Don't bury policy collisions in prose the product owner has to hunt through paragraph by
 paragraph. For each area of concern:
 
-- Name the policy area it came from (security, brand, compliance, UX, or whatever else applies).
+- Name the policy skill it came from by its actual name (e.g. `security-api`, `compliance-gdpr`,
+  `ux-personal`), not just its broad domain — that's what makes the concern routable rather than
+  merely categorized.
 - Name the responsible policy owner if you know it — if you don't, ask the user who owns that
   policy area rather than leaving it unassigned.
 - Present concerns as an explicit, individually-addressable list, not folded into the Requirements
@@ -146,7 +178,7 @@ The goal is that a product owner scanning the spec can tell at a glance exactly 
 still need a policy owner's sign-off, and who to go ask, without reading the whole document
 first.
 
-## Step 5: Present spec.md for review, not for drafting
+## Step 6: Present spec.md for review, not for drafting
 
 Show the full spec.md to the product owner. Their job is to check it against the original problem
 (does this actually solve what `intent.md` said was broken? were the open questions genuinely
@@ -155,7 +187,7 @@ owners — not to hand you line edits to make directly. If they come back wantin
 treat that as new information to regenerate the affected section from (so it goes back through the
 same policy constraints as everything else), not as a patch to apply verbatim on their say-so.
 
-## Step 6: Write the file
+## Step 7: Write the file
 
 - **Path**: same folder as the intent — `docs/sdlc/<ISSUE-KEY>-<slug>/spec.md`.
 - Write the file to that path and stop there. Committing it and raising the PR is not this
