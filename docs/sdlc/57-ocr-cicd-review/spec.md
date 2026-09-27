@@ -33,7 +33,7 @@ concerns — a review-quality gate, not a mechanical correctness gate).
 ```yaml
 name: OCR
 on:
-  pull_request:
+  pull_request_target:
 
 permissions:
   contents: read
@@ -48,21 +48,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run OpenCodeReview
-        uses: alibaba/open-code-review@<pin-to-release-tag>   # see Areas of concern: dependency pinning
+        uses: alibaba/open-code-review@v1.12.9   # pinned to the current stable release; bump deliberately
         with:
-          llm_url: https://api.anthropic.com                  # confirm exact base URL against OCR docs at Build time
+          llm_url: https://api.anthropic.com
           llm_auth_token: ${{ secrets.ANTHROPIC_API_KEY }}
-          llm_model: claude-haiku-4-5-20251001                 # see "Exact Claude model", below
-          llm_use_anthropic: true
+          llm_model: ${{ vars.OCR_LLM_MODEL }}         # repo variable, default: claude-haiku-4-5-20251001
+          llm_use_anthropic: ${{ vars.OCR_LLM_USE_ANTHROPIC }}  # repo variable, default: 'true'
           rule: .opencodereview/rule.json
-          max_tokens_budget: 350000                            # see "Exact token budget value", below
-          upload_artifacts: true                               # keep default: audit trail for section 5 (vuln/incident response)
+          max_tokens_budget: 350000                    # see "Exact token budget value", below
+          upload_artifacts: true                        # keep default: audit trail for section 5 (vuln/incident response)
 
       - name: Block PR on a critical-severity finding
         if: always()
         run: |
           node .github/scripts/ocr-check-critical.mjs /tmp/ocr-result.json
 ```
+
+`llm_model`/`llm_use_anthropic` as repo Variables rather than literals follows the pattern in
+OpenCodeReview's own published GitHub Actions example (`examples/github_actions/ocr-review.yml`)
+— neither value is sensitive, so `vars.*` (not `secrets.*`) keeps them visible/editable without a
+commit, while the actual credential (`llm_auth_token`) stays a secret.
 
 `alibaba/open-code-review`'s composite action does its own checkout, PR-head fetch, and
 merge-base computation internally — the calling workflow does not need its own `actions/checkout`
@@ -72,6 +77,12 @@ above is purely for the severity-based blocking policy this spec adds on top, an
 sense to run when the first step actually produced a result file — the `if: always()` above is a
 placeholder for "ran and produced a result," to be tightened to the action's actual exit-status
 output once confirmed at Build time (see Open questions resolved, item 1).
+
+Nothing else in this workflow may check out or execute the PR head's own code — the one step that
+touches fork content (`Run OpenCodeReview`) only diffs and reads it as text to send to the LLM,
+per the maintainers' own security note for their `pull_request_target` example ("only reads the
+diff and does not execute any code from the PR"). Any future addition to `ocr.yml` (a build step,
+a test step) must not reuse this same trigger without re-opening the Fork PRs question below.
 
 ### Severity-based blocking (`.github/scripts/ocr-check-critical.mjs`)
 
@@ -86,9 +97,13 @@ Design: a small Node script, `.github/scripts/ocr-check-critical.mjs`, that:
 - Reads `/tmp/ocr-result.json`.
 - Counts findings whose severity is `critical` (the four-value vocabulary — `critical`, `high`,
   `medium`, `low` — is confirmed from the action's own `route_severity_below` input; the exact
-  JSON field name/path for a finding's severity within the result file still needs confirming
-  against a real `ocr review --format json` output at Build time — see Open questions resolved,
-  item 1).
+  JSON field name/path for a finding's severity within the result file is **not published
+  anywhere** — checked the action's own README, `AGENTS.md`, and the
+  `examples/github_actions/README.md` integration guide directly, and none of the three documents
+  the `--format json` output structure. This can only be resolved empirically: the first Build
+  task for this script should be a throwaway `ocr review --format json` run against a real diff
+  in this repo, read the actual output once, and write the parser against that — not against a
+  guessed schema).
 - On any critical finding: prints which file(s)/finding(s) triggered it (what went wrong) and
   points at the posted PR comments for detail (what to do about it), per brand-personal's
   error-message ordering, then exits non-zero.
@@ -145,36 +160,42 @@ security-baseline section 1.
   security-sensitive surfaces (workflow files, the catalog-index build script, the dynamic
   file-serving route, frontmatter parsing). Literal schema keys carried forward to Build, as
   above.
-- **Fork PRs** (intent, open question 5): Resolved — trigger on plain `pull_request`, not
-  `pull_request_target`. GitHub does not pass repository secrets to `pull_request` runs
-  originating from a fork, so `ANTHROPIC_API_KEY` is never exposed to a fork-authored workflow
-  run; the practical effect is that OCR simply won't run (no credential available) on a
-  fork-originated PR, rather than running with elevated trust. `pull_request_target` would make
-  secrets available for fork PRs too, but only by running the workflow in the base repo's trust
-  context against untrusted fork code — a known-risky pattern security-baseline's section 2
-  ("treat third-party executable code as untrusted until vetted") argues against by default. This
-  repo has no external-contributor base today, so the safer default (no review on fork PRs) costs
-  nothing in practice; revisit if that changes.
+- **Fork PRs** (intent, open question 5): Resolved — trigger on `pull_request_target`, matching
+  OpenCodeReview's own published GitHub Actions example
+  (`examples/github_actions/ocr-review.yml`). This reverses an earlier draft of this section,
+  which reasoned that `pull_request_target` is unsafe with untrusted fork content and defaulted to
+  plain `pull_request` (accepting "OCR doesn't run on fork PRs" as the cost). Reading the
+  maintainers' own integration guide changed that: the specific risk `pull_request_target` usually
+  introduces is running the base repo's trust context (and its secrets) *while building or
+  executing* untrusted fork code — and OCR's own documentation states it explicitly avoids that
+  ("only reads the diff and does not execute any code from the PR"). It diffs the fork's commits
+  as text and sends that text to the LLM; it never checks out the fork head as something to run.
+  That's a materially different risk profile than the pattern security-baseline's §2 warns about,
+  so `pull_request_target` is the better choice here: it lets OCR actually review fork-originated
+  PRs (this repo may eventually take outside contributions — see the GDPR area of concern below)
+  instead of silently skipping them. The condition this depends on is load-bearing: this workflow
+  must never grow a step that checks out and executes/builds the PR head's own code under this
+  trigger — noted directly in the workflow section above so it isn't lost by the time Build adds
+  something else to this file.
 
 ## Areas of concern
 
-- **security-baseline (§1, dependency pinning)**: `uses: alibaba/open-code-review@<tag>` in the
-  workflow above is a placeholder — pin to a specific release tag or commit SHA (not `@main` or a
-  floating major-version tag) before merging. Confirm the current stable release at Build time.
 - **security-baseline (§4, data handling)**: every PR's diff — plus, unavoidably, git commit
   metadata (author name/email) as part of the diff context — is sent to Anthropic's API for
-  review. For a solo personal repo this is Joseph's own data by default, but if this repo ever
-  takes an external contribution, that contributor's commit metadata leaves the repo boundary to
-  a third-party model with no explicit notice to them beyond this being visible as a public CI
-  check. Not a blocker given the repo's current scope, but named explicitly rather than silently
-  assumed away, per baseline's instruction not to resolve data-handling gaps quietly.
-- **compliance-gdpr**: directly downstream of the point above — if a future PR is opened by
-  someone other than Joseph, their commit author name/email (personal data) is processed by a
-  third-party (Anthropic) as part of this workflow, with no lawful-basis determination made here
-  and no disclosure mechanism beyond "the workflow is visible in the repo." Low risk at solo-repo
-  scale; needs a real answer (most likely: legitimate-interests basis, disclosed via
-  `CONTRIBUTING.md`) before this repo accepts outside contributions. Product owner: confirm
-  whether that's in scope now or deferred until the repo actually opens to outside contributors.
+  review. Because the Fork PRs resolution above deliberately chooses `pull_request_target` so OCR
+  *does* run on fork-originated PRs, this is no longer a purely hypothetical future case — any
+  fork PR opened against this repo, starting from the day this workflow merges, sends that
+  contributor's commit metadata to a third party. Not a blocker given the repo's current scope
+  (no outside contributors yet), but named explicitly rather than silently assumed away, per
+  baseline's instruction not to resolve data-handling gaps quietly.
+- **compliance-gdpr**: directly downstream of the point above, and with the same "starting the day
+  this merges" timing — the first fork PR from someone other than Joseph will have their commit
+  author name/email (personal data) processed by a third-party (Anthropic) as part of this
+  workflow, with no lawful-basis determination made here and no disclosure mechanism beyond "the
+  workflow is visible in the repo." Low risk at solo-repo scale; needs a real answer (most likely:
+  legitimate-interests basis, disclosed via `CONTRIBUTING.md`) before this repo accepts outside
+  contributions. Product owner: confirm whether that disclosure should land now, alongside this
+  change, or is accepted as a gap until the repo's first outside contributor actually shows up.
 - **compliance-eu-ai-act**: classified as **minimal risk** — a deployer (not provider) use of a
   foundation model for developer-productivity code review, none of the Article 5
   sensitive-domain categories (biometrics, critical infrastructure, employment, essential
