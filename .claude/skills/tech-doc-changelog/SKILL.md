@@ -3,20 +3,15 @@ name: tech-doc-changelog
 description: >-
   Generates a new CHANGELOG.md or adds/updates entries in an existing one, following the Keep a
   Changelog 2.0.0 standard (six fixed categories -- Added, Changed, Deprecated, Removed, Fixed,
-  Security -- ISO 8601 dates, an Unreleased section, and reference-style version links). Before
+  Security -- ISO 8601 dates, an Unreleased section, reference-style version links). Before
   drafting, establishes whether the repo is a single package or a monorepo needing per-component
   changelogs, whether commit history already follows Conventional Commits (so entries can be
-  derived from git log/diff instead of asked for from scratch), and whether release automation
-  (semantic-release, release-please, or similar) already drafts entries -- in which case the
-  skill's job shifts to a human-readability pass on the automation's output rather than writing
-  from a blank file. Also applies Keep a Changelog 2.0.0's own explicit guidance for an AI drafting
-  a changelog: summarize what's notable to a reader, never paste raw commit messages or git log
-  output as entries. Use this skill whenever the user mentions a CHANGELOG, release notes, "what
-  changed in this version," cutting a release, or asks to create, write, update, or clean up a
-  CHANGELOG.md file -- even if they call it something else, like a "changes" file or "history"
-  file. This is one of a family of doc-generation skills (README, CONTRIBUTING, SECURITY,
-  CODE_OF_CONDUCT, etc.) and is scoped specifically to the changelog file itself, not to setting up
-  release automation or commit-message linting from scratch.
+  derived from git log/diff), and whether release automation (semantic-release, release-please)
+  already drafts entries -- in which case the job shifts to a readability pass on its output
+  rather than writing from a blank file. Applies Keep a Changelog 2.0.0's own guidance for an AI
+  drafting a changelog: summarize what's notable to a reader, never paste raw commit messages as
+  entries. Use whenever the user mentions a CHANGELOG, release notes, "what changed in this
+  version," cutting a release, or asks to create, update, or clean up a CHANGELOG.md.
 summary: Generates or updates a CHANGELOG.md following Keep a Changelog 2.0.0 -- asks the framing questions first (single package vs. monorepo, Conventional Commits or not, release automation already running or not), drafts entries from commit history when it can, and knows when to just polish what a release-automation tool already wrote instead of writing from scratch.
 ---
 

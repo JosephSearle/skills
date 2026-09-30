@@ -19,6 +19,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_SITE_ROOT = path.resolve(__dirname, '..');
 const DEFAULT_REPO_ROOT = path.resolve(DEFAULT_SITE_ROOT, '..');
 const DEFAULT_CATALOG_ROOT = path.join(DEFAULT_REPO_ROOT, 'catalog');
+const MAX_DESCRIPTION_LENGTH = 1024;
 
 function findSkillFolders(catalogRoot) {
   return fs
@@ -91,6 +92,13 @@ export async function buildIndex({
     const missing = ['name', 'description', 'summary'].filter((field) => !frontmatter[field]);
     if (missing.length > 0) {
       errors.push(`"${slug}": SKILL.md is missing required field(s): ${missing.join(', ')}`);
+      continue;
+    }
+
+    if (frontmatter.description.length > MAX_DESCRIPTION_LENGTH) {
+      errors.push(
+        `"${slug}": SKILL.md "description" is ${frontmatter.description.length} characters, exceeds the ${MAX_DESCRIPTION_LENGTH}-character limit`,
+      );
       continue;
     }
 

@@ -1,26 +1,17 @@
 ---
 name: runbook
 description: >-
-  Creates and maintains incident-response runbooks, playbooks, and on-call reference documentation
-  for operational systems. Unlike most doc-generation skills, there's no fill-in-the-blank file
-  format here -- the standardization is in process and structure. Enforces the distinction between
-  a runbook (a known problem with a known fix -- a fixed, followable sequence) and a playbook (a
-  situation needing investigation, judgment, or coordination -- guides triage rather than
-  prescribing steps), since conflating the two is the most common failure in this doc type. Before
-  drafting, establishes which of the two is being written, what severity/incident classification
-  scheme is in use (defaults to recommending PagerDuty's open SEV-1 through SEV-5 taxonomy when
-  none exists), who the actual reader is (someone who may not have written the code, possibly at
-  3am, on a rotation without full context), and how it'll actually be discovered during a real
-  incident (linked from alerting, an incident channel, an incident-management tool) rather than
-  just existing in a repo. Also supports auditing and updating an existing runbook after an
-  incident revealed it to be wrong or incomplete -- a runbook that goes stale gives false
-  confidence, and fixing it is part of incident follow-up, not a separate task. Use this skill
-  whenever the user mentions a runbook, playbook, on-call docs, incident response documentation,
-  "what do we do when X happens," escalation procedures, or asks to write, create, update, or audit
-  operational/incident documentation -- even if they call it something else, like a "wiki page" or
-  "SOP." This is one of a family of doc-generation skills (README, CONTRIBUTING, SECURITY,
-  CHANGELOG, CODEOWNERS, etc.), scoped specifically to runbook/playbook/on-call content rather than
-  general technical documentation.
+  Creates and maintains incident-response runbooks, playbooks, and on-call reference docs. No
+  fill-in-the-blank file format here -- standardization is in process and structure. Enforces the distinction between a runbook (a known problem, known fix, fixed
+  sequence) and a playbook (needs investigation, judgment, or coordination -- guides triage,
+  not a script), since conflating the two is the most common failure in this doc type. Before
+  drafting, establishes which of the two is being written, what severity scheme is in use
+  (defaults to PagerDuty's SEV-1 through SEV-5 taxonomy
+  when none exists), who the actual reader is (possibly someone at 3am who didn't write the code),
+  and how it'll be discovered during a real incident. Also supports auditing a runbook found
+  wrong or incomplete after an incident. Use whenever the user mentions a runbook,
+  playbook, on-call docs, incident documentation, or asks to audit operational/incident
+  documentation -- even under another name, like a "wiki page" or "SOP."
 summary: Writes runbooks (known problem, known fix, fixed sequence) and playbooks (needs judgment, guides triage) for incident response and on-call work -- asks which one it's actually writing, what severity scale is in use, who the low-context 3am reader really is, and how the doc gets found during a real incident, plus an audit mode for fixing a runbook a real incident proved wrong.
 ---
 
@@ -111,6 +102,27 @@ management tool, or something else. If the user doesn't have an answer yet, say 
 worth deciding rather than leaving to chance -- the SRE Workbook's own guidance is that alerts should
 link straight to the relevant playbook entry, not that someone should have to search for it while
 the system is on fire. Note the answer in the doc itself if there's a natural place for it (e.g., "linked from the `high-queue-depth` PagerDuty alert").
+
+### 1e. Where does the file itself live, and what's it named?
+
+Check the repo for an existing convention first -- a `docs/runbooks/` or `runbooks/` directory
+that's already in use, a wiki, or a stated policy elsewhere (e.g. a CLAUDE.md/CONTRIBUTING.md
+note). If one exists, follow it rather than introducing a second location or naming scheme.
+
+If there's no existing convention, default to a single standard rather than inventing a new one
+per document:
+
+- **Location**: `docs/runbooks/`, one file per runbook or playbook, flat (no further nesting by
+  team/service unless the repo already organizes docs that way).
+- **Filename**: a descriptive kebab-case slug of the subject only -- `add-a-skill.md`,
+  `high-queue-depth.md`, `payment-webhook-failures.md`. Don't prefix the filename with `runbook-`
+  or `playbook-` -- the directory already says what the file is, so the prefix is redundant on
+  every single file in it. (If a project genuinely mixes runbooks and playbooks in one directory
+  and wants the type visible at a glance, a suffix like `-playbook.md` on the handful that are
+  playbooks is more useful than prefixing every file with `runbook-`, since runbooks are the
+  common case here and playbooks are the exception worth flagging.)
+- Once a project has adopted this convention (or its own), keep applying it consistently for
+  every runbook/playbook in that repo -- don't let each new document introduce a fresh scheme.
 
 ## Step 2 -- Runbook mode: the fixed sequence
 
@@ -212,6 +224,8 @@ changed, a case the doc didn't anticipate at all). Then:
   SEV-1..5 was proposed explicitly rather than assumed silently.
 - Confirm related links point to real, specific things (an actual alert name, an actual dashboard,
   an actual related doc) rather than generic placeholders like "see monitoring."
+- Confirm the file was placed and named per Step 1e -- the repo's existing convention if one
+  exists, otherwise `docs/runbooks/<subject-slug>.md` with no `runbook-`/`playbook-` prefix.
 
 ## Step 6 -- Automation: what to recommend, and what not to build
 

@@ -5,16 +5,13 @@ description: >-
   or "we should really fix X" into a committed intent.md that a product owner can accept into
   Design or reject. Interviews the originator -- anyone with an idea, not necessarily an engineer
   -- in their own words, keeps asking the scope/users/constraints/success-criteria questions an
-  analyst would ask until the answer is concrete rather than guessing on their behalf, gets the
-  idea linked to a GitHub issue or Jira ticket (offering to create one if a connector is
-  available), drafts intent.md against an exact template, and always shows it back to the
-  originator for correction before committing it to docs/sdlc/<issue-key>-<slug>/intent.md via a
-  reviewable PR. Trigger this whenever someone describes a new feature idea, a problem they want
-  turned into a formal proposal or spec input, something to hand to a product owner or engineering
-  team, or explicitly says "/sdlc-plan", "start a plan doc", "capture this as intent", or mentions
-  "intent.md" by name -- even if they haven't used any of that vocabulary and just started
-  describing what's broken and what they wish existed instead. Do not use this for a bug report
-  with no design implications, a small fix, or anything already at the spec/design stage.
+  analyst would ask until the answer is concrete, gets the idea linked to a GitHub issue or Jira
+  ticket (offering to create one if possible), drafts intent.md against an exact
+  template, and shows it back to the originator for correction before committing it to
+  docs/sdlc/<issue-key>-<slug>/intent.md via a reviewable PR. Trigger whenever someone describes a
+  new feature idea, a problem to turn into a formal proposal, or says "/sdlc-plan", "start a plan
+  doc", or "capture this as intent" -- even without that vocabulary. Not for a bug report with no
+  design implications, or anything already at the spec/design stage.
 summary: Interviews an originator (any idea-haver, not necessarily an engineer) about a feature idea until scope, affected users/systems, constraints, and success criteria are all concrete, links it to a GitHub or Jira issue, drafts an exact intent.md template, gets explicit sign-off on the draft, and commits it via a reviewable PR to docs/sdlc/<issue-key>-<slug>/intent.md -- implementing Stage 1 (Capture Intent) of Anthropic's AI-Native SDLC.
 ---
 
