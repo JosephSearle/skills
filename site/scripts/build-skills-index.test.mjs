@@ -88,6 +88,18 @@ describe('buildIndex', () => {
     expect(index.skills).toHaveLength(1);
   });
 
+  it('fails the build with a clear message when description contains an XML-like tag', async () => {
+    writeSkill('xml-tag-skill', {
+      name: 'xml-tag-skill',
+      description: 'Writes files to docs/sdlc/<issue-key>-<slug>/intent.md for review.',
+      summary: 'A skill whose description has a bracketed placeholder.',
+    });
+
+    await expect(buildIndex({ catalogRoot, siteRoot })).rejects.toThrow(
+      /xml-tag-skill.*XML-like tag/s,
+    );
+  });
+
   it('warns but does not fail when frontmatter name does not match the folder', async () => {
     writeSkill('folder-name', {
       name: 'different-name',

@@ -20,6 +20,7 @@ const DEFAULT_SITE_ROOT = path.resolve(__dirname, '..');
 const DEFAULT_REPO_ROOT = path.resolve(DEFAULT_SITE_ROOT, '..');
 const DEFAULT_CATALOG_ROOT = path.join(DEFAULT_REPO_ROOT, 'catalog');
 const MAX_DESCRIPTION_LENGTH = 1024;
+const XML_TAG_PATTERN = /<\/?[a-zA-Z][^<>]*>/;
 
 function findSkillFolders(catalogRoot) {
   return fs
@@ -98,6 +99,14 @@ export async function buildIndex({
     if (frontmatter.description.length > MAX_DESCRIPTION_LENGTH) {
       errors.push(
         `"${slug}": SKILL.md "description" is ${frontmatter.description.length} characters, exceeds the ${MAX_DESCRIPTION_LENGTH}-character limit`,
+      );
+      continue;
+    }
+
+    const xmlTagMatch = frontmatter.description.match(XML_TAG_PATTERN);
+    if (xmlTagMatch) {
+      errors.push(
+        `"${slug}": SKILL.md "description" contains an XML-like tag (${xmlTagMatch[0]}) -- descriptions cannot contain XML tags`,
       );
       continue;
     }
