@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This repo has two independent parts:
 
-- **`catalog/`** — the actual skill content. Each subdirectory is one skill: a `SKILL.md` with YAML frontmatter (`name`, `description`, `summary` are all required; `description` must be at most 1024 characters, enforced by `build-skills-index.mjs`) plus a markdown body, and optional `references/`, `scripts/`, `evals/` subfolders.
+- **`catalog/`** — the actual skill content. Each subdirectory is one skill: a `SKILL.md` with YAML frontmatter (`name`, `description`, `summary` are all required; `description` must be at most 1024 characters and must not contain XML-like tags such as `<slug>`, both enforced by `build-skills-index.mjs`) plus a markdown body, and optional `references/`, `scripts/`, `evals/` subfolders.
 - **`site/`** — a standalone Next.js 15 (App Router, static export) app that reads `catalog/` and publishes it as a browsable, downloadable catalog. It has its own `package.json`/lockfile; there is no root-level `package.json` or workspace tooling.
 
 Everything below (`npm` commands, lint, tests) runs from inside `site/`.
