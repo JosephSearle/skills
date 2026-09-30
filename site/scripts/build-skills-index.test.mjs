@@ -65,6 +65,29 @@ describe('buildIndex', () => {
     await expect(buildIndex({ catalogRoot, siteRoot })).rejects.toThrow(/broken-skill.*summary/s);
   });
 
+  it('fails the build with a clear message when description exceeds 1024 characters', async () => {
+    writeSkill('too-long-skill', {
+      name: 'too-long-skill',
+      description: 'x'.repeat(1025),
+      summary: 'A skill with an oversized description.',
+    });
+
+    await expect(buildIndex({ catalogRoot, siteRoot })).rejects.toThrow(
+      /too-long-skill.*1025.*1024/s,
+    );
+  });
+
+  it('accepts a description that is exactly 1024 characters', async () => {
+    writeSkill('boundary-skill', {
+      name: 'boundary-skill',
+      description: 'x'.repeat(1024),
+      summary: 'A skill with a description right at the limit.',
+    });
+
+    const index = await buildIndex({ catalogRoot, siteRoot });
+    expect(index.skills).toHaveLength(1);
+  });
+
   it('warns but does not fail when frontmatter name does not match the folder', async () => {
     writeSkill('folder-name', {
       name: 'different-name',

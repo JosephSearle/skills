@@ -7,13 +7,11 @@ description: >-
   containment/eradication focus) and general operational/availability playbooks (Atlassian-style
   detect-through-postmortem arc: service restoration, communication focus). Always distinguishes
   playbooks from runbooks -- a runbook is for a known problem with a known fix (restart this
-  service, rotate this credential); if the user describes that kind of fixed, deterministic
-  procedure, use the sibling runbook skill instead, or say so explicitly. Use this skill whenever
-  the user asks for an incident response plan, a security incident response playbook, a major
-  incident process, an on-call escalation guide for an ambiguous/multi-cause problem, incident
-  roles and severity definitions, an incident cheat sheet, or wants to define what counts as a
-  "major incident" for their team -- even if they just say "we need something for when things go
-  wrong and nobody knows why" or "what do we do if we get breached."
+  service, rotate this credential); if the user describes that kind of fixed procedure, use the
+  sibling runbook skill instead. Use whenever the user asks for an incident response plan, a
+  security incident response playbook, a major incident process, incident roles and severity
+  definitions, or wants to define what counts as a "major incident" -- even if they just say "we
+  need something for when things go wrong and nobody knows why.""
 summary: Writes incident-response playbooks and their live-incident cheat sheets for ambiguous situations needing investigation or judgment -- picks the right lineage (NIST PICERL for security incidents, Atlassian-style detect-through-postmortem for operational ones), pins down a severity scale and an explicit invocation boundary, and always produces a standalone one-page cheat sheet alongside the full document.
 ---
 
