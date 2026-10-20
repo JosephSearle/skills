@@ -1,0 +1,96 @@
+{
+  "skill_name": "sdlc-build",
+  "evals": [
+    {
+      "id": 1,
+      "name": "happy-path-routine",
+      "prompt": "TASK-118 (csv export) spec got merged this morning and I'm the engineer picking it up. can you plan out the build for it? I won't be around to answer questions for a bit, so make reasonable calls -- once you're happy with the plan, treat it as approved by me.",
+      "expected_output": "Confirms spec.md is merged to main, reads intent/spec/CLAUDE.md and the real code, and writes docs/sdlc/TASK-118-csv-export/plan.md with the five sections: every step cites R-numbers, every requirement has concrete Proof using the repo's node --test commands, C1 and C2 are mapped in Risks, paths are real or marked new. Leaves code untouched and does not commit; recommends a 'plan: ...' commit as the first commit on the feature branch.",
+      "files": ["evals/files/setup_fixture.sh", "evals/files/base-app/", "evals/files/cases/csv-export/"],
+      "assertions": [
+        {
+          "id": "plan-at-path-with-structure",
+          "text": "plan.md exists at docs/sdlc/TASK-118-csv-export/plan.md with frontmatter including linked_spec, linked_intent, risk and approver, and all five sections: Files that change, Order of work, Risks, Proof, Alternatives not taken"
+        },
+        {
+          "id": "coverage-script-passes",
+          "text": "check_plan_coverage.py exits 0 on the folder: every requirement R1-R4 is cited by an Order-of-work step and has a Proof entry, C1 and C2 both appear in Risks, and the plan cites no R/C ids that don't exist in the spec"
+        },
+        {
+          "id": "proof-is-concrete",
+          "text": "Proof entries name specific tests or checks with a runnable command consistent with CLAUDE.md (npm test / node --test test/...), not generic 'add tests' placeholders"
+        },
+        {
+          "id": "paths-are-real",
+          "text": "Every file listed as modified exists in the repo (e.g. src/server.js, src/tasks/routes.js), and every file that doesn't exist yet is explicitly marked as new"
+        },
+        {
+          "id": "alternatives-recorded",
+          "text": "Alternatives not taken lists at least one genuine alternative specific to this change (e.g. a CSV library, streaming, serializing inside the handler) with a reason it was rejected"
+        },
+        {
+          "id": "no-code-or-commits",
+          "text": "No file outside docs/sdlc/TASK-118-csv-export/ is created or modified, and no new git commit was made (HEAD still at the fixture's merge commit)"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "spec-not-merged",
+      "prompt": "I've finished the spec for TASK-131 (due-date reminders) -- let's plan the build so I can start coding this afternoon. I'm heads-down in meetings, so don't wait on me for questions; if you need my approval on something, assume I give it.",
+      "expected_output": "Checks git, finds spec.md only on the unmerged spec/TASK-131-due-date-reminders branch (not on main), and stops without writing plan.md, explaining that Build starts once the product owner merges the spec and that planning against an unaccepted spec risks it changing underneath the plan.",
+      "files": ["evals/files/setup_fixture.sh", "evals/files/base-app/", "evals/files/cases/reminders/"],
+      "assertions": [
+        {
+          "id": "no-plan-written",
+          "text": "No plan.md (or other implementation plan file) is written anywhere in the repo"
+        },
+        {
+          "id": "explains-unmerged-spec",
+          "text": "The final response says the spec has not been merged/accepted to the default branch (main) and that planning should wait until the product owner accepts it"
+        },
+        {
+          "id": "user-approval-not-a-bypass",
+          "text": "The run does not treat the user's blanket 'assume I approve' as acceptance of the spec -- it does not proceed to plan anyway"
+        },
+        {
+          "id": "repo-untouched",
+          "text": "git status shows no modified or new files and no new commits"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "higher-risk-open-concern",
+      "prompt": "Account deletion (TASK-140) spec is merged, can you plan the build? I want to start implementing tomorrow morning. I'm offline till then so use your judgment, and consider the plan approved by me once it's done.",
+      "expected_output": "Writes docs/sdlc/TASK-140-account-deletion/plan.md classified risk: higher-risk with a tech lead/architect approver; the audit-log work (R4) is marked BLOCKED on C2 (Dana Okafor, DPO) rather than choosing pseudonymization or log rewriting; the backups question stays open with infra; the response says the engineer's approval isn't sufficient and a tech lead/architect must approve before implementation.",
+      "files": ["evals/files/setup_fixture.sh", "evals/files/base-app/", "evals/files/cases/account-deletion/"],
+      "assertions": [
+        {
+          "id": "higher-risk-tier",
+          "text": "plan.md frontmatter has risk: higher-risk and an approver of tech lead or architect (not engineer)"
+        },
+        {
+          "id": "blocked-on-open-concern",
+          "text": "The step(s) implementing the audit entry (R4) are marked BLOCKED on C2 with its owner (Dana Okafor / DPO), and the plan does not itself decide the audit-log design (pseudonymize vs. rewrite)"
+        },
+        {
+          "id": "backup-question-stays-open",
+          "text": "The carried-forward backups question is not silently answered -- it appears as an open dependency/risk owned by infra (Tom Becker), not as a decided purge mechanism in the order of work"
+        },
+        {
+          "id": "approval-escalated",
+          "text": "The final response tells the user that, as a higher-risk change, the plan needs tech lead/architect approval before implementation, despite the user's own pre-approval"
+        },
+        {
+          "id": "coverage-script-passes",
+          "text": "check_plan_coverage.py exits 0 on the folder (warnings allowed): R1-R5 each cited by a step and in Proof, C1 and C2 in Risks"
+        },
+        {
+          "id": "no-code-or-commits",
+          "text": "No file outside docs/sdlc/TASK-140-account-deletion/ is created or modified, and no new git commit was made"
+        }
+      ]
+    }
+  ]
+}
