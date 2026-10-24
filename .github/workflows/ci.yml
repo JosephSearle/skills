@@ -5,12 +5,14 @@ on:
     paths:
       - 'site/**'
       - 'catalog/**'
+      - '.claude-plugin/**'
       - '.github/workflows/ci.yml'
   push:
     branches: [main]
     paths:
       - 'site/**'
       - 'catalog/**'
+      - '.claude-plugin/**'
       - '.github/workflows/ci.yml'
 
 concurrency:

@@ -4,12 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository shape
 
-This repo has two independent parts:
+This repo has two independent parts, plus a plugin marketplace that republishes some of the catalog:
 
 - **`catalog/`** — the actual skill content. Each subdirectory is one skill: a `SKILL.md` with YAML frontmatter (`name`, `description`, `summary` are all required; `description` must be at most 1024 characters and must not contain XML-like tags such as `<slug>`, both enforced by `build-skills-index.mjs`) plus a markdown body, and optional `references/`, `scripts/`, `evals/` subfolders.
 - **`site/`** — a standalone Next.js 15 (App Router, static export) app that reads `catalog/` and publishes it as a browsable, downloadable catalog. It has its own `package.json`/lockfile; there is no root-level `package.json` or workspace tooling.
+- **`.claude-plugin/marketplace.json`** — a Claude Code plugin marketplace (`searle-skills`) at the repo root. Each plugin entry has `source: "./"` and no `plugin.json`, so the entry *is* the manifest and its `skills` array points straight at `catalog/` folders — no copies. `core` ships the policy skills (every skill `catalog/sdlc-design/references/personas.md` names); `sdlc` ships `sdlc-status`/`sdlc-plan`/`sdlc-design`/`sdlc-build` and depends on `core`. Two rules follow:
+  - Renaming or removing a catalog folder means updating its `skills` path here; adding a policy skill to `personas.md` means adding it to `core`. `site/scripts/marketplace.test.mjs` fails CI on either miss.
+  - Each entry's `version` pins what installed users get, so catalog edits reach plugin users only when that plugin's `version` is bumped.
 
-Everything below (`npm` commands, lint, tests) runs from inside `site/`.
+Everything below (`npm` commands, lint, tests) runs from inside `site/`, except `claude plugin validate .`, which runs from the repo root to check the marketplace (needs the Claude Code CLI; not run in CI).
 
 Note: there is no separate `.claude/skills/` copy for the Claude Code harness in this repo — skills are loaded from `catalog/`. If a session needs a skill available locally under `.claude/skills/`, copy or symlink it there deliberately; don't assume it's already present.
 

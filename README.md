@@ -29,7 +29,7 @@ removing a skill under `catalog/` requires no frontend code changes.
 
 This repo has two independent parts, and installation depends on which one you want.
 
-To use a skill with Claude Code, no install step is needed beyond copying or symlinking it — see
+To use a skill with Claude Code, either install it as part of a plugin or copy/symlink it — see
 [Usage](#usage) below.
 
 To run the catalog site locally:
@@ -58,6 +58,25 @@ cp -r catalog/pr-description .claude/skills/
 
 Claude Code picks it up automatically the next time it lists available skills. You can also
 download any skill as a `.skill` archive from the published catalog site.
+
+### Using the plugins
+
+The repo is also a Claude Code plugin marketplace
+([.claude-plugin/marketplace.json](.claude-plugin/marketplace.json)) that bundles catalog skills
+into two plugins:
+
+- **`core`** — organisation-wide priorities: the security, compliance, brand and UX policy skills
+  other plugins build on.
+- **`sdlc`** — the AI-Native SDLC workflow (`sdlc-plan` → `sdlc-design` → `sdlc-build`) plus the
+  `sdlc-status` navigator. Depends on `core`, so installing it installs both.
+
+```bash
+claude plugin marketplace add JosephSearle/skills
+claude plugin install sdlc@searle-skills
+```
+
+Then, in a session, `/sdlc:sdlc-status` shows where each change under `docs/sdlc/` stands and which
+skill to run next; `/sdlc:sdlc-plan` starts a new one.
 
 ### Running the catalog site
 

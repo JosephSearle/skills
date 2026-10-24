@@ -1,0 +1,41 @@
+{
+  "name": "searle-skills",
+  "description": "Joseph Searle's skills catalog as Claude Code plugins",
+  "owner": {
+    "name": "Joseph Searle"
+  },
+  "plugins": [
+    {
+      "name": "core",
+      "source": "./",
+      "version": "0.1.0",
+      "category": "policy",
+      "description": "Organisation-wide priorities: security, compliance, brand and UX policy skills that other plugins build on",
+      "skills": [
+        "./catalog/security-baseline",
+        "./catalog/security-api",
+        "./catalog/security-llm",
+        "./catalog/security-mcp",
+        "./catalog/security-agent",
+        "./catalog/compliance-gdpr",
+        "./catalog/compliance-eu-ai-act",
+        "./catalog/brand-personal",
+        "./catalog/ux-personal"
+      ]
+    },
+    {
+      "name": "sdlc",
+      "source": "./",
+      "version": "0.1.0",
+      "category": "workflow",
+      "description": "AI-Native SDLC: idea -> intent.md -> spec.md -> plan.md, with a status navigator to show where each change stands",
+      "dependencies": ["core"],
+      "skills": [
+        "./catalog/sdlc-status",
+        "./catalog/sdlc-plan",
+        "./catalog/sdlc-design",
+        "./catalog/sdlc-build"
+      ]
+    }
+  ]
+}
