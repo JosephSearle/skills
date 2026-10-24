@@ -16,6 +16,10 @@ grouped under the date they landed on `main`.
   known fix.
 
 ### Changed
+- CI runs lint, typecheck, unit tests, index build and eval validation through the shared
+  `node-ci` workflow from `JosephSearle/workflow-catalog` v1.0.0, with one install in place of
+  five. Every action is pinned to a commit SHA, jobs get a read-only token, and Dependabot
+  keeps the pins current.
 - Renamed the "issue-filing" skill to "gh-issue-filing" and the "issue-template" skill to
   "gh-issue-template" to make their GitHub-specific scope explicit in the slug itself.
 - Renamed the eight repo-standard-docs skills ("changelog", "code-of-conduct", "codeowners",

@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # Catalog releases in one PR, majors included, so they can be checked against its changelog.
+      workflow-catalog:
+        patterns: ["JosephSearle/workflow-catalog*"]
+      github-actions:
+        patterns: ["*"]
+    cooldown:
+      default-days: 7
