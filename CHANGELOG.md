@@ -9,6 +9,8 @@ grouped under the date they landed on `main`.
 ## [Unreleased]
 
 ### Added
+- New "sdlc-status" skill that reports which stage each change under `docs/sdlc/` has reached and
+  the next skill to run, using a bundled script that checks acceptance against git.
 - New "runbook" skill for creating and maintaining incident-response runbooks, playbooks, and
   on-call reference documentation.
 - New "playbook" skill for creating and maintaining incident-response playbooks and their
