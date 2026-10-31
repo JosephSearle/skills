@@ -24,7 +24,7 @@ jobs:
   # eval structure.
   ci:
     name: lint, typecheck, test, validate
-    uses: JosephSearle/workflow-catalog/.github/workflows/node-ci.yml@52dc33b701540a49cfc36f03ac93a779631441af # v1.0.0
+    uses: JosephSearle/workflow-catalog/.github/workflows/node-ci.yml@dfe23bca5360468ef0a61bc76716f8c75f9b9fbb # v1.2.0
     permissions:
       contents: read
     with:
