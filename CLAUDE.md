@@ -56,7 +56,10 @@ Because the index and archives are build-time artifacts, **adding, editing, or r
 
 ## CI/CD
 
-- `.github/workflows/ci.yml` runs on PRs/pushes touching `site/**` or `catalog/**`: parallel `lint-format`, `typecheck`, `unit-tests`, `build-index` (validates every `SKILL.md` in `catalog/`, gating on the same exit-1 behavior described above), `validate-evals` (structurally validates every `catalog/*/evals/evals.json`, see `npm run validate:evals` above), and `e2e` (needs `build-index`, runs a full `next build` then Playwright against the static export).
+- `.github/workflows/ci.yml` runs on PRs/pushes touching `site/**`, `catalog/**`, or `.claude-plugin/**`, as two jobs:
+  - `ci` calls the shared `node-ci` reusable workflow from `JosephSearle/workflow-catalog` (pinned to a commit SHA), which does one `npm ci` in `site/` and then runs `lint:ci`, `typecheck`, `test`, `build:index` (validates every `SKILL.md` in `catalog/`, gating on the same exit-1 behavior described above), and `validate:evals` in that order, stopping at the first failure.
+  - `e2e` (needs `ci`) runs a full `next build` then Playwright against the static export.
+  - Every action is SHA-pinned and jobs get a read-only token; `.github/dependabot.yml` keeps the pins current.
 - `.github/workflows/deploy.yml` triggers on a successful CI run on `main` and deploys `site/` to Vercel via the Vercel CLI; it needs `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` repo secrets to actually deploy.
 
 ## Review policy
