@@ -97,7 +97,9 @@ skills that apply to it, drawn from whatever domains exist (security, compliance
    `compliance-eu-ai-act` where personal-data or AI-system obligations apply, and
    `brand-personal`/`ux-personal` for voice, naming, and UX standards. Treat this list as
    illustrative, not fixed — always defer to whatever `personas.md` actually says, since it's
-   the file that changes as new policy skills get added.
+   the file that changes as new policy skills get added. When the policy skills come from the
+   `core` plugin they show up namespaced (e.g. `core:security-baseline`) — that's the same skill;
+   record the bare name in `skills_applied`.
 3. If a skill the row names isn't actually available/loaded in this session, say so as an
    explicit limitation on the resulting spec (an Area of concern, not a silent gap) rather than
    proceeding as if that policy simply doesn't apply.

@@ -9,6 +9,11 @@ grouped under the date they landed on `main`.
 ## [Unreleased]
 
 ### Added
+- A Claude Code plugin marketplace at `.claude-plugin/marketplace.json` publishing two plugins
+  built from catalog skills: "core" (the security, compliance, brand and UX policy skills) and
+  "sdlc" (the SDLC workflow skills, depending on "core").
+- New "sdlc-status" skill that reports which stage each change under `docs/sdlc/` has reached and
+  the next skill to run, using a bundled script that checks acceptance against git.
 - New "runbook" skill for creating and maintaining incident-response runbooks, playbooks, and
   on-call reference documentation.
 - New "playbook" skill for creating and maintaining incident-response playbooks and their
