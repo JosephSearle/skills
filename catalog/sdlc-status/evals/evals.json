@@ -1,0 +1,60 @@
+{
+  "skill_name": "sdlc-status",
+  "evals": [
+    {
+      "id": 1,
+      "name": "mixed-stages-across-changes",
+      "prompt": "In a repo whose docs/sdlc/ has four change folders -- one with only an uncommitted intent.md, one with an accepted intent and no spec, one with accepted intent and spec but no plan, and one with an accepted spec and an uncommitted plan.md marked risk: routine -- the user asks \"where are we with everything?\"",
+      "expected_output": "Runs the bundled sdlc_status.py script and reports each change's stage and single next step: commit the intent on a branch for PR, run sdlc-design, run sdlc-build, and commit plan.md as the first commit on the implementation branch -- without drafting or committing anything itself.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Determines stages by running scripts/sdlc_status.py (or the equivalent git log check against the base branch), not by trusting the status: field in each file's frontmatter",
+          "id": "uses-git-not-frontmatter"
+        },
+        {
+          "text": "Each of the four changes is reported with the correct next step: commit intent.md for PR review, sdlc-design, sdlc-build, and commit plan.md before any code respectively",
+          "id": "correct-next-step-per-change"
+        },
+        {
+          "text": "Does not create, edit, commit, or push any file in docs/sdlc/, and does not open a PR",
+          "id": "read-only"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "ready-for-build-does-not-start-planning",
+      "prompt": "TASK-131's intent.md and spec.md are both merged to main and there is no plan.md. The user asks \"what's next for the due-date reminders change?\"",
+      "expected_output": "Reports that TASK-131 is ready for Build and that the next step is running sdlc-build, then stops -- it does not explore the codebase for a plan, enter plan mode, or draft plan.md itself.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Names sdlc-build (namespaced as /sdlc:sdlc-build if loaded through the sdlc plugin) as the next step for TASK-131",
+          "id": "names-sdlc-build"
+        },
+        {
+          "text": "Does not draft any part of plan.md, list files that would change, or start implementation planning",
+          "id": "does-not-start-build"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "no-sdlc-folder",
+      "prompt": "In a repo with no docs/sdlc/ folder at all, the user asks \"which SDLC changes are in flight?\"",
+      "expected_output": "Reports that no changes have been captured yet (the script exits 2 for a missing root) and that the first step is sdlc-plan, without inventing any change folders or stages.",
+      "files": [],
+      "assertions": [
+        {
+          "text": "States that there are no changes in flight rather than inventing change folders, issue keys, or stages",
+          "id": "no-invented-changes"
+        },
+        {
+          "text": "Points to sdlc-plan as the way to capture the first intent, and does not suggest any stage after plan.md such as testing or deployment",
+          "id": "points-to-sdlc-plan"
+        }
+      ]
+    }
+  ]
+}

@@ -7,12 +7,12 @@ description: >-
   -- in their own words, keeps asking the scope/users/constraints/success-criteria questions an
   analyst would ask until the answer is concrete, gets the idea linked to a GitHub issue or Jira
   ticket (offering to create one if possible), drafts intent.md against an exact
-  template, and shows it back to the originator for correction before committing it to
-  docs/sdlc/ISSUE-KEY-slug/intent.md via a reviewable PR. Trigger whenever someone describes a
+  template, and shows it back to the originator for correction before writing it to
+  docs/sdlc/ISSUE-KEY-slug/intent.md for a reviewable PR. Trigger whenever someone describes a
   new feature idea, a problem to turn into a formal proposal, or says "/sdlc-plan", "start a plan
   doc", or "capture this as intent" -- even without that vocabulary. Not for a bug report with no
   design implications, or anything already at the spec/design stage.
-summary: Interviews an originator (any idea-haver, not necessarily an engineer) about a feature idea until scope, affected users/systems, constraints, and success criteria are all concrete, links it to a GitHub or Jira issue, drafts an exact intent.md template, gets explicit sign-off on the draft, and commits it via a reviewable PR to docs/sdlc/ISSUE-KEY-slug/intent.md -- implementing Stage 1 (Capture Intent) of Anthropic's AI-Native SDLC.
+summary: Interviews an originator (any idea-haver, not necessarily an engineer) about a feature idea until scope, affected users/systems, constraints, and success criteria are all concrete, links it to a GitHub or Jira issue, drafts an exact intent.md template, gets explicit sign-off on the draft, and writes it to docs/sdlc/ISSUE-KEY-slug/intent.md for a reviewable PR -- implementing Stage 1 (Capture Intent) of Anthropic's AI-Native SDLC.
 ---
 
 # SDLC Plan (Capture Intent)
@@ -44,8 +44,8 @@ input and work with it.
 
 ## What this stage is not
 
-- Not spec.md, architecture, or acceptance criteria — that's Stage 2: Design, and it's out of
-  scope here. If the conversation starts drifting into "here's exactly how we'd build it," that's
+- Not spec.md, architecture, or acceptance criteria — that's Stage 2: Design (the `sdlc-design`
+  skill), and it's out of scope here. If the conversation starts drifting into "here's exactly how we'd build it," that's
   a sign the idea may already be past this stage — flag it, but still finish capturing the intent
   cleanly rather than half-drafting a design.
 - Not for a bug report with no design implications, or a small fix with no real scope to capture.
@@ -153,7 +153,10 @@ Once the originator has signed off:
 
 You don't need to do anything about the actual accept/reject decision — that happens later, by
 someone else, as an ordinary PR review. Your job ends at making sure the artifact is structured to
-support that review.
+support that review. Once it's merged, `sdlc-design` picks it up and turns it into `spec.md` in the
+same folder (and `sdlc-build` after that turns the spec into `plan.md`) — which is why the
+Constraints and Open questions sections matter so much: they're carried, item by item, all the way
+into the build plan.
 
 ## Metrics this stage cares about
 

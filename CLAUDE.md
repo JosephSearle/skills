@@ -4,12 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository shape
 
-This repo has two independent parts:
+This repo has two independent parts, plus a plugin marketplace that republishes some of the catalog:
 
 - **`catalog/`** — the actual skill content. Each subdirectory is one skill: a `SKILL.md` with YAML frontmatter (`name`, `description`, `summary` are all required; `description` must be at most 1024 characters and must not contain XML-like tags such as `<slug>`, both enforced by `build-skills-index.mjs`) plus a markdown body, and optional `references/`, `scripts/`, `evals/` subfolders.
 - **`site/`** — a standalone Next.js 15 (App Router, static export) app that reads `catalog/` and publishes it as a browsable, downloadable catalog. It has its own `package.json`/lockfile; there is no root-level `package.json` or workspace tooling.
+- **`.claude-plugin/marketplace.json`** — a Claude Code plugin marketplace (`searle-skills`) at the repo root. Each plugin entry has `source: "./"` and no `plugin.json`, so the entry *is* the manifest and its `skills` array points straight at `catalog/` folders — no copies. `core` ships the policy skills (every skill `catalog/sdlc-design/references/personas.md` names); `sdlc` ships `sdlc-status`/`sdlc-plan`/`sdlc-design`/`sdlc-build` and depends on `core`. Two rules follow:
+  - Renaming or removing a catalog folder means updating its `skills` path here; adding a policy skill to `personas.md` means adding it to `core`. `site/scripts/marketplace.test.mjs` fails CI on either miss.
+  - Each entry's `version` pins what installed users get, so catalog edits reach plugin users only when that plugin's `version` is bumped.
 
-Everything below (`npm` commands, lint, tests) runs from inside `site/`.
+Everything below (`npm` commands, lint, tests) runs from inside `site/`, except `claude plugin validate .`, which runs from the repo root to check the marketplace (needs the Claude Code CLI; not run in CI).
 
 Note: there is no separate `.claude/skills/` copy for the Claude Code harness in this repo — skills are loaded from `catalog/`. If a session needs a skill available locally under `.claude/skills/`, copy or symlink it there deliberately; don't assume it's already present.
 
@@ -53,7 +56,10 @@ Because the index and archives are build-time artifacts, **adding, editing, or r
 
 ## CI/CD
 
-- `.github/workflows/ci.yml` runs on PRs/pushes touching `site/**` or `catalog/**`: parallel `lint-format`, `typecheck`, `unit-tests`, `build-index` (validates every `SKILL.md` in `catalog/`, gating on the same exit-1 behavior described above), `validate-evals` (structurally validates every `catalog/*/evals/evals.json`, see `npm run validate:evals` above), and `e2e` (needs `build-index`, runs a full `next build` then Playwright against the static export).
+- `.github/workflows/ci.yml` runs on PRs/pushes touching `site/**`, `catalog/**`, or `.claude-plugin/**`, as two jobs:
+  - `ci` calls the shared `node-ci` reusable workflow from `JosephSearle/workflow-catalog` (pinned to a commit SHA), which does one `npm ci` in `site/` and then runs `lint:ci`, `typecheck`, `test`, `build:index` (validates every `SKILL.md` in `catalog/`, gating on the same exit-1 behavior described above), and `validate:evals` in that order, stopping at the first failure.
+  - `e2e` (needs `ci`) runs a full `next build` then Playwright against the static export.
+  - Every action is SHA-pinned and jobs get a read-only token; `.github/dependabot.yml` keeps the pins current.
 - `.github/workflows/deploy.yml` triggers on a successful CI run on `main` and deploys `site/` to Vercel via the Vercel CLI; it needs `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` repo secrets to actually deploy.
 
 ## Review policy

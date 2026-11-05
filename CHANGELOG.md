@@ -9,6 +9,14 @@ grouped under the date they landed on `main`.
 ## [Unreleased]
 
 ### Added
+- A Claude Code plugin marketplace at `.claude-plugin/marketplace.json` publishing two plugins
+  built from catalog skills: "core" (the security, compliance, brand and UX policy skills) and
+  "sdlc" (the SDLC workflow skills, depending on "core").
+- New "sdlc-build" skill that turns an accepted `spec.md` into a reviewable `plan.md` before any
+  code is written, with each step and check traced back to the spec's numbered requirements and
+  a bundled script that verifies that coverage.
+- New "sdlc-status" skill that reports which stage each change under `docs/sdlc/` has reached and
+  the next skill to run, using a bundled script that checks acceptance against git.
 - New "runbook" skill for creating and maintaining incident-response runbooks, playbooks, and
   on-call reference documentation.
 - New "playbook" skill for creating and maintaining incident-response playbooks and their
@@ -26,6 +34,13 @@ grouped under the date they landed on `main`.
   "contributing", "governance", "readme", "security", "support") to a "tech-doc-" prefix (e.g.
   "tech-doc-readme") so the catalog listing groups them as one recognizable family rather than
   generic bare names.
+- The "sdlc-design" skill now numbers requirements (R1, R2, ...) and areas of concern (C1, C2,
+  ...) in `spec.md` and keeps those numbers stable, gives each concern an owner and an
+  open/resolved status, and adds a table showing how each `intent.md` constraint is met.
+
+### Fixed
+- The "sdlc-plan" skill's description and evals no longer say it commits `intent.md` and opens
+  the PR itself; it writes the file and recommends the commit message and branch.
 
 ## [2026-09-20]
 

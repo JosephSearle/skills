@@ -10,14 +10,15 @@ description: >-
   and unmerged, stop and say so. Trigger whenever someone has an accepted/merged intent.md and
   wants to move it forward, get requirements together, start design, or turn it into a spec --
   even without that vocabulary, e.g. "what would it take to build this," or "/sdlc-design". Not
-  for drafting intent.md itself (sdlc-plan's job), or for implementation code/build plans (later
-  Build stage) -- output stops at a reviewable spec.md.
+  for drafting intent.md itself (sdlc-plan's job), or for implementation code/build plans
+  (sdlc-build's job) -- output stops at a reviewable spec.md.
 summary: Reads an already-accepted intent.md, resolves which policy skills apply via a persona lookup
-  (references/personas.md), and generates spec.md (Requirements, Design approach, Open
-  questions resolved, Areas of concern) constrained by those policy skills, surfacing every
-  policy collision as a named concern routed to a policy owner rather than resolving it
-  silently, then commits spec.md alongside intent.md for the product owner to review (never to
-  draft) and accept into Build.
+  (references/personas.md), and generates spec.md (numbered Requirements, Design approach,
+  Constraints from intent, Open questions resolved, numbered Areas of concern) constrained by
+  those policy skills, surfacing every policy collision as a named concern routed to a policy
+  owner rather than resolving it silently, then writes spec.md alongside intent.md for a
+  reviewable PR that the product owner reviews (never drafts) and accepts into Build
+  (sdlc-build).
 ---
 
 # SDLC Design (Requirements and Design)
@@ -25,7 +26,8 @@ summary: Reads an already-accepted intent.md, resolves which policy skills apply
 This skill implements Stage 2 of Anthropic's AI-Native SDLC playbook:
 [Requirements and Design](https://academy.claude.com/courses/ai-native-sdlc-playbook/requirements-and-design).
 It picks up exactly where [`sdlc-plan`](../sdlc-plan/SKILL.md) leaves off — an accepted `intent.md`
-— and hands off exactly where Build begins — a committed `spec.md`. Don't reach backward into
+— and hands off exactly where [`sdlc-build`](../sdlc-build/SKILL.md) begins — an accepted
+`spec.md`, whose numbered requirements and concerns `plan.md` will cite. Don't reach backward into
 `sdlc-plan`'s elicitation work or forward into writing code; both directions have their own stage
 for a reason, described below.
 
@@ -47,7 +49,7 @@ if brand/security/compliance/UX simply don't apply to this change.
 - Not `sdlc-plan`'s job: don't draft or edit `intent.md` here. If someone hands you a raw idea with
   no accepted intent, that's the wrong stage — point them at `sdlc-plan` instead of trying to
   backfill an intent yourself.
-- Not Build's job: don't produce `plan.md`, a task breakdown, or implementation code. The spec
+- Not Build's job (`sdlc-build`): don't produce `plan.md`, a task breakdown, or implementation code. The spec
   describes *what* and *how at a design level* — file structure, integration points, data model
   changes, API shape — not line-by-line implementation.
 - Not a place for the product owner to write content. Their role here is identical in spirit to
@@ -75,6 +77,11 @@ explicit in `spec.md`: either answered (with the reasoning), or explicitly carri
 still open. Silently dropping one because it's inconvenient, or because the answer isn't obvious,
 defeats the entire point of having flagged it upstream.
 
+Read its **Constraints** section with the same care. Each constraint gets a row in the spec's
+Constraints-from-intent table (Step 4) saying how the design meets it — or which area of concern
+explains why it can't be met. A constraint that never appears in the spec is a constraint Build
+will never see.
+
 ## Step 2: Resolve which policy skills apply (persona lookup)
 
 Read `references/personas.md` before generating anything. It's a flat lookup table, not a skill
@@ -90,7 +97,9 @@ skills that apply to it, drawn from whatever domains exist (security, compliance
    `compliance-eu-ai-act` where personal-data or AI-system obligations apply, and
    `brand-personal`/`ux-personal` for voice, naming, and UX standards. Treat this list as
    illustrative, not fixed — always defer to whatever `personas.md` actually says, since it's
-   the file that changes as new policy skills get added.
+   the file that changes as new policy skills get added. When the policy skills come from the
+   `core` plugin they show up namespaced (e.g. `core:security-baseline`) — that's the same skill;
+   record the bare name in `skills_applied`.
 3. If a skill the row names isn't actually available/loaded in this session, say so as an
    explicit limitation on the resulting spec (an Area of concern, not a silent gap) rather than
    proceeding as if that policy simply doesn't apply.
@@ -136,18 +145,34 @@ created: <ISO date>
 # Spec: <short title>
 
 ## Requirements
-<what the system must do, derived from intent.md>
+R1. <one thing the system must do, derived from intent.md — one testable requirement per line>
+R2. ...
 
 ## Design approach
-<how it will be built / integrated into the existing codebase>
+<how it will be built / integrated into the existing codebase; cite requirements (R1, R2) where
+a design decision exists to satisfy them>
+
+## Constraints from intent
+| Constraint (from intent.md) | How the design meets it |
+|---|---|
+| <constraint, as written in intent.md> | <how it's satisfied, citing R#s — or "Not met: see C2"> |
 
 ## Open questions resolved
 <each open question from intent.md, with its resolution or "carried forward" if still unresolved>
 
 ## Areas of concern
-<flagged policy collisions — each one tagged with which policy skill raised it, e.g.
-"security-baseline: ...", "brand-personal: ...", "compliance-gdpr: ...">
+C1. **<policy-skill name>** — <the collision> — Owner: <name/role, or "unassigned: ask"> —
+    Status: <open | resolved: how>
+C2. ...
 ```
+
+**Number requirements and concerns, and keep the numbers stable.** `sdlc-build`'s `plan.md` cites
+them directly — every step names the requirements it satisfies ("(R1, R3)"), every risk names the
+concern it answers ("(C2)") — which is what lets a reviewer check the plan against the spec line by
+line. So give each requirement its own `R` number and each concern its own `C` number, and once a
+plan exists, never renumber: append new items with new numbers, and mark withdrawn ones
+`R4. (withdrawn: reason)` rather than deleting them. If there are no areas of concern, write
+"None identified" rather than leaving the section empty, so Build can tell "none" from "forgot".
 
 If the change is front-end/UI-facing, don't embed a UI design directly in the spec — note instead
 that a design mock should be produced from `intent.md` and iterated on separately before export to
@@ -171,8 +196,11 @@ paragraph. For each area of concern:
   merely categorized.
 - Name the responsible policy owner if you know it — if you don't, ask the user who owns that
   policy area rather than leaving it unassigned.
-- Present concerns as an explicit, individually-addressable list, not folded into the Requirements
-  or Design approach sections where they'd be easy to miss.
+- Present concerns as an explicit, individually-addressable list (`C1`, `C2`, …), not folded into
+  the Requirements or Design approach sections where they'd be easy to miss.
+- Give each one a status: `open` until a policy owner has decided it, then `resolved: <how>`. Build
+  treats open concerns as blockers for the steps they touch, so the status has to be honest — a
+  concern marked resolved before anyone has actually decided it lets Build plan straight past it.
 
 The goal is that a product owner scanning the spec can tell at a glance exactly how many decisions
 still need a policy owner's sign-off, and who to go ask, without reading the whole document
@@ -209,7 +237,8 @@ same policy constraints as everything else), not as a patch to apply verbatim on
 **Stop here.** Don't advance into Build, and don't commit or open the PR yourself. The product
 owner's separate decision to accept spec and intent into Build — consulting a technical lead first
 for higher-risk changes — is what starts Stage 3, and it isn't this skill's decision to make on
-their behalf.
+their behalf. Once the spec is merged, `sdlc-build` picks it up and plans the implementation as
+`plan.md` in the same folder.
 
 ## The maturity path (mention this, don't build it)
 
